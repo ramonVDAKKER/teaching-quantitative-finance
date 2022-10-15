@@ -23,9 +23,22 @@ class BlackScholesOptionPrice():
 
         d1, d2 = self._d1_and_d2(current_stock_price, time_to_maturity)
         return np.exp(-self.r * time_to_maturity) * self.strike * norm.cdf(-d2) - current_stock_price * norm.cdf(-d1)
-
+    
+    def delta_put(self, current_stock_price, time_to_maturity):
+        """Calculates delta of European put option."""
+        
+        d1, _ = self._d1_and_d2(current_stock_price, time_to_maturity)
+        return - norm.cdf(d1)
+                
     def price_call(self, current_stock_price, time_to_maturity):
         """Calculates price of European call option"""
 
         d1, d2 = self._d1_and_d2(current_stock_price, time_to_maturity)
         return current_stock_price * norm.cdf(d1) - np.exp(-self.r * time_to_maturity) * self.strike *  norm.cdf(d2)
+    
+    def delta_call(self, current_stock_price, time_to_maturity):
+        """Calculates delta of European call option."""
+        
+        d1, _ = self._d1_and_d2(current_stock_price, time_to_maturity)
+        return norm.cdf(d1)
+
