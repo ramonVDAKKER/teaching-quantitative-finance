@@ -28,7 +28,7 @@ class BlackScholesOptionPrice():
         """Calculates delta of European put option."""
         
         d1, _ = self._d1_and_d2(current_stock_price, time_to_maturity)
-        return - norm.cdf(d1)
+        return - norm.cdf(- d1)
                 
     def price_call(self, current_stock_price, time_to_maturity):
         """Calculates price of European call option"""
