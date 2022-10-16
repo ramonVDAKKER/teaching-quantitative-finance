@@ -45,7 +45,7 @@ class BlackScholesOptionPrice():
     def _vega(self, current_stock_price, time_to_maturity):
         """Computes vega."""
         
-        d1, _ = _d1_and_d2(current_stock_price, time_to_maturity)
+        d1, _ = self._d1_and_d2(current_stock_price, time_to_maturity)
         return current_stock_price * norm.pdf(d1) * np.sqrt(time_to_maturity)
     
     def vega_call(self, current_stock_price, time_to_maturity):
