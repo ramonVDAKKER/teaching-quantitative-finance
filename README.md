@@ -4,4 +4,4 @@ Auxiliary material course **Quantitative Finance** ([BSc Econometrics & Operatio
 - notebooks (Python);
 - notes.
 
-Please report typos/errors/unclarities via 'Issues' or update the material and open a pull request.
+Please report questions, typos, errors, unclarities etc. via 'Issues'. Alternatively, update the material and open a pull request.
