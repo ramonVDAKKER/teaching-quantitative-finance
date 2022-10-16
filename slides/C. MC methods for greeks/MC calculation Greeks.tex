@@ -1,0 +1,675 @@
+\documentclass[pdf, handout]{beamer}
+\mode<presentation>{\usetheme{Warsaw}}
+%% preamble
+ \setbeamertemplate{headline}{}
+\setbeamertemplate{section page}[mine]
+% \setbeamertemplate{footline}[]
+\title{Monte Carlo approximation of Greeks}
+\subtitle{Quantitative Finance}
+\author{Tilburg University}
+\institute{
+These slides are partly based on earlier versions by Nikolaus Schweizer
+\\ \vspace{.5cm}
+Ramon van den Akker
+}
+\date{}
+%%
+\usepackage{array}
+\usepackage{multirow}
+%\input{sheets_QF_generic2.sty}
+
+
+%\newcommand\MyBox[2]{
+%  \fbox{\lower0.75cm
+%    \vbox to 1.7cm{\vfil
+%      \hbox to 1.7cm{\hfil\parbox{1.4cm}{#1\\#2}\hfil}
+%      \vfil}%
+%  }%
+%}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{diagrams}
+\usepackage{amsmath}
+%\usepackage{graphics}
+\usepackage{multicol}
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{pstricks}
+\input{commands.txt}
+%\renewcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\renewcommand{\epsi}{\varepsilon}
+\newcommand{\argmin}{\mathop{\mathrm{arg\,min}}}
+\newcommand{\rank}{\operatorname{rank}}
+\renewcommand{\kansp}{\mathbb{P}}
+\renewcommand{\calF}{\mathcal{F}}
+\newcommand{\e}{\operatorname{e}}
+\newcommand{\Bin}{\operatorname{Bin}}
+\newcommand{\kbin}{\operatorname{b}}
+\newcommand{\lin}{\operatorname{lin}}
+\newcommand{\kansq}{\mathbb{Q}}
+%\newarrow{hulp}{<}{filler}{middle}{filler}{head}
+\DeclareMathOperator*\ster{*} \DeclareMathOperator*\argmax{argmax}
+\usepackage{color}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%
+%
+
+%
+%\begin{frame}{}
+%Fundamental assumption: \\
+%NO FREE LUNCH WITHOUT RISK\bigsqcup
+%\end{frame}
+
+\AtBeginSection{\frame{\sectionpage}}
+%\AtBeginSubsection{\frame{\subsectionpage}}
+\newtranslation[to=greek]{Section}{En'othta}
+\newtranslation[to=greek]{Subsection}{Upoen'othta}
+
+\defbeamertemplate{section page}{mine}[1][]{%
+  \begin{centering}
+    {\usebeamerfont{section name}\usebeamercolor[fg]{section name}#1}
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=12pt,center]{part title}
+      \usebeamerfont{section title}\insertsection\par
+    \end{beamercolorbox}
+  \end{centering}
+}
+
+\defbeamertemplate{subsection page}{mine}[1][]{%
+  \begin{centering}
+    {\usebeamerfont{subsection name}\usebeamercolor[fg]{subsection name}#1}
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=8pt,center,#1]{part title}
+      \usebeamerfont{subsection title}\insertsubsection\par
+    \end{beamercolorbox}
+  \end{centering}
+}
+
+%%
+\begin{document}
+% title frame
+\begin{frame}
+\titlepage
+\end{frame}
+%
+
+
+\begin{frame}{the Greeks}
+Previous lecture we met the Greeks:\\ \vspace{.5cm}
+\begin{tabular}{rl}
+delta & $\dfrac{\partial C}{\partial S}$ \\[8mm] \pause
+vega & $\dfrac{\partial C}{\partial \sigma}$ \\ [8mm] \pause
+rho & $\dfrac{\partial C}{\partial r}$ \\ [8mm] \pause
+theta & $\dfrac{\partial C}{\partial t}$
+
+\end{tabular} \pause
+\hspace{1.5cm}
+\begin{tabular}{rl}
+gamma & $\dfrac{\partial^2 C}{\partial S^2}$ \\[8mm] \pause
+vomma & $\dfrac{\partial^2 C}{\partial \sigma^2}$ \\[8mm] \pause
+vanna & $\dfrac{\partial^2 C}{\partial S \partial \sigma}$
+\end{tabular}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Monte Carlo computation of Greeks}
+\begin{itemize}
+\item we have seen that Greeks are important to risk measurement and risk management (hedging)
+\item for standard options in the Black-Scholes market, closed-form expressions for the Greeks are available
+\begin{itemize}
+\item for example, the Delta of European call option is given by $\Phi(d_1)$
+\end{itemize}
+\item this lecture: how to compute an approximation, using Monte Carlo simulation, to the Greeks if we cannot obtain a closed-form solution?
+\item we discuss three methods: 
+\begin{itemize}
+\item bump and reprice
+\item pathwise method
+\item likelihood ratio method
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\section{Bump and Reprice}
+
+\begin{frame}{Goal}
+\textbf{Goal:} \\
+Compute, using Monte Carlo techniques, approximation to:
+$$
+\frac{d}{d\theta} \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]
+$$
+where
+\begin{itemize}
+\item $\theta$, $\eta$, and $\gamma$ are (deterministic) parameters
+\item  $X$ is random variable whose distribution might depend on $(\theta,\eta)$
+\item  $h$ is a real-valued function of $X$ and potentially the parameters
+$(\theta,\gamma)$
+\item if $X$ has density (pdf) $f(\cdot;\theta,\eta)$:
+\[
+ \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]
+ = \int  h(u; \theta, \gamma)  f(u;\theta,\eta) \rd u
+\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example}
+\textbf{Example (vega call option)}
+\begin{itemize}
+\item assume Black-Scholes market
+\item vega of European call option: 
+\[
+\frac{\partial}{\partial\sigma} F(t,S_t;r,\sigma,T,K)
+\]
+where $F(t,S_t;r,\sigma,T,K)$ is price, at time $t$, of European option with payoff $\max\{S_T-K,0\}$ at maturity $T$ 
+\item by FFT:
+\begin{align*}
+F(t,S_t;r,\sigma,T,K) 
+&=  \e^{-r(T-t)}  
+\mathbb{E}_{\mathbb{Q}}\left[ C_T        | \mathcal{F}_t   \right]
+\\
+&=  \e^{-r(T-t)}  
+\mathbb{E}_{\mathbb{Q}}\left[\max\{S_T-K,0\}        | \mathcal{F}_t    \right]
+\end{align*}
+\begin{itemize}
+\item remark: from $\rd S_t = r S_t \rd t + \sigma S_t \rd W_t^{\mathbb{Q}}$
+we see that conditional pdf of $S_T$, under $\mathbb{Q}$, (indeed) depends on $\sigma$
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Core idea}
+\begin{itemize}
+\item we want to obtain MC approximation to
+$$
+\frac{d}{d\theta} \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]
+$$
+\item please recall, for $f:\mathbb{R}\to\mathbb{R}$,
+\[
+f^\prime(x) = \lim_{\epsilon\to 0} \frac{ f(x+\epsilon) - f(x)}{\epsilon}\approx \frac{ f(x+h) - f(x)}{h} %
+\]
+for small number $h$
+\item this suggests to approximate 
+$(d/d\theta) \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]$
+by 
+\emph{one-sided finite-difference estimate}:
+$$
+\frac{ \mathbb{E}_{\theta+h,\eta} [ h(X; \theta+h, \gamma)]
+-  \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]
+}{h}
+$$
+where $h$ is a small step
+\item 
+however, we cannot (or do not want to) compute 
+$\mathbb{E}_{\theta+h,\eta} [ h(X; \theta+h, \gamma)]$ and
+$\mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]$ analytically
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Core idea}
+\begin{itemize}
+\item if we simulate $X_1,\dots,X_n$ i.i.d. from same distribution as $X\distr P_{\theta,\eta}$, then we have (LLN), for ``large'' $n$,
+\[
+f(\theta):=\mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]
+\approx \frac{1}{n}\sum_{i=1}^n h(X_i; \theta,\gamma)=:\hat f_n(\theta)
+\]
+\item to stress that we simulated from $ P_{\theta,\eta}$
+we will write $X_i = X_i^{\theta,\eta}$
+\item please note:
+\begin{align*}
+&\mathbb{E}_{\theta,\eta} [ \hat f_n(\theta) ] = f(\theta), \\
+&\operatorname{var}_{\theta,\eta} [ \hat f_n(\theta) ] = 
+\frac{ \operatorname{var}_{\theta,\eta}\left[ h\left(X_1^{\theta,\eta}\right)\right]}{n}.
+\end{align*}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{One-sided estimate}
+Combining the observations on the previous slide leads to
+\textbf{bump and reprice} method a.k.a.
+\textbf{finite-difference} method:
+\begin{itemize}
+\item choose small number $h$
+\item simulate $X_1^{\theta,\eta},\dots,X_n^{\theta,\eta}$ i.i.d. from 
+$P_{\theta,\eta}$
+\item simulate $X_1^{\theta+h,\eta},\dots,X_n^{\theta+h,\eta}$ i.i.d. from 
+$P_{\theta+h,\eta}$
+\item approximate 
+\[
+\frac{d}{d\theta} \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]
+\]
+by \emph{one-sided finite-difference estimate}:
+$$
+\frac{\frac{1}{n}\sum_{i=1}^n h(X_i^{\theta+h,\eta}; \theta+h,\gamma) - \frac{1}{n}\sum_{i=1}^n h(X_i^{\theta,\eta}; \theta,\gamma)}{h}
+$$
+where $h$ is a small step
+\end{itemize}
+\end{frame}
+
+\begin{frame}{One-sided estimate - quality}
+\begin{itemize}
+\item denote 
+\[
+f(\theta) = \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)] \text{ and } 
+\hat f_n(\theta) = \frac{1}{n}\sum_{i=1}^n h(X_i^{\theta,\eta}; \theta,\gamma)
+\]
+\item we approximate $f'(\theta)$ by one-sided f.d.
+\[ 
+\hat{f}_n^\prime(\theta) = \frac{ \hat f_n(\theta+h) - \hat f_n(\theta)}{h}
+\]
+\item estimation error $\hat{f}_n^\prime(\theta) - f^\prime(\theta)$ can be written as:
+\begin{align*}
+\hat{f}_n^\prime(\theta) - f^\prime(\theta) &
+= \left[ 
+\frac{ f(\theta+h) - f(\theta)}{h} - f'(\theta)
+\right] \\
+&\quad + \left[ \hat{f}_n^\prime(\theta) - \frac{ f(\theta+h) - f(\theta)}{h} \right]
+\end{align*}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{One-sided estimate - quality}
+\begin{itemize}
+\item from 
+\begin{align*}
+\hat{f}_n^\prime(\theta) - f^\prime(\theta) &
+= \left[ 
+\frac{ f(\theta+h) - f(\theta)}{h} - f'(\theta)
+\right] \\
+&\quad + \left[ \hat{f}_n^\prime(\theta) - \frac{ f(\theta+h) - f(\theta)}{h} \right],
+\end{align*}
+with \[ 
+\hat{f}_n^\prime(\theta) = \frac{ \hat f_n(\theta+h) - \hat f_n(\theta)}{h},
+\]
+we obtain
+\[
+\text{MSE} = \left( \frac{ f(\theta+h) - f(\theta)}{h} - f'(\theta)
+    \right)^2 +
+ \frac{1}{h^2} \var\left(
+    \hat f_n(\theta+h) -  \hat f_n(\theta)
+    \right)
+\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{One-sided estimate - quality}
+\begin{itemize}
+\item recall (if $f$ is sufficiently smooth)
+\[
+f(\theta+h) = f(\theta) + f'(\theta)h+\frac{f''(\theta)}{2}h^2 +O\big(h^3\big)
+\]
+\item so 
+\[
+\left( \frac{f(\theta+h)-f(\theta)}{h} 
+-f'(\theta) \right)^2 = O(h^2)
+\]
+\item to determine  \emph{variance}, we first consider case  that
+$(X_1^{\theta,\eta},\dots,X_n^{\theta,\eta})$ are independent of
+$(X_1^{\theta+h,\eta},\dots,X_n^{\theta+h,\eta})$
+\begin{align*}
+ \var\!\left[
+  \hat f_n(\theta+h) -  \hat f_n(\theta)
+\right]
+ &= \frac{1}{n} \left( \var_{\theta+h,\eta}(   
+h(X_1^{\theta+h,\eta};\theta+h,\gamma))
+ \right. \\
+&\quad +\left.\var_{\theta,\eta}(   
+h(X_1^{\theta,\eta};\theta,\gamma))\right]
+\end{align*}
+\item we assume that $ \var_{\theta+h,\eta}(   
+h(X_1^{\theta+h,\eta};\theta+h,\gamma)$ is a (locally) bounded function of $\theta$
+\item this implies
+\[
+\text{MSE}  = \text{bias}^2 + \text{var}= c_1 h^2  + c_2 \frac{1}{nh^2}
+\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{One-sided estimate - quality}
+\begin{itemize}
+\item we have
+\[
+\text{MSE}  = \text{bias}^2 + \text{var}= c_1 h^2  + c_2 \frac{1}{nh^2}
+\]
+\item letting $h$ tend to $0$ while keeping $n$ constant will make the MSE
+tend to $\infty$
+\item choosing $h$ such that $\text{MSE}$ is minimal 
+leads to $h \propto n^{-1/4}$ and
+$$
+\text{MSE} = O\big(n^{-1/2}\big)
+$$
+\item recall that (standard) MC approximation of option price itself (i.e. $(f\theta)$) satifies
+$\text{MSE} = O(n^{-1})$
+\item can we improve our rate?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{One-sided estimate - using common random numbers}
+\begin{itemize}
+\item we considered case that $(X_1^{\theta,\eta},\dots,X_n^{\theta,\eta})$ are independent of
+$(X_1^{\theta+h,\eta},\dots,X_n^{\theta+h,\eta})$
+\item In many cases, it is possible to use \emph{common random numbers} in the simulation: 
+\begin{itemize}
+\item simulate $Z_1,\dots,Z_n$ i.i.d.
+\item suppose there exists function $g$ such that
+\[
+h(X_i^{\theta,\eta};\theta,\eta) 
+\stackrel{d}{=} g(Z_i;\theta,\eta) \text{ and }
+h(X_i^{\theta+h,\eta};\theta+h,\eta)\stackrel{d}{=} g(Z_i;\theta+h,\eta)
+\]
+\end{itemize}
+\item if $g$ is differentiable with respect to the parameter $\theta$,
+then
+\begin{align*}
+\var\!\big(
+\hat f_n(\theta+h) -  \hat f_n(\theta)
+)\big)= \frac{1}{n}\var\left(
+g(Z_1;\theta+h,\eta) - g(Z_1;\theta,\eta)
+\right)
+ \\
+= \frac{1}{n}  \var\!\Big( \frac{\partial g}{\partial \theta} (Z_1,\theta)h + O\big(h^2\big)\Big)
+= \frac{1}{n}O\big(h^2\big) \hspace{1cm}
+\end{align*}
+which yields 
+\[
+\text{MSE} = c_1 h^2 + c_2  \frac{1}{n}
+\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{One-sided estimate - using common random numbers}
+\begin{itemize}
+\item under  assumption of ``smoothness''
+(function $g$ differentiable with respect to $\theta$), the mean square error (of the one-sided estimate)
+is of the form  
+$$
+\text{MSE} = c_1 h^2 + \frac{c_2}{n}\,. \hspace{2cm}
+$$
+so, for fixed $n$, the variance does not explode as $h$ becomes small
+\item 
+bias is purely controlled by $h$ and variance by $n$ 
+\item so we can take
+$h$ as small as we want, and the convergence
+rate of MSE is $O(n^{-1})$ just as in the case of MC approximation of option value itself.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Remarks}
+\textbf{Refinement: two-sided approach}
+\begin{itemize}
+\item  
+approximate $f'(\theta)$ by 
+\[
+\frac{f(\theta+h) - f(\theta -h)    }{2h}  
+\]
+\item from Taylor expansion $f(\theta+h)=f(\theta) + f'(\theta)h
++.5f''(\theta)h^2 + O(h^3)$  we see that bias is reduced
+from  $O\big(h\big)$ to $O\big(h^2\big)$
+\item  more accurate, but 
+requires extra set of simulations
+\end{itemize}
+\textbf{How to determine second-order Greeks?}
+\begin{itemize}
+\item for second-order Greeks the following finite-difference could be used
+\begin{align*}
+f''(\theta) &\approx 
+\frac{ f'(\theta+h)  - f'(\theta)}{h}\approx
+\frac{\frac{ f(\theta+h) -f(\theta)}{h} - 
+\frac{ f(\theta) -f(\theta-h)}{h}
+}{h}\\
+&
+= \frac{f(\theta+h) - 2f(\theta) + f(\theta-h) }{h^2}
+\end{align*}
+\item now  replace population moments by MC approximations
+\end{itemize}
+\end{frame}
+
+\section{Pathwise and likelihood ratio methods}
+
+
+\begin{frame}{The pathwise and likelihood ratio methods}
+\begin{itemize}
+\item
+pathwise and likelihood ratio method are the most common refinements of Bump and Reprice
+\item strategy behind both methods is to write
+\[
+\frac{d}{d\theta} \mathbb{E}[\ldots] =
+\frac{d}{d\theta} \int \cdots  \rd u
+\stackrel{?}{=} \int \frac{d}{d\theta}\cdots   \rd u
+=  \tilde{\mathbb{E}}\left[\frac{d}{d\theta} \cdots\right]
+\]
+(if admissible) and to compute the right hand side by MC
+\item one often has a choice whether to put the dependence on $\theta$ into the payoff or into the density
+\begin{itemize}
+\item
+ first case leads to pathwise method,  second to  LRM method
+ \end{itemize} 
+\item more advanced methods (like Malliavin Greeks) build on these two methods... but Bump-and-Reprice remains relevant in applications
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Core idea Pathwise method}
+Suppose $X \sim N(\mu,\sigma^2)$ and we wish to compute the derivative of $\mathbb{E}_{\mu,\sigma}[f(X)]$ w.r.t $\mu$. Denote by $\phi_{\mu,\sigma}$ the density of $N(\mu,\sigma)$.
+\vskip4mm
+\textbf{Pathwise method}: (assume $f$ is smooth!)
+\begin{align*}
+\frac{\partial}{\partial\mu} \mathbb{E}_{\mu,\sigma}[f(X)] &= \frac{\partial}{\partial\mu} \int f(\mu+\sigma x) \phi_{0,1}(x) dx \stackrel{?}{=} \int f'(\mu+\sigma x) \phi_{0,1}(x) dx \\
+&= \mathbb{E}_{\mu,\sigma}[ f'(X)]
+\end{align*} 
+If we are able to:
+\begin{itemize}
+\item obtain a closed-form formula for $f^\prime$ and
+\item simulate $X_1,\dots,X_n$ i.i.d. from the same distribution as $X$,
+\end{itemize}
+then we can estimate $(\partial/\partial\mu) \mathbb{E}_{\mu,\sigma}[f(X)]$ by
+\[
+\frac{1}{n}\sum_{i=1}^n f^\prime(X_i).
+\]
+Note that this is an unbiased estimator!
+\end{frame}
+
+\begin{frame}{Core idea Likelihood Ration Method (LRM)}
+Suppose $X \sim N(\mu,\sigma^2)$ and we wish to compute the derivative of $\mathbb{E}_{\mu,\sigma}[f(X)]$ w.r.t $\mu$. Denote by $\phi_{\mu,\sigma}$ the density of $N(\mu,\sigma)$.
+\vskip4mm
+\textbf{LRM:}
+\begin{align*}
+\frac{\partial}{\partial\mu} \mathbb{E}_{\mu,\sigma}[f(X)] &= \frac{\partial}{\partial\mu} \int f(x) \phi_{\mu,\sigma}(x) dx \stackrel{?}{=} \int f(x) \frac{\frac{\partial  \phi_{\mu,\sigma}}{d\mu}(x)}{\phi_{\mu,\sigma}(x)} \phi_{\mu,\sigma}(x) dx
+\\
+&= \mathbb{E}_{\mu,\sigma}\left[f(X) \frac{\frac{\partial  \phi_{\mu,\sigma}}{\partial\mu}(X)}{\phi_{\mu,\sigma}(X)}  \right]
+= 
+\mathbb{E}_{\mu,\sigma}\left[f(X) \frac{\partial}{\partial\mu} \log  \phi_{\mu,\sigma}(X)  \right]
+\end{align*}
+If we are able to:
+\begin{itemize}
+\item obtain a closed-form formula for $(\partial/\partial\mu) \log  \phi_{\mu,\sigma}(X)$ and
+\item simulate $X_1,\dots,X_n$ i.i.d. from the same distribution as $X$,
+\end{itemize}
+then we can estimate $(\partial/\partial\mu) \mathbb{E}_{\mu,\sigma}[f(X)]$ by
+\[
+\frac{1}{n}\sum_{i=1}^n
+\left[
+ f(X_i) \frac{\partial}{\partial\mu} \log  \phi_{\mu,\sigma}(X_i)\right].
+\]
+Note that this is an unbiased estimator!
+\end{frame}
+
+
+
+\begin{frame}{Pathwise method (1)}
+Under sufficient smoothness, we indeed have:
+$$
+\frac{\partial}{\partial \theta} E [f(Z,\theta)] = E \Big[ \frac{\partial}{\partial\theta}f(Z,\theta)\Big].
+$$
+Example: compute the delta, at $t=0$, of a call option in the B-S market.
+\begin{align*}
+f(Z,S_0) & = \max(S_T-K,0) \\
+S_T & = S_0\exp\!\big((r-\tfrac{1}{2}\sigma^2)T + \sigma \sqrt{T} \,Z\big),
+\quad Z \sim N(0,1).
+\end{align*}
+\pause
+The partial      derivative with respect to $S_0$ is given by
+$$
+\frac{\partial f}{\partial S_0} = \frac{\partial f}{ \partial S_T}\, \frac{\partial S_T}{\partial S_0} =
+1\{S_T>K\}\,\exp\!\big((r-\frac{1}{2}\sigma^2)T + \sigma \sqrt{T} \,Z\big) \,.
+$$
+\pause
+Interchange of expectation and differentiation is valid in this case. The delta can be
+computed by straightforward MC.
+\end{frame}
+
+\begin{frame}{Pathwise method (2)}
+What makes functions like $f(x)=\max(x,0)$ sufficiently smooth for our purposes is that -- even though they are not differentiable -- there exists a (non-unique) function $f'(x)$
+such that
+\[
+\structure{f(b)-f(a)=\int_a^b f'(x) dx} = \int_a^b 1_{x>0} dx.
+\]
+Intuitively, this is what we need here: A function that behaves like the (non-existent) derivative of $f$ when its inside an integral. 
+Such functions are called \emph{absolutely continuous}. 
+You implicitly are aware of this from probability theory: 
+random variables that have a pdf (and such random variables are said to have an absolutely continuous distribution).
+\vskip2mm
+Conversely, the pathwise approach fails for functions $f$ that have jumps and thus cannot be represented as integrals. Bump \& Reprice remains applicable. 
+\end{frame}
+
+\begin{frame}{Failure of pathwise method}
+What happens if we try the pathwise method to compute the delta, at $t=0$, of a digital option?
+\begin{align*}
+f(Z,S_0) & = 1\{S_T>K\} \\
+S_T & = S_0\exp\!\big((r-\tfrac{1}{2}\sigma^2)T + \sigma \sqrt{T} \,Z\big),
+\quad Z \sim N(0,1).
+\end{align*}
+\vskip2mm\pause
+The partial derivative with respect to $S_0$ is given by
+$$
+\frac{\partial f}{\partial S_0} = \frac{\partial f}{ \partial S_T}\, \frac{\partial S_T}{\partial S_0} =
+0 \qquad (\text{w.p.}\,1).
+$$
+\vskip4mm\pause
+Interchange of expectation and differentiation is \emph{not} valid in this case. Indeed,
+the expectation of the derivative is $0$, but this is not the delta of the digital option.
+\end{frame}
+
+
+
+\begin{frame}{Applicability of pathwise method}
+In general, the pathwise method fails when the payoff is \emph{not} sensitive to small changes
+in the simulated path, such as in the case of digital options and barrier options. These are
+also the cases in which the bump-and-reprice method converges slowly but may be the only method.
+\vskip4mm\pause
+The pathwise method requires that you know the derivative of the payoff with respect to
+the parameter of interest. %In the context of the Euler discretization, compute partial
+%derivatives step-by-step (based on the chain rule).
+\vskip4mm\pause
+Because payoff functions often have kinks, so that their derivatives are not continuous,
+the pathwise method frequently does not apply to the calculation of second-order sensitivities 
+such as gamma. We can still use a method based on finite differences (analogous to bump-and-reprice).
+\end{frame}
+
+
+
+
+\begin{frame}{Likelihood ratio method}
+\begin{itemize}
+\item
+in cases in which the payoff depends on a random variable whose density function is known explicitly,
+the difficulties arising from discontinuous payoff functions can be avoided by making $\theta$
+a parameter of the \emph{density}
+\item  We can then differentiate the density rather than the payoff function
+\end{itemize}
+\begin{align*}
+& \frac{\partial}{\partial\theta} \, \mathbb{E}_{\theta,\eta}[F(X)] = \frac{\partial}{\partial\theta} \int F(u)\, g(u; \theta,\eta) \,du
+= \int F(u) \, \frac{\partial g}{\partial \theta}(u;\theta,\eta) \,du \\
+&\quad = \int F(u) \, \frac{(\partial g/\partial\theta)(u;\theta,\eta)}{g(u;\theta,\eta)} g(u;\theta,\eta) \, du \\
+&\quad 
+= \mathbb{E}_{\theta,\eta} \Bigg[F(X) \, \frac{(\partial g/\partial\theta)(X;\theta,\eta)}{g(X;\theta,\eta)}\Bigg] = \mathbb{E}_{\theta,\eta}\Bigg[F(X) \, \frac{\partial \log g(X;\theta, \eta)}{\partial \theta} \Bigg].
+\end{align*}
+\end{frame}
+
+\begin{frame}{Example (1)}
+Consider an option written on $S_T$ in the standard BS model, and suppose we want to
+compute its delta at $t=0$ (sensitivity w.r.t.\ $S_0$). We have
+$$
+S_T = S_0 \exp\big( (r-\tfrac{1}{2}\sigma^2)T + \sigma\sqrt{T}\, Z \big).
+$$
+\pause
+The density of $S_T$ can be found by computing $\mathbb{Q}(S_T \leq s)$ for given $s \in \mathbb{R}$ and
+differentiating with respect to $s$:
+$$
+g(s,S_0) = \frac{1}{s\sigma\sqrt{T}} \,\,\phi\Bigg( \frac{\log(s/S_0) - (r-\frac{1}{2}\sigma^2)T}
+{\sigma \sqrt{T}} \Bigg)
+$$
+where $\phi(z)=\frac{1}{\sqrt{2\pi}}\exp(-\tfrac{1}{2}z^2)$, the standard normal density.
+\pause
+So
+$$
+\log\, g(s,S_0) = -\frac{\big(\log(s/S_0) - (r-\frac{1}{2}\sigma^2)T\big)^2}
+{2\sigma^2 T}  + \cdots
+$$
+where the dots indicate terms that do not depend on $S_0$.
+\end{frame}
+
+\begin{frame}{Example (2)}
+\vskip2mm
+The score function is
+\begin{align*}
+\frac{\partial}{\partial S_0} \, \log\, g(s,S_0)
+= \frac{\log(s/S_0) - (r-\frac{1}{2}\sigma^2)T}{\sigma^2 T \, S_0}\,.
+\end{align*}
+\pause
+The delta, at $t=0$, of an option with payoff $F(S_T)$ can now be computed as
+$$
+e^{-rT} \mathbb{E}_{\mathbb{Q}}\Bigg[ F(S_T) \, \frac{\log(S_T/S_0) - (r-\frac{1}{2}\sigma^2)T}{\sigma^2 T \, S_0}\Bigg].
+$$
+\pause
+Given that $S_T = S_0 \exp\big( (r-\tfrac{1}{2}\sigma^2)T + \sigma\sqrt{T}\, Z \big)$,
+we can also write this as
+$$
+e^{-rT} \mathbb{E}_{\mathbb{Q}}\Bigg[ F(S_T) \, \frac{Z}{\sigma \sqrt{T} \,S_0} \Bigg].
+$$
+\end{frame}
+
+\begin{frame}{Comments}
+Comments on the LR method:
+\vskip1mm
+\begin{itemize}
+\itemsep3mm
+\item It is applicable to \emph{any} payoff function $F$, continuous or not.\pause
+\item It can be used analogously for other Greeks, including higher-order derivatives.\pause
+\item It depends on availability of the density of the underlying at time $T$ in
+analytic form.
+\end{itemize}
+\end{frame}
+
+
+
+\section{Concluding remarks}
+
+\begin{frame}{Summary of sensitivity estimation}
+\begin{itemize}
+\item Bump and reprice is conceptually simple and easy to apply, but comes with a bias.
+It is essential to use common random numbers.\pause
+\item For continuous (piecewise differentiable) payoffs, the pathwise method can be
+used as an alternative to bump and reprice. The pathwise method is not applicable to
+discontinuous payoffs.\pause
+\item The likelihood ratio method can be used both for continuous and discontinuous
+payoffs. It requires that the density of the underlying at expiry is available in
+analytic form.\pause
+\item For second-order derivatives, finite differences are most generally applicable.
+Convergence is often slow, however.
+\end{itemize}
+\end{frame}
+\end{document} 
+
+
