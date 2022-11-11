@@ -215,10 +215,10 @@ We will only give a full proof for the Black-Scholes market. To prepare for the 
 \item If $V$ is self-financing portfolio then
 \begin{align*}
 \rd \frac{V_t}{B_t}
-&= \frac{1}{B_t} \rd V_t - r \frac{V_t}{B_t} 
+&= \frac{1}{B_t} \rd V_t - r \frac{V_t}{B_t}  
 \rd t =
 \frac{1}{B_t}(\phi_t \rd S_t + \psi_t \rd B_t)
- -r \frac{V_t}{B_t} \\
+ -r \frac{V_t}{B_t} \rd t \\
  & =\dots = \phi_t \rd \frac{S_t}{B_t}
 \end{align*}
 Hence: if $S/B$ is $\mathbb{Q}$-martingale, then
@@ -319,7 +319,7 @@ Define
 $\mathbb{Q}$ by, for events $A \in\mathcal{F}_T$,
 \[
 \mathbb{Q}(A)=%\mathbb{E}_{\mathbb{P}}\left[  \theta_T \right]=
-\mathbb{E}_{\mathbb{P}}\left[ 1_A \exp\left(  -\frac{1}{2} \int_0^T \gamma_t^2 \rd t   - \int_0^T \gamma_t  \rd W^{\mathbb{P}}_t         \right)1_A\right].
+\mathbb{E}_{\mathbb{P}}\left[ 1_A \exp\left(  -\frac{1}{2} \int_0^T \gamma_t^2 \rd t   - \int_0^T \gamma_t  \rd W^{\mathbb{P}}_t         \right)\right].
 \]
 Then we have:
 \begin{itemize}
