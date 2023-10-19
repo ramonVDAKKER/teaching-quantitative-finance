@@ -140,7 +140,7 @@ C_t=F(t, S_t)
 
 \begin{frame}{Black-Scholes Partial Differential Equation}
 \textbf{Black-Scholes Partial Differential Equation:} \\
-$F$ corresponds to a self-financing trading strategy if and only if $F$ is a solution to the PDE
+$F$ corresponds to a self-financing trading strategy if and only if $F$ is a solution to the Partial Differential Equation (equation with function $G$ as variable)
 \[
 \frac{\partial G}{\delta t}(t, s) + r s \frac{\partial G}{\partial
 s}(t, s) + \frac{1}{2}\sigma^2 s^2 \frac{\partial^2 G}{\partial
@@ -148,11 +148,11 @@ s^2}(t,s) -r G(t,s )=0\,\, \forall s>0, t\in[0, T),
 \]
 and in that case the positions in the self-financing trading strategy are given by:
 \[
-\phi(t,s)=\frac{\partial G}{\partial s}(t, s),
+\phi(t,s)=\frac{\partial F}{\partial s}(t, s),
 \]
 and
 \[
-\psi(t,s)=\frac{G(t,s)-\phi(t,s) s}{B_t}.
+\psi(t,s)=\frac{F(t,s)-\phi(t,s) s}{\exp(rt)}.
 \]
 \\ \vspace{.3cm}
 \textbf{Remarks:}
@@ -237,7 +237,7 @@ On the previous slide we obtained
 F_t + \frac{1}{2}\sigma^2 F_{SS} S_t^2    
 &=  r\psi_t B_t.
 \end{align*}
-Realizing that $\psi_t B_t = F - \phi_t S_t = F - F_S S_t$
+As $\psi_t B_t = F - \phi_t S_t = F - F_S S_t$
 we obtain the result.
 \end{frame}
 
@@ -355,6 +355,56 @@ Value function $F(t,s)$:
 \begin{figure}
 \includegraphics[width=0.85\textwidth]{value_dig_put.eps}
 \end{figure}
+\end{frame}
+
+\begin{frame}{Feynman-Kac Theorem}
+Let $\alpha(t, x)$, $\beta(t,x)$, and $k(t,x)$ be  functions satisfying `regularity conditions'.
+Consider the PDE
+\[
+\frac{\partial G}{\delta t}(t, x) +  \alpha(t, x) \frac{\partial G}{\partial
+s}(t, x) + \frac{1}{2} \beta^2(t,x)  \frac{\partial^2 G}{\partial
+s^2}(t,x) - k(t, x)  G(t,x )=0, 
+\]
+for all $x$ and 
+$t\in[0, T)$ with boundary condition $G(T, x) = h(x)$ for all $x$.  
+
+Then the solution is given by:
+\[
+G(t,x)= \mathbb{E}\left[ 
+ \exp\left( -  \int_t^T k(s, X_s) \rd s  \right) h( X_T)
+\mid X_t=x
+\right],
+\]
+where $X$ is a stochastic process, on the time interval $[t, T]$, defined via the SDE
+\[
+\rd X_u = \alpha(u,X_u) \rd u + \beta(u, X_u) \rd W_u
+\]
+and with starting value $X_t=x$, and
+where $W$ is a standard Brownian motion.
+\end{frame}
+
+
+
+\begin{frame}{Black-Scholes PDE reconsidered}
+The no-arbitrage price, at time $t\in [0,T)$, of a European option with payoff $h(S_T)$ at expiration date $T>0$ is given by
+$F(t, S_t)$ where $F$ satisfies
+\[
+\frac{\delta F}{\delta t}(t,s) + r s \frac{\partial F}{\partial
+s}(t,s) + \frac{1}{2}\sigma^2 s^2 \frac{\partial^2 F}{\partial
+s^2}(t,s) -r F(t,s)=0\quad \forall s>0,\,t\in[0, T),
+\]
+Feynman-Kac tells us that we have
+\[
+F(t, s)= \mathbb{E}\left[ \e^{-r(T-t)}
+ h( S_T)
+\mid S_t=s
+\right],
+\]
+where $S$ is defined via the SDE
+\[
+\rd S_u = r S_u \rd u + \sigma S_u \rd W_u, \quad S_t=s,
+\]
+where $W$ is a standard Brownian motion.
 \end{frame}
 
 \end{document}
