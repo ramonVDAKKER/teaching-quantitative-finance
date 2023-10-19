@@ -202,16 +202,22 @@ All pricing methods we discuss rely on insisting that arbitrage opportunities do
 exist.
 
 \begin{definition}
-If it is possible to find a self-financing trading strategy with value process $V$ such that, for some  $T>0$, we have
+If it is possible to find an admissible self-financing trading strategy with value process $V$ such that, for some  $T>0$, we have
 $V_0\leq 0$ and
 \[
 \mathbb{P}( V_T< 0 )=0 \text{ and }  \mathbb{P}( V_T> 0 )>0,
 \]
 then we say that an arbitrage opportunity exists.
 \end{definition}
-\begin{figure}
-\includegraphics[angle=270,width=0.3\textwidth]{gordon-gekko.eps}
-\end{figure}
+\textbf{Remarks:}
+\begin{itemize}
+\item in QF you are allowed to ignore `admissible': this condition rules out 'doubling strategies'. A sufficient condition for admissibility: $\mathbb{E}V_t^2<\infty$ for all $t\in[0,T]$, 
+where $V_t$ denotes the porfolio value of the self-financing strategy
+\end{itemize}
+
+%\begin{figure}
+%\includegraphics[angle=270,width=0.3\textwidth]{gordon-gekko.eps}
+%\end{figure}
 \end{frame}
 
 \section{Toy model}
