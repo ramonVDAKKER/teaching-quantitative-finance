@@ -193,6 +193,19 @@ $\rd V_t=\textcolor{blue}{c_t} \rd t + \textcolor{red}{d_t} \rd W_t$
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Warning: sloppy notation}
+We will often use the following notations/abbrevations when working with PDEs:
+\begin{itemize}
+\item $F_S = (\partial F / \partial s) = (\partial F / \partial s)(t,S_t)$
+\item $F_t = (\partial F / \partial t) = (\partial F / \partial t)(t,S_t)$
+\item $F = F(t,S_t$)
+\item etc.
+\end{itemize}
+The notation $F_t$ is somewhat confusing as it seems to refer to a stochastic process. And you argue that it would be a natural abbrevation for $F(t,S_t)$. \\
+If you want to be clear and safe it could be better to just write down the partial derivatives fully.
+\end{frame}
+
+
 \begin{frame}{Derivation}
 %{\small
 We have
@@ -343,7 +356,7 @@ Probability that option ends in-the-money:
 \end{frame}
 
 \begin{frame}{Examples: European digital put option}
-Price of the option (at $t=0$) $F(s,0)$ - numerical solution compared to exact solution:
+Price of the option (at $t=0$) $F(0,s)$ - numerical solution compared to exact solution:
 \begin{figure}
 \includegraphics[width=0.85\textwidth]{startprice_dig_put.eps}
 \end{figure}
@@ -362,8 +375,8 @@ Let $\alpha(t, x)$, $\beta(t,x)$, and $k(t,x)$ be  functions satisfying `regular
 Consider the PDE
 \[
 \frac{\partial G}{\delta t}(t, x) +  \alpha(t, x) \frac{\partial G}{\partial
-s}(t, x) + \frac{1}{2} \beta^2(t,x)  \frac{\partial^2 G}{\partial
-s^2}(t,x) - k(t, x)  G(t,x )=0, 
+x}(t, x) + \frac{1}{2} \beta^2(t,x)  \frac{\partial^2 G}{\partial
+x^2}(t,x) - k(t, x)  G(t,x )=0, 
 \]
 for all $x$ and 
 $t\in[0, T)$ with boundary condition $G(T, x) = h(x)$ for all $x$.  
