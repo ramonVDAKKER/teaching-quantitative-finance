@@ -130,7 +130,7 @@ Suppose bank ABC takes no further action. Then at $t=3/12$:
 \item if stock price at $t=3/12$ exceeds 5 euro:
 \begin{itemize}
 \item bank ABC needs to sell stocks to S for $5$ euro; this leads to loss
-of $10,000 \times (S_{3/12} -5) - 3,000$ euro
+of $10,000 \times (S_{3/12} -5) - 3,000\times\exp(rT)$ euro
 \item note that potential loss is unbounded (assuming GBM as model for $S$):  for any $K>0$:  $\mathbb{P}(S_{3/12} > K)>0$
 \end{itemize}
 \item so selling the option yields risk. Bank ABC would like (and is enforced to do so by regulators) to \emph{measure}  the risk
