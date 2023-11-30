@@ -329,9 +329,9 @@ h(X_1^{\theta,\eta};\theta,\gamma))\right]
 \end{align*}
 \item we assume that $ \var_{\theta+h,\eta}(   
 h(X_1^{\theta+h,\eta};\theta+h,\gamma)$ is a (locally) bounded function of $\theta$
-\item this implies
+\item this implies that we have
 \[
-\text{MSE}  = \text{bias}^2 + \text{var}= c_1 h^2  + c_2 \frac{1}{nh^2}
+\text{MSE}  = \text{bias}^2 + \text{var} =O(h^2)  +  O\left(\frac{1}{nh^2}\right)
 \]
 \end{itemize}
 \end{frame}
@@ -340,7 +340,7 @@ h(X_1^{\theta+h,\eta};\theta+h,\gamma)$ is a (locally) bounded function of $\the
 \begin{itemize}
 \item we have
 \[
-\text{MSE}  = \text{bias}^2 + \text{var}= c_1 h^2  + c_2 \frac{1}{nh^2}
+\text{MSE}  = \text{bias}^2 + \text{var} = O( h^2)  + O\left( \frac{1}{nh^2} \right)
 \]
 \item letting $h$ tend to $0$ while keeping $n$ constant will make the MSE
 tend to $\infty$
@@ -383,7 +383,7 @@ g(Z_1;\theta+h,\eta) - g(Z_1;\theta,\eta)
 \end{align*}
 which yields 
 \[
-\text{MSE} = c_1 h^2 + c_2  \frac{1}{n}
+\text{MSE} = O( h^2 ) + O(  \frac{1}{n})
 \]
 \end{itemize}
 \end{frame}
@@ -394,7 +394,7 @@ which yields
 (function $g$ differentiable with respect to $\theta$), the mean square error (of the one-sided estimate)
 is of the form  
 $$
-\text{MSE} = c_1 h^2 + \frac{c_2}{n}\,. \hspace{2cm}
+\text{MSE} = O( h^2) + O\left(\frac{1}{n}\right)\,. \hspace{2cm}
 $$
 so, for fixed $n$, the variance does not explode as $h$ becomes small
 \item 
@@ -461,7 +461,7 @@ pathwise and likelihood ratio method are the most common refinements of Bump and
 
 
 \begin{frame}{Core idea Pathwise method}
-Suppose $X \sim N(\mu,\sigma^2)$ and we wish to compute the derivative of $\mathbb{E}_{\mu,\sigma}[f(X)]$ w.r.t $\mu$. Denote by $\phi_{\mu,\sigma}$ the density of $N(\mu,\sigma)$.
+Suppose $X \sim N(\mu,\sigma^2)$ and we wish to compute the derivative of $\mathbb{E}_{\mu,\sigma}[f(X)]$ w.r.t $\mu$. Denote by $\phi_{\mu,\sigma}$ the density of $N(\mu,\sigma^2)$.
 \vskip4mm
 \textbf{Pathwise method}: (assume $f$ is smooth!)
 \begin{align*}
@@ -481,7 +481,7 @@ Note that this is an unbiased estimator!
 \end{frame}
 
 \begin{frame}{Core idea Likelihood Ration Method (LRM)}
-Suppose $X \sim N(\mu,\sigma^2)$ and we wish to compute the derivative of $\mathbb{E}_{\mu,\sigma}[f(X)]$ w.r.t $\mu$. Denote by $\phi_{\mu,\sigma}$ the density of $N(\mu,\sigma)$.
+Suppose $X \sim N(\mu,\sigma^2)$ and we wish to compute the derivative of $\mathbb{E}_{\mu,\sigma}[f(X)]$ w.r.t $\mu$. Denote by $\phi_{\mu,\sigma}$ the density of $N(\mu,\sigma^2)$.
 \vskip4mm
 \textbf{LRM:}
 \begin{align*}
