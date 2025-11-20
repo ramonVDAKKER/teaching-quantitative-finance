@@ -42,6 +42,18 @@ class BlackScholesOptionPrice():
         d1, _ = self._d1_and_d2(current_stock_price, time_to_maturity)
         return norm.cdf(d1)
     
+    def _gamma(self, current_stock_price, time_to_maturity):
+        """Computes gamma (same for puts and calls)."""
+        
+        d1, _ = self._d1_and_d2(current_stock_price, time_to_maturity)
+        return norm.pdf(d1) / (current_stock_price * self.sigma * np.sqrt(time_to_maturity))
+    
+    def gamma_call(self, current_stock_price, time_to_maturity):
+        return self._gamma(current_stock_price, time_to_maturity)
+
+    def gamma_put(self, current_stock_price, time_to_maturity):
+        return self._gamma(current_stock_price, time_to_maturity)
+    
     def _vega(self, current_stock_price, time_to_maturity):
         """Computes vega."""
         
