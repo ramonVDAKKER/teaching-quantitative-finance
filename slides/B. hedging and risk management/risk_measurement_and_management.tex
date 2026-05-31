@@ -359,6 +359,7 @@ with
 d_1= \frac{
 \log(S_t/K)+(r +0.5 \sigma^2)(T-t)}{\sigma\sqrt{T-t}}
 \]
+\item the put delta follows from \emph{put-call parity}: differentiating $C-P=S-K\e^{-r(T-t)}$ in $S$ gives $\Delta_{\text{put}}=\Delta_{\text{call}}-1=\Phi(d_1)-1=-\Phi(-d_1)$
 \item portfolio consisting of $a$ options and $b$ stocks (at time $t$) has Delta:
 \[
 \Delta_{\text{portfolio}} = a \Delta_{\text{option}}
@@ -586,6 +587,16 @@ Zero gamma and vega (a $2\times2$ system), then zero delta:
 \textbf{Numbers} $(\Delta,\Gamma,\nu)$:\ I$=(0.55,0.07,0.40)$,\ II$=(0.50,0.02,0.10)$,\ III$=(0.60,0.03,0.20)$:
 \[ a=2,\qquad b=1,\qquad c=0.55-2(0.50)-1(0.60)=-1.05 . \]
 So buy $2$ of option~II and $1$ of option~III, and short $1.05$ shares. (Vega-hedging is why a \emph{second} traded option is needed.)
+\end{frame}
+
+\begin{frame}{Implied volatility and the smile}
+The Black-Scholes price is strictly increasing in $\sigma$. The \textbf{implied volatility} $\sigma_{\text{imp}}$ of a traded option is the volatility that makes the B-S price match the market price:
+\[ F^{\text{BS}}(t,S_t;\sigma_{\text{imp}})=\text{market price}. \]
+\begin{itemize}
+\item it is the market's ``Black-Scholes-equivalent'' volatility quote;
+\item if B-S held exactly, $\sigma_{\text{imp}}$ would be identical across all strikes and maturities --- in practice it is not. Plotting $\sigma_{\text{imp}}$ against the strike gives the \emph{volatility smile} (or skew);
+\item so $\sigma_{\text{imp}}$ is a market-implied \emph{input}, whereas the \emph{realized} volatility $\sigma_{\text{real}}$ is what the stock actually does. The two need not agree --- which is exactly what a delta-hedged option bets on (next slide).
+\end{itemize}
 \end{frame}
 
 \begin{frame}{The gamma--theta P\&L of a delta-hedged option}
