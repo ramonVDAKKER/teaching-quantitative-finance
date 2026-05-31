@@ -124,7 +124,15 @@ The logic of risk-neutral pricing:
 \section{Risk-neutral pricing}
 
 \begin{frame}{Motivation}
-We have proved the First Fundamental Theorem of asset pricing for the toy model (see part 1). Now we will  state the continuous-time version.
+In part~1 we priced options in the one-period toy model two ways: by \emph{replication}, and by \emph{risk-neutral} pricing under a measure $\mathbb{Q}$ that made $S/B$ a martingale. There we proved the First Fundamental Theorem of asset pricing.
+\medskip
+
+The same ideas carry over to continuous time --- only the machinery is heavier. We now
+\begin{itemize}
+\item state the continuous-time First Fundamental Theorem;
+\item \emph{find} the risk-neutral measure $\mathbb{Q}$ (via Girsanov);
+\item use it to price European options.
+\end{itemize}
 \end{frame}
 
 
@@ -294,8 +302,6 @@ C_t &=  N_t \mathbb{E}_{\mathbb{Q}}\left[
 \end{itemize}
 \end{frame}
 
-
-
 \begin{frame}{Using the first fundamental theorem to price option}
 \begin{itemize}
 \item price processes basic assets in standard Black-Scholes market given; in particular: 
@@ -373,80 +379,8 @@ is a standard Brownian motion under $\mathbb{Q}$.
 \begin{itemize}
 \item source: Wikipedia
 \item under $\mathbb{Q}$ and $\mathbb{P}$ same sample paths possible (equivalence), but with different likelihoods
+\item a sketch of proof is given in the \hyperlink{app:girsanov}{appendix}
 \end{itemize}
-\end{frame}
-
-\begin{frame}{Sketch proof Girsanov}
-\begin{itemize}
-\item given the integrability conditions, it is easy to show that $\mathbb{Q}$ is probability measure equivalent to $\mathbb{P}$
-\item to prove that $W^{\mathbb{Q}}$ is a standard Brownian motion under $\mathbb{Q}$ we need to show, for any $0=t_0<t_1<\dots<t_n\leq T$, that
-\[
-(W_{t_1}^{\mathbb{Q}} - W_{t_0}^{\mathbb{Q}},\dots,W_{t_n}^{\mathbb{Q}} - W^{\mathbb{Q}}_{t_{n-1}})\distr \rN(0_n, \Sigma)
-\]
-where $\Sigma_{ij}=0$ for $i\neq j$ 
-and $\Sigma_{ii} = t_i -t_{i-1}$
-\item we only consider case in which $u\mapsto \gamma_u$ is deterministic and  $n=2$ with $t_2=T$
-\item it is sufficient to show (MGF determines the probability distribution)
-\[
-\mathbb{E}_{\mathbb{Q}}\left[ \e^{a_1 (W^{\mathbb{Q}}_{t_1} - W^{\mathbb{Q}}_{t_0}) + a_2 (W^{\mathbb{Q}}_{t_2} - W^{\mathbb{Q}}_{t_1})}\right]  = \e^{\frac{1}{2}\left(a_1^2(t_1-t_0) + a_2^2(t_2-t_1)
-\right)} 
-\]
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Sketch proof Girsanov}
-We  have 
-\begin{align*}
-&\mathbb{E}_{\mathbb{Q}}\left[ \e^{a_1 (W_{t_1}^{\mathbb{Q}} - W_{t_0}^{\mathbb{Q}}) + a_2 (W^{\mathbb{Q}}_{t_2} - W^{\mathbb{Q}}_{t_1})}\right]= 
-\mathbb{E}_{\mathbb{P}}\left[\frac{\rd\mathbb{Q}}{\rd\mathbb{P}} \e^{a_1 (W_{t_1}^{\mathbb{Q}} - W^{\mathbb{Q}}_{t_0}) + a_2 (W^{\mathbb{Q}}_{t_2} - W^{\mathbb{Q}}_{t_1})}\right] \\
- &\quad=
-\mathbb{E}_{\mathbb{P}}\left[
-\e^{a_1 (W^{\mathbb{Q}}_{t_1} - W^{\mathbb{Q}}_{t_0}) + a_2 (W^{\mathbb{Q}}_{t_2} - W^{\mathbb{Q}}_{t_1})}
-\e^{-\frac{1}{2}\int_0^T \gamma_u^2 \rd u - \int_0^T \gamma_u \rd W^{\mathbb{P}}_u}
-\right] \\
- &\quad=
-\e^{
-a_1 \int_{t_0}^{t_1} \gamma_u \rd u + a_2 \int_{t_1}^{t_2} \gamma_u \rd u 
--\frac{1}{2}\int_{t_0}^{t_2} \gamma_u^2  \rd u} \\
-&\qquad\quad \times
-\mathbb{E}_{\mathbb{P}}\left[
-\e^{ 
--\int_{t_0}^{t_1} ( \gamma_u - a_1)  \rd W^{\mathbb{P}}_u
--\int_{t_1}^{t_2} (\gamma_u - a_2)  \rd W^{\mathbb{P}}_u
-}
-\right]
-\end{align*}
-Exploiting independent increments and  
-$\int_a^b f_u \rd W^{\mathbb{P}}_u \distr \rN( 0, \int_a^b f_u^2 \rd u)$ for deterministic functions $f$:
-\begin{align*}
-& \mathbb{E}_{\mathbb{P}}\left[
-\e^{ 
--\int_{t_0}^{t_1} ( \gamma_u - a_1)  \rd W^{\mathbb{P}}_u
--\int_{t_1}^{t_2} (\gamma_u - a_2)  \rd W^{\mathbb{P}}_u
-}
-\right] \\
-&\quad =
-\mathbb{E}_{\mathbb{P}}
-\left[
-\e^{ 
--\int_{t_0}^{t_1} ( \gamma_u - a_1)  \rd W^{\mathbb{P}}_u }
-\right]
-\mathbb{E}_{\mathbb{P}}
-\left[\e^{ 
--\int_{t_1}^{t_2} ( \gamma_u - a_2)  \rd W^{\mathbb{P}}_u}\right]
-\\
-&\quad
-= \e^{
-\frac{1}{2} \int_{t_0}^{t_1} ( \gamma_u - a_1)^2 \rd u
-}\e^{
-\frac{1}{2} \int_{t_1}^{t_2} ( \gamma_u - a_2)^2 \rd u
-}  = \e^{\frac{1}{2}\int_{t_0}^{t_2} \gamma_u^2 \rd u 
-- a_1 \int_{t_0}^{t_1} \gamma_u \rd u 
-- a_2 \int_{t_1}^{t_2} \gamma_u \rd u
-} \\
-&\qquad \times \e^{\frac{1}{2}\left( a_1^2 (t_1-t_0) + a_2^2 (t_2- t_1)\right)
-} \text{ which yields the result}
-\end{align*}
 \end{frame}
 
 
@@ -473,35 +407,13 @@ Then $\mathbb{Q}$ is \emph{not} equivalent to $\mathbb{P}$.
 \end{frame}
 
 \begin{frame}{Back to valuation: exploiting Girsanov}
-%\vspace{-.25cm}
-\begin{theorem} Under regularity conditions: 
-absence of arbitrage holds if and only if,
-for some num\'{e}raire $N$, there exists a probability measure $\mathbb{Q}=\mathbb{Q}_N$ such that:
-\begin{itemize}
-\item[(1)] $\mathbb{Q}$ is equivalent to $\mathbb{P}$;
-\begin{itemize}
-\item i.e. $\mathbb{Q}(A)>0$ iff $\mathbb{P}(A)>0$ and $\mathbb{Q}(A)=0$ iff $\mathbb{P}(A)=0$;
-\end{itemize}
-\item[(2)] for any price process $A$ in the market, the discounted price process $A/N$ is a $\mathbb{Q}$-martingale, i.e. 
-\[
-\frac{A_t}{N_t}=\mathbb{E}_{\mathbb{Q}}\left[ \frac{A_{t+h}}{N_{t+h}} \mid \calF_t \right] 
-=
-\mathbb{E}_{\mathbb{Q}}\left[ \frac{A_{T}}{N_{T}} \mid \calF_t \right].
-\]
-\end{itemize}
-%\textbf{Theorem} \\
-%if there is \emph{No Free Lunch Without Vanishing Risk}  there exists probability measure $\mathbb{Q}$ such that (1)-(2) hold
-%\begin{itemize}
-%\item NFLWVR is rather subtle relaxation of no-arbitrage which is (far) beyond (technical) scope of QF
-%\item you are allowed to read the theorems as an ``if and only if''
-%\end{itemize}
-\end{theorem}
-\textbf{Remarks:}
-\begin{itemize}
-\item any asset $A$ with $\mathbb{P}(A_t > 0)=1$ for all $t$ can be used as num\'{e}raire
-\item typically Money Market Account $B$ is used as num\'{e}raire 
-\end{itemize}
-%
+\textbf{Recall the First Fundamental Theorem} (stated earlier): for a num\'eraire $N$, absence of arbitrage means there is a measure $\mathbb{Q}\sim\mathbb{P}$ under which \emph{every} discounted price $A/N$ is a martingale.
+\medskip
+
+\textbf{Plan.} In the Black-Scholes market we now \emph{construct} this $\mathbb{Q}$ explicitly --- using Girsanov --- and then read off option prices as discounted $\mathbb{Q}$-expectations.
+\medskip
+
+(We use the money-market account $B$ as num\'eraire; any asset that stays strictly positive would also do.)
 \end{frame}
 
 
@@ -773,6 +685,8 @@ K_t A_t  =\mathbb{E}_{\mathbb{P}}[ K_T A_T \mid
 \]
 i.e. $KA$ is a $\mathbb{P}$-martingale
 \end{itemize}
+\smallskip
+{\small Here $K=Z/N$ is the discounted likelihood ratio $\tfrac1N\,\tfrac{\rd\mathbb{Q}}{\rd\mathbb{P}}$ --- the continuous-time version of the kernel $m=\tfrac{B_0}{B_1}\tfrac{\rd\mathbb{Q}}{\rd\mathbb{P}}$ from part~1.}
 \end{frame}
 
 \begin{frame}{The first fundamental theorem of asset pricing (pricing kernel version)}
@@ -791,8 +705,6 @@ C_t=\frac{1}{K_t}\mathbb{E}_{\mathbb{P}}[ K_T C_T \mid \calF_t]
 \end{itemize}
 
 \end{frame}
-
-
 
 
 
@@ -886,7 +798,24 @@ correspond to small values of $S_T(\omega)$
 \end{itemize}
 \end{frame}
 
-
+\begin{frame}{One object, three encodings}
+The risk-neutral measure, the pricing kernel, and state prices are three views of the \emph{same} pricing rule.
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\small}]
+\node[draw,rounded corners,fill=blue!6] (Q) at (0,0) {risk-neutral measure $\mathbb{Q}$};
+\node[draw,rounded corners,fill=orange!10] (K) at (6,0) {pricing kernel $K=Z/N$};
+\node[draw,rounded corners,fill=green!10] (pi) at (3,-1.7) {state prices};
+\draw[<->,thick,gray] (Q)--(K) node[midway,above,font=\scriptsize]{$Z=\tfrac{\rd\mathbb{Q}}{\rd\mathbb{P}}$};
+\draw[<->,thick,gray] (Q)--(pi);
+\draw[<->,thick,gray] (K)--(pi);
+\end{tikzpicture}
+\end{center}
+The same price, three ways:
+\[ C_t = N_t\,\mathbb{E}_{\mathbb{Q}}\!\Big[\tfrac{C_T}{N_T}\,\Big|\,\mathcal{F}_t\Big]
+= \tfrac{1}{K_t}\,\mathbb{E}_{\mathbb{P}}[\,K_T C_T\mid\mathcal{F}_t\,]
+= \int C_T\,\rd\pi . \]
+In the part-1 toy model these were the measure $\mathbb{Q}$, the kernel $m$, and the Arrow-Debreu prices $\pi_u,\pi_d$.
+\end{frame}
 
 \section{Second Fundamental Theorem of
 asset pricing}
@@ -930,5 +859,99 @@ valuation (and hedging) in incomplete markets
 as well as actuarial risk). 
 \end{frame}
 
+
+\begin{frame}{Three methods, one price}
+For the European digital put (payoff $1\{S_T\le K\}$) all three methods give the \emph{same} price:
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{ll}
+\hline
+method & price $C_0$\\
+\hline
+Black-Scholes PDE (part 2) & $\e^{-rT}\Phi(d_-)$\\
+risk-neutral pricing (part 3) & $\e^{-rT}\Phi(d_-)$\\
+pricing kernel (part 3) & $\e^{-rT}\Phi(d_-)$\\
+\hline
+\end{tabular}
+\end{center}
+with $\,d_-=\dfrac{\log(K/s_0)-(r-\frac12\sigma^2)T}{\sigma\sqrt{T}}$. The PDE, the risk-neutral measure, and the pricing kernel are three routes to the \emph{same} no-arbitrage price --- exactly as in the binomial toy model of part~1.
+\end{frame}
+
+\appendix
+\section{Appendix}
+
+\begin{frame}{Appendix: sketch proof of Girsanov (1/2)}
+\hypertarget{app:girsanov}{}
+\begin{itemize}
+\item given the integrability conditions, it is easy to show that $\mathbb{Q}$ is probability measure equivalent to $\mathbb{P}$
+\item to prove that $W^{\mathbb{Q}}$ is a standard Brownian motion under $\mathbb{Q}$ we need to show, for any $0=t_0<t_1<\dots<t_n\leq T$, that
+\[
+(W_{t_1}^{\mathbb{Q}} - W_{t_0}^{\mathbb{Q}},\dots,W_{t_n}^{\mathbb{Q}} - W^{\mathbb{Q}}_{t_{n-1}})\distr \rN(0_n, \Sigma)
+\]
+where $\Sigma_{ij}=0$ for $i\neq j$ 
+and $\Sigma_{ii} = t_i -t_{i-1}$
+\item we only consider case in which $u\mapsto \gamma_u$ is deterministic and  $n=2$ with $t_2=T$
+\item it is sufficient to show (MGF determines the probability distribution)
+\[
+\mathbb{E}_{\mathbb{Q}}\left[ \e^{a_1 (W^{\mathbb{Q}}_{t_1} - W^{\mathbb{Q}}_{t_0}) + a_2 (W^{\mathbb{Q}}_{t_2} - W^{\mathbb{Q}}_{t_1})}\right]  = \e^{\frac{1}{2}\left(a_1^2(t_1-t_0) + a_2^2(t_2-t_1)
+\right)} 
+\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Appendix: sketch proof of Girsanov (2/2)}
+We  have 
+\begin{align*}
+&\mathbb{E}_{\mathbb{Q}}\left[ \e^{a_1 (W_{t_1}^{\mathbb{Q}} - W_{t_0}^{\mathbb{Q}}) + a_2 (W^{\mathbb{Q}}_{t_2} - W^{\mathbb{Q}}_{t_1})}\right]= 
+\mathbb{E}_{\mathbb{P}}\left[\frac{\rd\mathbb{Q}}{\rd\mathbb{P}} \e^{a_1 (W_{t_1}^{\mathbb{Q}} - W^{\mathbb{Q}}_{t_0}) + a_2 (W^{\mathbb{Q}}_{t_2} - W^{\mathbb{Q}}_{t_1})}\right] \\
+ &\quad=
+\mathbb{E}_{\mathbb{P}}\left[
+\e^{a_1 (W^{\mathbb{Q}}_{t_1} - W^{\mathbb{Q}}_{t_0}) + a_2 (W^{\mathbb{Q}}_{t_2} - W^{\mathbb{Q}}_{t_1})}
+\e^{-\frac{1}{2}\int_0^T \gamma_u^2 \rd u - \int_0^T \gamma_u \rd W^{\mathbb{P}}_u}
+\right] \\
+ &\quad=
+\e^{
+a_1 \int_{t_0}^{t_1} \gamma_u \rd u + a_2 \int_{t_1}^{t_2} \gamma_u \rd u 
+-\frac{1}{2}\int_{t_0}^{t_2} \gamma_u^2  \rd u} \\
+&\qquad\quad \times
+\mathbb{E}_{\mathbb{P}}\left[
+\e^{ 
+-\int_{t_0}^{t_1} ( \gamma_u - a_1)  \rd W^{\mathbb{P}}_u
+-\int_{t_1}^{t_2} (\gamma_u - a_2)  \rd W^{\mathbb{P}}_u
+}
+\right]
+\end{align*}
+Exploiting independent increments and  
+$\int_a^b f_u \rd W^{\mathbb{P}}_u \distr \rN( 0, \int_a^b f_u^2 \rd u)$ for deterministic functions $f$:
+\begin{align*}
+& \mathbb{E}_{\mathbb{P}}\left[
+\e^{ 
+-\int_{t_0}^{t_1} ( \gamma_u - a_1)  \rd W^{\mathbb{P}}_u
+-\int_{t_1}^{t_2} (\gamma_u - a_2)  \rd W^{\mathbb{P}}_u
+}
+\right] \\
+&\quad =
+\mathbb{E}_{\mathbb{P}}
+\left[
+\e^{ 
+-\int_{t_0}^{t_1} ( \gamma_u - a_1)  \rd W^{\mathbb{P}}_u }
+\right]
+\mathbb{E}_{\mathbb{P}}
+\left[\e^{ 
+-\int_{t_1}^{t_2} ( \gamma_u - a_2)  \rd W^{\mathbb{P}}_u}\right]
+\\
+&\quad
+= \e^{
+\frac{1}{2} \int_{t_0}^{t_1} ( \gamma_u - a_1)^2 \rd u
+}\e^{
+\frac{1}{2} \int_{t_1}^{t_2} ( \gamma_u - a_2)^2 \rd u
+}  = \e^{\frac{1}{2}\int_{t_0}^{t_2} \gamma_u^2 \rd u 
+- a_1 \int_{t_0}^{t_1} \gamma_u \rd u 
+- a_2 \int_{t_1}^{t_2} \gamma_u \rd u
+} \\
+&\qquad \times \e^{\frac{1}{2}\left( a_1^2 (t_1-t_0) + a_2^2 (t_2- t_1)\right)
+} \text{ which yields the result}
+\end{align*}
+\end{frame}
 
 \end{document}
