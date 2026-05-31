@@ -460,7 +460,7 @@ F_{ss}\approx\frac{F(t,s+\Delta s)-2F(t,s)+F(t,s-\Delta s)}{\Delta s^2}.
 \item start from the known terminal values $F(T,s)=h(s)$ and step \emph{backward} in time;
 \item the explicit scheme writes each $F(t,s_i)$ as a (discounted) weighted average of its three neighbours $F(t+\Delta t,s_{i-1}),\,F(t+\Delta t,s_i),\,F(t+\Delta t,s_{i+1})$ --- i.e.\ a \emph{trinomial tree}.
 \end{itemize}
-The digital-put figures shown earlier were produced exactly this way.
+An implementation --- including the explicit/trinomial scheme and its stability condition --- is provided in the accompanying notebook.
 \end{frame}
 
 \begin{frame}{Finite differences, trees, and no-arbitrage}
@@ -510,6 +510,18 @@ where $W$ is a standard Brownian motion.
 \end{frame}
 
 
+
+\begin{frame}{Sketch of proof (Feynman-Kac)}
+Let $F$ solve the PDE with $F(T,x)=h(x)$, and let $X$ follow $\rd X_u=\alpha(u,X_u)\rd u+\beta(u,X_u)\rd W_u$ on $[t,T]$ with $X_t=x$. Define the discounted process
+\[ M_u=\exp\!\Big(-\!\int_t^u k(v,X_v)\,\rd v\Big)\,F(u,X_u),\qquad u\in[t,T]. \]
+With $D_u=\exp(-\int_t^u k\,\rd v)$, It\^o's formula gives
+\begin{align*}
+\rd M_u &= D_u\Big[-k\,F\,\rd u + \big(F_t+\alpha F_x+\tfrac12\beta^2 F_{xx}\big)\rd u + \beta F_x\,\rd W_u\Big]\\
+&= D_u\underbrace{\big(F_t+\alpha F_x+\tfrac12\beta^2 F_{xx}-kF\big)}_{=\,0\ \text{(the PDE)}}\rd u \;+\; D_u\,\beta F_x\,\rd W_u .
+\end{align*}
+So $M$ has \emph{no drift}: it is a (local) martingale, hence --- under integrability conditions --- a martingale. As $M_t=F(t,x)$ and $M_T=\exp(-\int_t^T k\,\rd v)\,h(X_T)$,
+\[ F(t,x)=\mathbb{E}[\,M_T\mid X_t=x\,]=\mathbb{E}\Big[\exp\!\Big(-\!\int_t^T \! k(v,X_v)\,\rd v\Big)h(X_T)\,\Big|\,X_t=x\Big]. \,\square \]
+\end{frame}
 
 \begin{frame}{Black-Scholes PDE reconsidered}
 The no-arbitrage price, at time $t\in [0,T)$, of a European option with payoff $h(S_T)$ at expiration date $T>0$ is given by
