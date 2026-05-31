@@ -110,6 +110,17 @@ Money Market Account:
 \end{frame}
 
 
+\begin{frame}{Roadmap for these slides}
+The logic of risk-neutral pricing:
+\begin{enumerate}
+\item \textbf{First Fundamental Theorem:} no arbitrage $\Leftrightarrow$ there is a measure $\mathbb{Q}\sim\mathbb{P}$ under which \emph{discounted} prices are martingales.
+\item To \emph{use} it we must actually find $\mathbb{Q}$ --- this is what \textbf{Girsanov}'s theorem delivers (an intermezzo).
+\item \textbf{Apply it:} under $\mathbb{Q}$ the stock earns $r$, and the option price is a discounted $\mathbb{Q}$-expectation. Worked examples (digital put, Philips put).
+\item An equivalent encoding: the \textbf{pricing kernel}.
+\item When is $\mathbb{Q}$ \emph{unique}? The \textbf{Second Fundamental Theorem} (completeness).
+\end{enumerate}
+\end{frame}
+
 \section{Risk-neutral pricing}
 
 \begin{frame}{Motivation}
@@ -494,7 +505,7 @@ for some num\'{e}raire $N$, there exists a probability measure $\mathbb{Q}=\math
 \end{frame}
 
 
-\begin{frame}{Using FFT and Girsanov}
+\begin{frame}{Using FFT and Girsanov: setup}
 \begin{itemize}
 \item setup: standard Black-Scholes market ($W=W^{\mathbb{P}}$ is standard Brownian motion):
 \[
@@ -515,7 +526,7 @@ $\mathbb{Q}$-martingale
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Using FFT and Girsanov}
+\begin{frame}{Using FFT and Girsanov: finding $\mathbb{Q}$}
 \[
 \rd \frac{S_t}{B_t} =(\mu -r) \frac{S_t}{B_t} \rd t + \sigma \frac{S_t}{B_t} \rd W_t^{\mathbb{P}}
 \]
@@ -540,6 +551,17 @@ $W^{\mathbb{Q}}$ is a $\mathbb{Q}$-standard Brownian motion
 \]
 so $S/B$ is martingale under $\mathbb{Q}$ (not under $\mathbb{P}$!)
 \end{itemize}
+\end{frame}
+
+\begin{frame}{From the binomial model to the market price of risk}
+In part~1 the risk-neutral probability $q$ tilted the real-world $p$ just enough to make $S/B$ a martingale. In continuous time Girsanov does the same job continuously, through the \textbf{market price of risk}
+\[ \gamma=\frac{\mu-r}{\sigma}. \]
+\begin{itemize}
+\item $\mu-r$ is the stock's \emph{excess return} over the riskless rate; dividing by $\sigma$ gives excess return \emph{per unit of risk} (a Sharpe ratio);
+\item Girsanov removes exactly this drift, $\rd W^{\mathbb{Q}}_t=\gamma\,\rd t+\rd W^{\mathbb{P}}_t$, turning the stock's drift from $\mu$ into $r$;
+\item discrete analogue (part~1): $q=\dfrac{B_1/B_0-s_d/S_0}{s_u/S_0-s_d/S_0}$ is the same tilt, one period at a time.
+\end{itemize}
+The larger the risk premium $\mu-r$ (or the smaller the risk $\sigma$), the larger the adjustment $\gamma$.
 \end{frame}
 
 \begin{frame}{Using FFT and Girsanov: intermezzo}
@@ -589,7 +611,7 @@ Equivalently $\mathbb{E}_{\mathbb{Q}}[S_T/B_T\mid\mathcal{F}_t]=S_t/B_t$: \textb
 This is the continuous-time version of the binomial identity $\frac{1}{B_1}\mathbb{E}_{\mathbb{Q}}[S_1]=S_0$ from part~1.
 \end{frame}
 
-\begin{frame}{Using FFT and Girsanov}
+\begin{frame}{Using FFT and Girsanov: the pricing formula}
 \small{
 \begin{itemize}
 \item the SDE
@@ -657,7 +679,9 @@ C_0&=\exp(-rT)\mathbb{Q}\left( \sigma W_T^{\mathbb{Q}}\leq \log \frac{K}{s_0} -(
 \log \frac{K}{s_0} -(r-0.5\sigma^2) T }{
 \sigma\sqrt{T}}
 \right)
-\end{align*}}
+\end{align*}
+\medskip
+This is exactly the price the part-2 PDE approach gives for the digital put --- the two methods agree.}
 \end{itemize}
 \end{frame}
 %
