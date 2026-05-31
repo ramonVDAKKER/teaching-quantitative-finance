@@ -18,7 +18,6 @@
 \usepackage{multicol}
 \usepackage{subfigure}
 \usepackage{graphicx}
-\usepackage{pstricks}
 \input{commands.txt}
 \newcommand{\Var}{\operatorname{Var}}
 \renewcommand{\epsi}{\varepsilon}
@@ -360,7 +359,7 @@ is a standard Brownian motion under $\mathbb{Q}$.
 \item given the integrability conditions, it is easy to show that $\mathbb{Q}$ is probability measure equivalent to $\mathbb{P}$
 \item to prove that $W^{\mathbb{Q}}$ is a standard Brownian motion under $\mathbb{Q}$ we need to show, for any $0=t_0<t_1<\dots<t_n\leq T$, that
 \[
-(W_{t_1}^{\mathbb{Q}} - W_{t_0}^{\mathbb{Q}},\dots,W_{t_n}^{\mathbb{Q}} - W^{\mathbb{Q}}_{t_{n-1}})\distr N(0_n, \Sigma)
+(W_{t_1}^{\mathbb{Q}} - W_{t_0}^{\mathbb{Q}},\dots,W_{t_n}^{\mathbb{Q}} - W^{\mathbb{Q}}_{t_{n-1}})\distr \rN(0_n, \Sigma)
 \]
 where $\Sigma_{ij}=0$ for $i\neq j$ 
 and $\Sigma_{ii} = t_i -t_{i-1}$
@@ -396,7 +395,7 @@ a_1 \int_{t_0}^{t_1} \gamma_u \rd u + a_2 \int_{t_1}^{t_2} \gamma_u \rd u
 \right]
 \end{align*}
 Exploiting independent increments and  
-$\int_a^b f_u \rd W^{\mathbb{P}}_u \distr N( 0, \int_a^b f_u^2 \rd u)$ for deterministic functions $f$:
+$\int_a^b f_u \rd W^{\mathbb{P}}_u \distr \rN( 0, \int_a^b f_u^2 \rd u)$ for deterministic functions $f$:
 \begin{align*}
 & \mathbb{E}_{\mathbb{P}}\left[
 \e^{ 
@@ -423,7 +422,7 @@ $\int_a^b f_u \rd W^{\mathbb{P}}_u \distr N( 0, \int_a^b f_u^2 \rd u)$ for deter
 - a_1 \int_{t_0}^{t_1} \gamma_u \rd u 
 - a_2 \int_{t_1}^{t_2} \gamma_u \rd u
 } \\
-&\qquad \times \e^{\frac{1}{2}\left( a_1^2 (t_1-t_0) + a_2^2 (t_2- t_0)\right)
+&\qquad \times \e^{\frac{1}{2}\left( a_1^2 (t_1-t_0) + a_2^2 (t_2- t_1)\right)
 } \text{ which yields the result}
 \end{align*}
 \end{frame}
@@ -522,7 +521,7 @@ we have $\rd W^{\mathbb{P}}_t = -\gamma_t \rd t + \rd W^{\mathbb{Q}}_t$ which yi
 \[
 \gamma_t=\frac{\mu-r}{\sigma}\quad \text{\emph{market price of risk}}
 \]
-yields $\mathbb{Q}\distr\mathbb{P}$ such that
+yields $\mathbb{Q}\sim\mathbb{P}$ such that
 $W^{\mathbb{Q}}$ is a $\mathbb{Q}$-standard Brownian motion
 \item  we have
 \[
@@ -828,7 +827,7 @@ a financial market
 is complete if and only if there is a \emph{unique}
 measure $\mathbb{Q}\sim\mathbb{P}$ that makes 
 all deflated asset prices $A/N$ $\mathbb{Q}$-martingales (where
-$N$ is chosen num\'{e}raire.
+$N$ is the chosen num\'{e}raire).
 \\
 \vspace{.5cm}
 \textbf{Examples}

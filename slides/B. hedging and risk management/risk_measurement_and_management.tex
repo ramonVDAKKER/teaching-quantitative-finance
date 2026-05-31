@@ -33,7 +33,6 @@ using the greeks}
 \usepackage{multicol}
 \usepackage{subfigure}
 \usepackage{graphicx}
-\usepackage{pstricks}
 \input{commands.txt}
 %\renewcommand{\E}{\operatorname{E}}
 \newcommand{\Var}{\operatorname{Var}}
@@ -114,7 +113,7 @@ on Air France-KLM which expire in 3 months from now and have
 \end{itemize}
 \item bank ABC steps in, to facilitate the needs of S, and offers to sell (write) the option
 \item using their models $10,000\times 0.30 = 3,000$ euro is the no-arbitrage price for the options
-\item reasonable commerical price is: $3,000$ euro + fee 
+\item reasonable commercial price is: $3,000$ euro + fee 
 (to be received at $t=0$)
 \item we have solved the valuation problem for bank ABC
 \end{itemize}
@@ -166,7 +165,7 @@ and bank ABC might want to \emph{manage} the risk by hedging part of the risk (b
 
 \begin{frame}{Hedging}
 \begin{itemize}
-\item Cambridge Dictionary describe \textbf{hedging}  as
+\item Cambridge Dictionary describes \textbf{hedging}  as
 \begin{quote}
 `the activity of reducing the risk of losing money on shares, bonds, etc. that you own'
 \end{quote}
@@ -174,7 +173,7 @@ and bank ABC might want to \emph{manage} the risk by hedging part of the risk (b
 \begin{itemize}
 \item using \emph{diversification}  in investment portfolio  (e.g. Markowitz portfolio theory)
 \item buying specific contracts to eliminate or reduce risk(s)
-in your porfolio
+in your portfolio
 (e.g. buy put option in combination with stock)
 \end{itemize}
 \item This topic takes point-of-view 
@@ -218,7 +217,7 @@ For the Black-Scholes market we have obtained:
 \item if we have option with price process $C_t=F(t, S_t)$,
 then  $F$ satisfies
 \[
-\frac{\delta F}{\delta t}(t,s) + r s \frac{\partial F}{\partial
+\frac{\partial F}{\partial t}(t,s) + r s \frac{\partial F}{\partial
 s}(t,s) + \frac{1}{2}\sigma^2 s^2 \frac{\partial^2 F}{\partial
 s^2}(t,s) -r F(t,s)=0\quad \forall s,t
 \]
@@ -262,7 +261,7 @@ and payoff $1,000\times \max\{K-S_T,0\}$ with $K=90$ (i.e. 1,000 put options)
 
 \begin{frame}{Illustration - remarks}
 \begin{itemize}
-\item positions in self-financing porfolio look very wiggly
+\item positions in self-financing portfolio look very wiggly
 \item we can show:
 \[
 \phi_t = - 1,000 \Phi(-d_1)  
@@ -383,7 +382,7 @@ Now back to trading on a discrete time grid.
 
 \begin{frame}{Delta-hedging with self-financing portfolio}
 \begin{itemize}
-\item supose we have $a$ options, against price $C_0$
+\item suppose we have $a$ options, against price $C_0$
 \item take a position in stock and money market to obtain delta-neutral portfolio at $t=0$ such that total portfolio is delta-neutral and has value 0
 \item at each point-in-time 
 we rebalance the position in $S$ such that the total 
@@ -399,7 +398,7 @@ We want to rebalance positions in $(S,B)$ in a budget-neutral way, i.e.
 \[
 aC_T + \phi_{T-\eta} S_T + \psi_{T-\eta} B_T 
 \]
-which in general wil differ from 0, i.e. we have replication error
+which in general will differ from 0, i.e. we have replication error
 (due to rebalancing in discrete-time instead of continuous time)!
 \end{itemize}
 \end{frame}
@@ -445,7 +444,7 @@ So by using the ``self-financing delta-neutral'' hedge we have substantially red
 \item Recall that ``delta'' was motivated by
 approximation to change in portfolio value
 \begin{align*}
-V_{t+\eps}-V_t
+V_{t+\epsilon}-V_t
 &\approx
  \frac{\partial V}{\partial S_t}(t,S_t)\times \Delta S_{t+\epsilon} 
 +\frac{\partial V}{\partial t}\times \epsilon 

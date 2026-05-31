@@ -16,7 +16,6 @@
 \usepackage{multicol}
 \usepackage{subfigure}
 \usepackage{graphicx}
-\usepackage{pstricks}
 \input{commands.txt}
 \newcommand{\Var}{\operatorname{Var}}
 \renewcommand{\epsi}{\varepsilon}
@@ -121,9 +120,9 @@ We will often use the following options that are defined by their pay-off:
 \item European digital (binary) call option with strike price $K$:  $C_T=1\{ S_T -K \geq 0\}$
 \item European digital (binary) put option with strike price $K$:  $C_T=1\{ K -S_T \geq 0\}$
 \end{itemize}
-Please recall that $1\{ x\leq K\} =1$ if $x\leq K$ and 0 otherwise.
+Please recall that the indicator $1\{A\}$ equals $1$ if statement $A$ is true and $0$ otherwise.
 \\ \vspace{.5cm}
-Note that can write all these payoffs as a function of $S_T$, i.e. $C_T = g(S_T)$.
+Note that we can write all these payoffs as a function of $S_T$, i.e. $C_T = g(S_T)$.
 \end{frame}
 
 
@@ -211,8 +210,8 @@ then we say that an arbitrage opportunity exists.
 \end{definition}
 \textbf{Remarks:}
 \begin{itemize}
-\item in QF you are allowed to ignore `admissible': this condition rules out 'doubling strategies'. A sufficient condition for admissibility: $\mathbb{E}V_t^2<\infty$ for all $t\in[0,T]$, 
-where $V_t$ denotes the porfolio value of the self-financing strategy
+\item in QF you are allowed to ignore `admissible': this condition rules out `doubling strategies'. A sufficient condition for admissibility: $\mathbb{E}V_t^2<\infty$ for all $t\in[0,T]$, 
+where $V_t$ denotes the portfolio value of the self-financing strategy
 \end{itemize}
 
 %\begin{figure}
@@ -265,7 +264,7 @@ $0<s_d<s_u$
 \textbf{Theorem} 
 There are no arbitrage opportunities in our financial market if and only if 
 \[
-0<\frac{s_d}{s_0}<\frac{B_1}{B_0}<\frac{s_u}{s_0}.
+0<\frac{s_d}{S_0}<\frac{B_1}{B_0}<\frac{s_u}{S_0}.
 \]
 \textbf{Proof} \\
 `$\Rightarrow$':  exercise \\
@@ -379,7 +378,7 @@ typically not hold for $A=S$
 \]
 yields
 \[
-q=\frac{\frac{B_1}{B_0}-\frac{s_d}{s_0}    }{ \frac{s_u}{s_0}-\frac{s_d}{s_0}  }
+q=\frac{\frac{B_1}{B_0}-\frac{s_d}{S_0}    }{ \frac{s_u}{S_0}-\frac{s_d}{S_0}  }
 \]
 \item if $q\in [0,1]$ then we indeed have found 
 artificial probability measure for which $(\star)$ is true by construction
@@ -390,7 +389,7 @@ artificial probability measure for which $(\star)$ is true by construction
 \begin{frame}{Method 2: risk-neutral pricing}
 Recall earlier theorem: there is no arbitrage if and only if
 \[
-0<\frac{s_d}{s_0}<\frac{B_1}{B_0}<\frac{s_u}{s_0}
+0<\frac{s_d}{S_0}<\frac{B_1}{B_0}<\frac{s_u}{S_0}
 \]
 which occurs exactly if $q\in (0,1)$. So we have proved:
 \\
@@ -409,7 +408,7 @@ Terminology:
 \begin{itemize}
 \item As $S/B$ is martingale under $\mathbb{Q}$ we have
 \[
-\frac{s_0}{B_0}=\mathbb{E}_{\mathbb{Q}}\left[ \frac{S_1}{B_1}\right],
+\frac{S_0}{B_0}=\mathbb{E}_{\mathbb{Q}}\left[ \frac{S_1}{B_1}\right],
 \]
 which yields
 \[
