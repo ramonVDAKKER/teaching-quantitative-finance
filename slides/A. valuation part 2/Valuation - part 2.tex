@@ -472,6 +472,16 @@ The explicit finite-difference scheme \emph{is} a trinomial tree; the binomial t
 \textbf{One picture:} numerical stability $\Leftrightarrow$ nonnegative weights $\Leftrightarrow$ a valid risk-neutral measure $\Leftrightarrow$ no arbitrage. The PDE, the trees, and the grid are three views of the same object.
 \end{frame}
 
+\begin{frame}{From the Black-Scholes PDE to the heat equation}
+A change of variables makes the connection precise. Write $\tau=T-t$ (time-to-maturity) and $x=\log s$, and set $F(t,s)=v(\tau,x)$. Using $s\,\partial_s=\partial_x$ and $s^2\partial_{ss}=\partial_{xx}-\partial_x$, the PDE turns into a \emph{constant-coefficient} equation with an \emph{initial} condition $v(0,x)=h(\e^{x})$:
+\[ v_\tau=\tfrac12\sigma^2 v_{xx}+\big(r-\tfrac12\sigma^2\big)v_x-r\,v. \]
+Rescaling time as $\tilde\tau=\tfrac12\sigma^2\tau$ and substituting $v=\e^{ax+b\tilde\tau}u$ with
+\[ a=-\tfrac12(k-1),\qquad b=-\tfrac14(k+1)^2,\qquad k=\tfrac{2r}{\sigma^2}, \]
+removes the first- and zeroth-order terms, leaving the pure \textbf{heat equation}
+\[ u_{\tilde\tau}=u_{xx}. \]
+So pricing a European option is, after a change of variables, an initial-value problem for the heat equation.
+\end{frame}
+
 \begin{frame}{Food for thought}
 \begin{fftbox}
 The B-S PDE comes with a \emph{terminal} condition $F(T,s)=h(s)$, so it runs \emph{backward} in time. With $\tau=T-t$, $x=\log s$ (and a discount/scaling factor) it becomes the \emph{heat equation}
@@ -543,6 +553,19 @@ where $S$ is defined via the SDE
 \rd S_u = r S_u \rd u + \sigma S_u \rd W_u, \quad S_t=s,
 \]
 where $W$ is a standard Brownian motion.
+\end{frame}
+
+\begin{frame}{Uniqueness and the maximum principle}
+Two structural facts make ``the'' price well-defined and well-behaved.
+\begin{itemize}
+\item \textbf{Uniqueness.} Under mild growth conditions the B-S PDE together with the terminal condition $F(T,s)=h(s)$ has a \emph{unique} solution. Hence $F(t,S_t)$ is unambiguous --- the analytic counterpart of market \emph{completeness}.
+\item \textbf{Maximum principle.} For this (parabolic) PDE a solution attains its extreme values on the boundary of the domain --- here the terminal time and the $s$-boundaries. Two consequences:
+\begin{itemize}
+\item \emph{monotonicity}: if $h_1\le h_2$ then $F_1\le F_2$ (prices respect the ordering of payoffs);
+\item \emph{no-arbitrage bounds}, e.g.\ $0\le F_{\text{call}}(t,s)\le s$.
+\end{itemize}
+\end{itemize}
+Both are also immediate from Feynman-Kac: $F(t,s)=\mathbb{E}[\e^{-r(T-t)}h(S_T)\mid S_t=s]$ is linear and monotone in the payoff $h$.
 \end{frame}
 
 \end{document}
