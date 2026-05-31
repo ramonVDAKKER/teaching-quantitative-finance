@@ -38,7 +38,6 @@ Ramon van den Akker
 \usepackage{multicol}
 \usepackage{subfigure}
 \usepackage{graphicx}
-\usepackage{pstricks}
 \input{commands.txt}
 %\renewcommand{\E}{\operatorname{E}}
 \newcommand{\Var}{\operatorname{Var}}
@@ -325,10 +324,10 @@ $(X_1^{\theta+h,\eta},\dots,X_n^{\theta+h,\eta})$
 h(X_1^{\theta+h,\eta};\theta+h,\gamma))
  \right. \\
 &\quad +\left.\var_{\theta,\eta}(   
-h(X_1^{\theta,\eta};\theta,\gamma))\right]
+h(X_1^{\theta,\eta};\theta,\gamma))\right)
 \end{align*}
 \item we assume that $ \var_{\theta+h,\eta}(   
-h(X_1^{\theta+h,\eta};\theta+h,\gamma)$ is a (locally) bounded function of $\theta$
+h(X_1^{\theta+h,\eta};\theta+h,\gamma))$ is a (locally) bounded function of $\theta$
 \item this implies that we have
 \[
 \text{MSE}  = \text{bias}^2 + \text{var} =O(h^2)  +  O\left(\frac{1}{nh^2}\right)
@@ -349,7 +348,7 @@ leads to $h \propto n^{-1/4}$ and
 $$
 \text{MSE} = O\big(n^{-1/2}\big)
 $$
-\item recall that (standard) MC approximation of option price itself (i.e. $(f\theta)$) satifies
+\item recall that (standard) MC approximation of option price itself (i.e. $f(\theta)$) satisfies
 $\text{MSE} = O(n^{-1})$
 \item can we improve our rate?
 \end{itemize}
@@ -374,7 +373,7 @@ then
 \begin{align*}
 \var\!\big(
 \hat f_n(\theta+h) -  \hat f_n(\theta)
-)\big)= \frac{1}{n}\var\left(
+\big)= \frac{1}{n}\var\left(
 g(Z_1;\theta+h,\eta) - g(Z_1;\theta,\eta)
 \right)
  \\
@@ -480,12 +479,12 @@ then we can estimate $(\partial/\partial\mu) \mathbb{E}_{\mu,\sigma}[f(X)]$ by
 Note that this is an unbiased estimator!
 \end{frame}
 
-\begin{frame}{Core idea Likelihood Ration Method (LRM)}
+\begin{frame}{Core idea Likelihood Ratio Method (LRM)}
 Suppose $X \sim N(\mu,\sigma^2)$ and we wish to compute the derivative of $\mathbb{E}_{\mu,\sigma}[f(X)]$ w.r.t $\mu$. Denote by $\phi_{\mu,\sigma}$ the density of $N(\mu,\sigma^2)$.
 \vskip4mm
 \textbf{LRM:}
 \begin{align*}
-\frac{\partial}{\partial\mu} \mathbb{E}_{\mu,\sigma}[f(X)] &= \frac{\partial}{\partial\mu} \int f(x) \phi_{\mu,\sigma}(x) dx \stackrel{?}{=} \int f(x) \frac{\frac{\partial  \phi_{\mu,\sigma}}{d\mu}(x)}{\phi_{\mu,\sigma}(x)} \phi_{\mu,\sigma}(x) dx
+\frac{\partial}{\partial\mu} \mathbb{E}_{\mu,\sigma}[f(X)] &= \frac{\partial}{\partial\mu} \int f(x) \phi_{\mu,\sigma}(x) dx \stackrel{?}{=} \int f(x) \frac{\frac{\partial  \phi_{\mu,\sigma}}{\partial\mu}(x)}{\phi_{\mu,\sigma}(x)} \phi_{\mu,\sigma}(x) dx
 \\
 &= \mathbb{E}_{\mu,\sigma}\left[f(X) \frac{\frac{\partial  \phi_{\mu,\sigma}}{\partial\mu}(X)}{\phi_{\mu,\sigma}(X)}  \right]
 = 
@@ -535,7 +534,7 @@ such that
 \[
 \structure{f(b)-f(a)=\int_a^b f'(x) dx} = \int_a^b 1_{x>0} dx.
 \]
-Intuitively, this is what we need here: A function that behaves like the (non-existent) derivative of $f$ when its inside an integral. 
+Intuitively, this is what we need here: A function that behaves like the (non-existent) derivative of $f$ when it is inside an integral. 
 Such functions are called \emph{absolutely continuous}. 
 You implicitly are aware of this from probability theory: 
 random variables that have a pdf (and such random variables are said to have an absolutely continuous distribution).

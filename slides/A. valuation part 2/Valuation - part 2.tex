@@ -17,7 +17,6 @@
 \usepackage{multicol}
 \usepackage{subfigure}
 \usepackage{graphicx}
-\usepackage{pstricks}
 \input{commands.txt}
 \newcommand{\Var}{\operatorname{Var}}
 \renewcommand{\epsi}{\varepsilon}
@@ -121,7 +120,7 @@ Markovian trading strategies:
 \]
 So we can write, for some function $F$,
 \[
- V_t=\phi(t, S_t) S_t + \psi_t(t, S_t) B_t=F(t, S_t)
+ V_t=\phi(t, S_t) S_t + \psi(t, S_t) B_t=F(t, S_t)
 \]
 \end{itemize}
 \textbf{Question:} \\
@@ -142,7 +141,7 @@ C_t=F(t, S_t)
 \textbf{Black-Scholes Partial Differential Equation:} \\
 $F$ corresponds to a self-financing trading strategy if and only if $F$ is a solution to the Partial Differential Equation (equation with function $G$ as variable)
 \[
-\frac{\partial G}{\delta t}(t, s) + r s \frac{\partial G}{\partial
+\frac{\partial G}{\partial t}(t, s) + r s \frac{\partial G}{\partial
 s}(t, s) + \frac{1}{2}\sigma^2 s^2 \frac{\partial^2 G}{\partial
 s^2}(t,s) -r G(t,s )=0\,\, \forall s>0, t\in[0, T),
 \]
@@ -194,14 +193,14 @@ $\rd V_t=\textcolor{blue}{c_t} \rd t + \textcolor{red}{d_t} \rd W_t$
 \end{frame}
 
 \begin{frame}{Warning: sloppy notation}
-We will often use the following notations/abbrevations when working with PDEs:
+We will often use the following notations/abbreviations when working with PDEs:
 \begin{itemize}
 \item $F_S = (\partial F / \partial s) = (\partial F / \partial s)(t,S_t)$
 \item $F_t = (\partial F / \partial t) = (\partial F / \partial t)(t,S_t)$
-\item $F = F(t,S_t$)
+\item $F = F(t,S_t)$
 \item etc.
 \end{itemize}
-The notation $F_t$ is somewhat confusing as it seems to refer to a stochastic process. And you argue that it would be a natural abbrevation for $F(t,S_t)$. \\
+The notation $F_t$ is somewhat confusing as it seems to refer to a stochastic process. And you argue that it would be a natural abbreviation for $F(t,S_t)$. \\
 If you want to be clear and safe it could be better to just write down the partial derivatives fully.
 \end{frame}
 
@@ -241,7 +240,7 @@ F_S \mu S_t +F_t +  \frac{1}{2}\sigma^2 F_{SS} S_t^2
 \begin{frame}{Derivation}
 We need to prove
 \[
-\frac{\delta F}{\delta t}(t,s) + r s \frac{\partial F}{\partial
+\frac{\partial F}{\partial t}(t,s) + r s \frac{\partial F}{\partial
 s}(t,s) + \frac{1}{2}\sigma^2 s^2 \frac{\partial^2 F}{\partial
 s^2}(t,s) -r F(t,s)=0\quad \forall s>0,\,t\in[0, T),
 \]
@@ -291,7 +290,7 @@ Given is a European option with payoff $h(S_T)$ at expiration date/maturity $T$.
 \begin{itemize}
 \item Solve the  PDE,
 \[
-\frac{\delta G}{\delta t}(t, s) + r s \frac{\partial G}{\partial
+\frac{\partial G}{\partial t}(t, s) + r s \frac{\partial G}{\partial
 s}(t, s) + \frac{1}{2}\sigma^2 s^2 \frac{\partial^2 G}{\partial
 s^2}(t,s) -r G(t,s )=0,
 \]
@@ -301,7 +300,7 @@ under the boundary condition
 G(T,s)=h(s) \text{ for all } s>0.
 \]
 \item If $F$ is solution to PDE satisfying the boundary condition, then no-arbitrage implies that the price of the option at time $t\in [0, T)$ is given by $F(t, S_t)$.
-\item If you are lucky: 'closed-form' solution can be found
+\item If you are lucky: `closed-form' solution can be found
 \begin{itemize}
 \item there is relation to well studied  heat equation
 \end{itemize}
@@ -341,7 +340,7 @@ F(t,s)=\exp(-r(T-t))\Phi(d_2),
 \]
 with
 \[
-d=\frac{
+d_2=\frac{
 \log(s/K)+(r-0.5 \sigma^2)(T-t)}{\sigma\sqrt{T-t}}
 \]
 \item
@@ -374,7 +373,7 @@ Value function $F(t,s)$:
 Let $\alpha(t, x)$, $\beta(t,x)$, and $k(t,x)$ be  functions satisfying `regularity conditions'.
 Consider the PDE
 \[
-\frac{\partial G}{\delta t}(t, x) +  \alpha(t, x) \frac{\partial G}{\partial
+\frac{\partial G}{\partial t}(t, x) +  \alpha(t, x) \frac{\partial G}{\partial
 x}(t, x) + \frac{1}{2} \beta^2(t,x)  \frac{\partial^2 G}{\partial
 x^2}(t,x) - k(t, x)  G(t,x )=0, 
 \]
@@ -402,7 +401,7 @@ where $W$ is a standard Brownian motion.
 The no-arbitrage price, at time $t\in [0,T)$, of a European option with payoff $h(S_T)$ at expiration date $T>0$ is given by
 $F(t, S_t)$ where $F$ satisfies
 \[
-\frac{\delta F}{\delta t}(t,s) + r s \frac{\partial F}{\partial
+\frac{\partial F}{\partial t}(t,s) + r s \frac{\partial F}{\partial
 s}(t,s) + \frac{1}{2}\sigma^2 s^2 \frac{\partial^2 F}{\partial
 s^2}(t,s) -r F(t,s)=0\quad \forall s>0,\,t\in[0, T),
 \]
