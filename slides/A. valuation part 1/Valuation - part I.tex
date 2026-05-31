@@ -41,7 +41,7 @@
 \newtcolorbox{quizbox}{colback=blue!4,colframe=blue!55!black,fonttitle=\bfseries,
   title=Quiz,boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt}
 \newtcolorbox{fftbox}{colback=orange!6,colframe=orange!75!black,fonttitle=\bfseries,
-  title=Food for thought (for the curious / advanced student),boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt}
+  title=Food for thought,boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt}
 % binomial-tree helper styles
 \tikzset{
   bnode/.style={font=\small},
@@ -86,24 +86,20 @@ Throughout, $S_t$ denotes the price of the underlying at time $t$, $K$ the strik
 \end{frame}
 
 \begin{frame}{Main problems}
-\textbf{Valuation/pricing} \\
-What is the `fair' price of an option and how does it evolve over time? This is an important question for:
+Unlike a stock, an option has no obvious ``correct'' price: its value is \emph{derived} from the underlying. This raises two central problems.
+\medskip
+
+\textbf{1.\ Valuation/pricing.} What is the `fair' price $C_t$ of an option, and how does it evolve over time? This matters for:
 \begin{itemize}
-\item investors/traders
-\begin{itemize}
-\item to identify that you don't pay too much
-\item to make money in case you think the market price is wrong
+\item investors/traders --- to avoid overpaying, or to profit from a market price they believe is wrong;
+\item financial institutions --- to quote prices for OTC (or `embedded') options, and to value and risk-manage books of options.
 \end{itemize}
-\item financial institutions
-\begin{itemize}
-\item who need to calculate price for selling
-OTC-options (or to price `embedded' options)
-\item who need to perform risk management on
-portfolios that contain options 
-\end{itemize}
-\end{itemize}
-\vspace{.5cm}
-\emph{Remark}: later on we will also discuss \textbf{hedging}.
+\medskip
+
+\textbf{2.\ Hedging.} Having sold an option, how do you control the resulting risk? (Treated later in the course.)
+\medskip
+
+A striking feature of the models we use: these two problems turn out to share the \emph{same} solution.
 \end{frame}
 
 \begin{frame}{Main problems - valuation}
@@ -168,11 +164,11 @@ where $V_t$ denotes the portfolio value of the self-financing strategy
 
 \begin{frame}{Motivation}
 First we discuss a very simple discrete time model and discuss pricing of options under assumption that arbitrage opportunities do not exist.
-We discuss two methods:
+We discuss three methods:
 \begin{itemize}
 \item pricing by replication
 \item risk-neutral pricing
-%\item pricing kernel
+\item the pricing kernel
 \end{itemize}
 Later on we will discuss their continuous-time analogues.
 Although the math gets more complicated, 
@@ -201,7 +197,14 @@ $0<s_d<s_u$
 \item  probability of state ``up'' is $p\in(0,1)$, i.e. $\mathbb{P}(\text{``up''})=p$
 \end{itemize}
 \begin{figure}
-\includegraphics[width=0.75\textwidth]{1period-1.eps}
+\centering
+\begin{tikzpicture}[xscale=2.6,yscale=1.0,>={Stealth[length=2.2mm]}]
+\node (s0) at (0,0) {$\begin{pmatrix}S_0\\ B_0\end{pmatrix}$};
+\node (su) at (1,0.95) {$\begin{pmatrix}s_u\\ B_1\end{pmatrix}$};
+\node (sd) at (1,-0.95) {$\begin{pmatrix}s_d\\ B_1\end{pmatrix}$};
+\draw[->,thick,gray] (s0)--(su) node[pos=0.55,above,font=\small]{$p$};
+\draw[->,thick,gray] (s0)--(sd) node[pos=0.55,below,font=\small]{$1-p$};
+\end{tikzpicture}
 \end{figure}
 \end{frame}
 
@@ -214,6 +217,8 @@ There are no arbitrage opportunities in our financial market if and only if
 \textbf{Proof} \\
 `$\Rightarrow$':  exercise \\
  `$\Leftarrow$':  this follows from the risk-neutral construction derived later in this section (verify!)
+\\ \vspace{.2cm}
+A full proof of `$\Rightarrow$' is given in the \hyperlink{app:noarb}{appendix}.
 \end{frame}
 
 \begin{frame}{What's the price of an option in this market?}
@@ -233,7 +238,16 @@ C_1(\omega)=\left\{
 \item what is price at $t=0$ for call?
 \end{itemize}
 \begin{figure}
-\includegraphics[width=0.85\textwidth]{1period-2.eps}
+\centering
+\begin{tikzpicture}[xscale=2.8,yscale=1.0,>={Stealth[length=2.2mm]}]
+\node (s0) at (0,0) {$\begin{pmatrix}S_0\\ B_0\end{pmatrix}$};
+\node (su) at (1,0.95) {$\begin{pmatrix}s_u\\ B_1\end{pmatrix}$};
+\node (sd) at (1,-0.95) {$\begin{pmatrix}s_d\\ B_1\end{pmatrix}$};
+\node[blue] at (1.85,0.95) {$C_1=c_u$};
+\node[blue] at (1.85,-0.95) {$C_1=c_d$};
+\draw[->,thick,gray] (s0)--(su) node[pos=0.55,above,font=\small]{$p$};
+\draw[->,thick,gray] (s0)--(sd) node[pos=0.55,below,font=\small]{$1-p$};
+\end{tikzpicture}
 \end{figure}
 \end{frame}
 
@@ -280,8 +294,7 @@ financial markets:
 \[
  \mathbb{E}\left[ \frac{S_1}{S_0} \right] =\frac{B_1}{B_0},
 \]
-would mean that expected (gross) return on stock is same as
-return on riskless asset
+would mean that the expected (gross) return on the stock equals the riskless return --- i.e.\ that investors demand \emph{no risk premium} for bearing risk, which is not what we observe
 \end{itemize}
 \end{frame}
 
@@ -387,29 +400,17 @@ the replicating portfolios.
 \end{frame}
 
 \begin{frame}{Worked example: one-period model}
-\textbf{Setup} (all numbers reproducible in the accompanying spreadsheet):
-\begin{columns}[T]
-\begin{column}{0.46\textwidth}
-\begin{itemize}
-\item $S_0=125$, \quad $B_0=1$
-\item interest: $B_1=1.02$ (i.e.\ $r=2\%$)
-\item $S_{1,u}=150$, \quad $S_{1,d}=100$
-\item real-world prob.\ $p=\mathbb{P}(\text{up})=0.7$
-\item claim: call with $K=50$, hence
-\[ c_u=100,\qquad c_d=50 \]
-\end{itemize}
-\end{column}
-\begin{column}{0.5\textwidth}
-\centering
-\begin{tikzpicture}[xscale=1.8,yscale=0.95]
-\node (s0) at (0,0) {$\begin{aligned}S_0&=125\\[-2pt]B_0&=1\end{aligned}$};
-\node (su) at (1,1.25) {$\begin{aligned}S_{1,u}&=150\\[-2pt]c_u&=100\end{aligned}$};
-\node (sd) at (1,-1.25){$\begin{aligned}S_{1,d}&=100\\[-2pt]c_d&=50\end{aligned}$};
-\draw[bedge] (s0)--(su) node[midway,above,sloped,font=\scriptsize]{$p=0.7$};
-\draw[bedge] (s0)--(sd) node[midway,below,sloped,font=\scriptsize]{$1-p=0.3$};
+\textbf{Setup} (numbers from the accompanying spreadsheet): $B_0=1$, $B_1=1.02$ (so $r=2\%$), real-world probability $p=\mathbb{P}(\text{up})=0.7$, and the claim is a call with strike $K=50$.
+\vspace{0.4cm}
+\begin{center}
+\begin{tikzpicture}[xscale=3.7,yscale=1.4,>={Stealth[length=2.4mm]}]
+\node (s0) at (0,0) {$S_0=125,\ \ B_0=1$};
+\node (su) at (1,1) {$S_{1,u}=150,\quad c_u=100$};
+\node (sd) at (1,-1) {$S_{1,d}=100,\quad c_d=50$};
+\draw[->,thick,gray] (s0)--(su) node[pos=0.5,above,font=\small]{$p=0.7$};
+\draw[->,thick,gray] (s0)--(sd) node[pos=0.5,below,font=\small]{$1-p=0.3$};
 \end{tikzpicture}
-\end{column}
-\end{columns}
+\end{center}
 \end{frame}
 
 \begin{frame}{Worked example: pricing by replication}
@@ -542,7 +543,7 @@ C_0=0.7\cdot0.770\cdot100+0.3\cdot1.471\cdot50\approx 75.98 ,
 again the same price. Note $m_d>m_u$: a payoff in the ``down'' (low-$S$) state is more expensive --- the kernel encodes the price of risk.
 \end{frame}
 
-\subsection{Multi-period model}
+\section{Multi-period model}
 
 \begin{frame}{Multi-period binomial model}
 The one-period idea extends directly to several trading dates. Consider a \emph{two-period}, recombining model ($t=0,1,2$): we may trade and rebalance at $t=0$ and $t=1$.
@@ -663,6 +664,29 @@ All three give the \emph{same} price, and they extend to the multi-period tree v
 \\
 \vspace{.5cm}
 For the continuous-time case we will see that exactly the same ideas are used. Unfortunately (?), the math gets a bit more difficult.
+\end{frame}
+
+\appendix
+\section{Appendix}
+
+\begin{frame}{Appendix: proof of the no-arbitrage theorem}
+\hypertarget{app:noarb}{}
+\textbf{Claim.} The market is free of arbitrage $\iff 0<\dfrac{s_d}{S_0}<\dfrac{B_1}{B_0}<\dfrac{s_u}{S_0}$.
+\medskip
+
+\textbf{`$\Rightarrow$'} (contrapositive). Suppose the chain of inequalities fails; recall $0<s_d<s_u$.
+\begin{itemize}
+\item If $\dfrac{B_1}{B_0}\leq \dfrac{s_d}{S_0}$: buy one share, financed by selling $S_0/B_0$ units of the bond, so $V_0=0$. Then
+\[
+V_1=S_1-\tfrac{S_0}{B_0}B_1\ \geq\ s_d-\tfrac{S_0}{B_0}B_1\ \geq\ 0,
+\]
+with strict inequality in the ``up'' state $\Rightarrow$ arbitrage.
+\item If $\dfrac{B_1}{B_0}\geq \dfrac{s_u}{S_0}$: the reverse strategy (short one share, invest $S_0$ in the bond) gives $V_0=0$ and $V_1=\tfrac{S_0}{B_0}B_1-S_1\geq 0$, strict in the ``down'' state $\Rightarrow$ arbitrage.
+\end{itemize}
+So absence of arbitrage forces the strict inequalities.
+\medskip
+
+\textbf{`$\Leftarrow$'} The inequalities are equivalent to $q\in(0,1)$; the risk-neutral construction (Method~2) then assigns every claim a price consistent with $S$ and $B$, leaving no arbitrage. \hfill$\square$
 \end{frame}
 
 \end{document}
