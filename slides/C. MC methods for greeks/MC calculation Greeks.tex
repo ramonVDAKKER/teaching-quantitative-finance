@@ -116,15 +116,15 @@ Ramon van den Akker
 \begin{frame}{the Greeks}
 Previous lecture we met the Greeks:\\ \vspace{.5cm}
 \begin{tabular}{rl}
-delta & $\dfrac{\partial C}{\partial S}$ \\[8mm] \pause
-vega & $\dfrac{\partial C}{\partial \sigma}$ \\ [8mm] \pause
-rho & $\dfrac{\partial C}{\partial r}$ \\ [8mm] \pause
-theta & $\dfrac{\partial C}{\partial t}$
+$\Delta$\, delta & $\dfrac{\partial C}{\partial S}$ \\[8mm] \pause
+$\nu$\, vega & $\dfrac{\partial C}{\partial \sigma}$ \\ [8mm] \pause
+$\rho$\, rho & $\dfrac{\partial C}{\partial r}$ \\ [8mm] \pause
+$\Theta$\, theta & $\dfrac{\partial C}{\partial t}$
 
 \end{tabular} \pause
 \hspace{1.5cm}
 \begin{tabular}{rl}
-gamma & $\dfrac{\partial^2 C}{\partial S^2}$ \\[8mm] \pause
+$\Gamma$\, gamma & $\dfrac{\partial^2 C}{\partial S^2}$ \\[8mm] \pause
 vomma & $\dfrac{\partial^2 C}{\partial \sigma^2}$ \\[8mm] \pause
 vanna & $\dfrac{\partial^2 C}{\partial S \partial \sigma}$
 \end{tabular}
@@ -393,9 +393,9 @@ $(X_1^{\theta+h,\eta},\dots,X_n^{\theta+h,\eta})$
 \item simulate $Z_1,\dots,Z_n$ i.i.d.
 \item suppose there exists function $g$ such that
 \[
-h(X_i^{\theta,\eta};\theta,\eta) 
-\stackrel{d}{=} g(Z_i;\theta,\eta) \text{ and }
-h(X_i^{\theta+h,\eta};\theta+h,\eta)\stackrel{d}{=} g(Z_i;\theta+h,\eta)
+h(X_i^{\theta,\eta};\theta,\gamma) 
+\stackrel{d}{=} g(Z_i;\theta) \text{ and }
+h(X_i^{\theta+h,\eta};\theta+h,\gamma)\stackrel{d}{=} g(Z_i;\theta+h)
 \]
 \end{itemize}
 \item if $g$ is differentiable with respect to the parameter $\theta$,
@@ -404,7 +404,7 @@ then
 \var\!\big(
 \hat f_n(\theta+h) -  \hat f_n(\theta)
 \big)= \frac{1}{n}\var\left(
-g(Z_1;\theta+h,\eta) - g(Z_1;\theta,\eta)
+g(Z_1;\theta+h) - g(Z_1;\theta)
 \right)
  \\
 = \frac{1}{n}  \var\!\Big( \frac{\partial g}{\partial \theta} (Z_1,\theta)h + O\big(h^2\big)\Big)
