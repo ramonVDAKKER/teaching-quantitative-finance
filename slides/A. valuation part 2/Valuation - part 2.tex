@@ -31,6 +31,17 @@
 \newcommand{\kansq}{\mathbb{Q}}
 \DeclareMathOperator*\ster{*} \DeclareMathOperator*\argmax{argmax}
 \usepackage{color}
+% --- visualisation & teaching extras (added) ---
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepgfplotslibrary{groupplots}
+\usepackage{tcolorbox}
+\newtcolorbox{quizbox}{colback=blue!4,colframe=blue!55!black,fonttitle=\bfseries,
+  title=Quiz,boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt}
+\newtcolorbox{fftbox}{colback=orange!6,colframe=orange!75!black,fonttitle=\bfseries,
+  title=Food for thought,boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt}
 \AtBeginSection{\frame{\sectionpage}}
 \newtranslation[to=greek]{Section}{En'othta}
 \newtranslation[to=greek]{Subsection}{Upoen'othta}
@@ -331,6 +342,53 @@ d_2=\frac{
 \end{itemize}
 \end{frame}
 %
+\begin{frame}{The call price as a function of $s$}
+The PDE solution $F(t,s)$ for a European call ($K=100$, $r=3\%$, $\sigma=20\%$), for several times-to-maturity $\tau=T-t$:
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=9cm,height=5.2cm,axis lines=left,xlabel={$s$},ylabel={$F(t,s)$},
+  xmin=50,xmax=150,ymin=-1,ymax=54,legend pos=north west,
+  legend style={font=\scriptsize,draw=none,fill=none},
+  xlabel style={font=\small},ylabel style={font=\small}]
+\addplot[black,very thick] coordinates {(50,0) (55,0) (60,0) (65,0) (70,0) (75,0) (80,0) (85,0) (90,0) (95,0) (100,0) (105,5) (110,10) (115,15) (120,20) (125,25) (130,30) (135,35) (140,40) (145,45) (150,50)};
+\addlegendentry{payoff $\max\{s-K,0\}$}
+\addplot[blue,thick] coordinates {(50,0.00) (55,0.01) (60,0.04) (65,0.13) (70,0.35) (75,0.79) (80,1.56) (85,2.76) (90,4.45) (95,6.67) (100,9.41) (105,12.64) (110,16.28) (115,20.28) (120,24.55) (125,29.03) (130,33.67) (135,38.43) (140,43.26) (145,48.15) (150,53.08)};
+\addlegendentry{$\tau=1.0$}
+\addplot[red,thick] coordinates {(50,0.00) (55,0.00) (60,0.00) (65,0.01) (70,0.03) (75,0.12) (80,0.39) (85,0.99) (90,2.10) (95,3.88) (100,6.37) (105,9.55) (110,13.32) (115,17.53) (120,22.06) (125,26.79) (130,31.64) (135,36.56) (140,41.52) (145,46.50) (150,51.50)};
+\addlegendentry{$\tau=0.5$}
+\addplot[orange,thick] coordinates {(50,0.00) (55,0.00) (60,0.00) (65,0.00) (70,0.00) (75,0.00) (80,0.00) (85,0.01) (90,0.13) (95,0.79) (100,2.67) (105,6.05) (110,10.47) (115,15.33) (120,20.30) (125,25.30) (130,30.30) (135,35.30) (140,40.30) (145,45.30) (150,50.30)};
+\addlegendentry{$\tau=0.1$}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+As $\tau\to 0$ the price collapses onto the payoff; the gap above it is the option's \emph{time value}.
+\end{frame}
+
+\begin{frame}{Worked example: verifying a candidate solution}
+To check that a function $F$ solves the B-S PDE, just substitute it. Two quick cases (recall $F_t+rsF_s+\tfrac12\sigma^2 s^2 F_{ss}-rF=0$):
+\medskip
+
+\textbf{(a) the stock, $F(t,s)=s$:} then $F_t=0,\ F_s=1,\ F_{ss}=0$, so
+\[ 0+rs\cdot 1+0-r\,s=0.\quad\checkmark \]
+\textbf{(b) a zero-coupon bond paying $K$ at $T$, $F(t,s)=K\e^{-r(T-t)}$:} then $F_s=F_{ss}=0$ and $F_t=rK\e^{-r(T-t)}=rF$, so
+\[ rF+0+0-rF=0.\quad\checkmark \]
+By \emph{linearity} of the PDE, any combination $a\,s+b\,K\e^{-r(T-t)}$ also solves it --- consistent with such a stock+bond portfolio being self-financing.
+\\[2pt]
+{\small(In the exercises you verify that the digital-call solution $F(t,s)=\e^{-r(T-t)}\Phi(d_2)$ solves the PDE.)}
+\end{frame}
+
+\begin{frame}{Quiz}
+\begin{quizbox}
+A portfolio has value process $V_t=F(t,S_t)$ with
+\[ F(t,s)=2\,s+3K\e^{-r(T-t)} . \]
+\begin{enumerate}
+\item Does $F$ solve the Black-Scholes PDE?
+\item Which self-financing strategy $(\phi,\psi)$ does it correspond to?
+\item Which claim does the portfolio pay at maturity $T$?
+\end{enumerate}
+\end{quizbox}
+\end{frame}
+
 \begin{frame}{Examples: European digital call option}
 \begin{itemize}
 \item payoff: $h(S_T)=1\{S_T\geq K\}$
@@ -367,6 +425,17 @@ Value function $F(t,s)$:
 \begin{figure}
 \includegraphics[width=0.85\textwidth]{value_dig_put.eps}
 \end{figure}
+\end{frame}
+
+\begin{frame}{Food for thought}
+\begin{fftbox}
+The B-S PDE comes with a \emph{terminal} condition $F(T,s)=h(s)$, so it runs \emph{backward} in time. With $\tau=T-t$, $x=\log s$ (and a discount/scaling factor) it becomes the \emph{heat equation}
+\[ \frac{\partial u}{\partial \tau}=\frac{\partial^2 u}{\partial x^2}. \]
+\begin{itemize}
+\item The heat equation instantly \emph{smooths} its initial data. What does this say about the smoothness of the price $F(t,\cdot)$ for $t<T$, even when the payoff $h$ has a kink (call) or a jump (digital)?
+\item Why is ``backward in time, from maturity'' the natural direction for valuation?
+\end{itemize}
+\end{fftbox}
 \end{frame}
 
 \begin{frame}{Feynman-Kac Theorem}
