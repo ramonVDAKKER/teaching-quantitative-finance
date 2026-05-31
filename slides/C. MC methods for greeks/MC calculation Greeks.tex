@@ -630,11 +630,11 @@ a parameter of the \emph{density}
 \item  We can then differentiate the density rather than the payoff function
 \end{itemize}
 \begin{align*}
-& \frac{\partial}{\partial\theta} \, \mathbb{E}_{\theta,\eta}[F(X)] = \frac{\partial}{\partial\theta} \int F(u)\, g(u; \theta,\eta) \,du
-= \int F(u) \, \frac{\partial g}{\partial \theta}(u;\theta,\eta) \,du \\
-&\quad = \int F(u) \, \frac{(\partial g/\partial\theta)(u;\theta,\eta)}{g(u;\theta,\eta)} g(u;\theta,\eta) \, du \\
+& \frac{\partial}{\partial\theta} \, \mathbb{E}_{\theta,\eta}[f(X)] = \frac{\partial}{\partial\theta} \int f(u)\, g(u; \theta,\eta) \,du
+= \int f(u) \, \frac{\partial g}{\partial \theta}(u;\theta,\eta) \,du \\
+&\quad = \int f(u) \, \frac{(\partial g/\partial\theta)(u;\theta,\eta)}{g(u;\theta,\eta)} g(u;\theta,\eta) \, du \\
 &\quad 
-= \mathbb{E}_{\theta,\eta} \Bigg[F(X) \, \frac{(\partial g/\partial\theta)(X;\theta,\eta)}{g(X;\theta,\eta)}\Bigg] = \mathbb{E}_{\theta,\eta}\Bigg[F(X) \, \frac{\partial \log g(X;\theta, \eta)}{\partial \theta} \Bigg].
+= \mathbb{E}_{\theta,\eta} \Bigg[f(X) \, \frac{(\partial g/\partial\theta)(X;\theta,\eta)}{g(X;\theta,\eta)}\Bigg] = \mathbb{E}_{\theta,\eta}\Bigg[f(X) \, \frac{\partial \log g(X;\theta, \eta)}{\partial \theta} \Bigg].
 \end{align*}
 \end{frame}
 
@@ -669,15 +669,15 @@ The score function is
 = \frac{\log(s/S_0) - (r-\frac{1}{2}\sigma^2)T}{\sigma^2 T \, S_0}\,.
 \end{align*}
 \pause
-The delta, at $t=0$, of an option with payoff $F(S_T)$ can now be computed as
+The delta, at $t=0$, of an option with payoff $f(S_T)$ can now be computed as
 $$
-e^{-rT} \mathbb{E}_{\mathbb{Q}}\Bigg[ F(S_T) \, \frac{\log(S_T/S_0) - (r-\frac{1}{2}\sigma^2)T}{\sigma^2 T \, S_0}\Bigg].
+e^{-rT} \mathbb{E}_{\mathbb{Q}}\Bigg[ f(S_T) \, \frac{\log(S_T/S_0) - (r-\frac{1}{2}\sigma^2)T}{\sigma^2 T \, S_0}\Bigg].
 $$
 \pause
 Given that $S_T = S_0 \exp\big( (r-\tfrac{1}{2}\sigma^2)T + \sigma\sqrt{T}\, Z \big)$,
 we can also write this as
 $$
-e^{-rT} \mathbb{E}_{\mathbb{Q}}\Bigg[ F(S_T) \, \frac{Z}{\sigma \sqrt{T} \,S_0} \Bigg].
+e^{-rT} \mathbb{E}_{\mathbb{Q}}\Bigg[ f(S_T) \, \frac{Z}{\sigma \sqrt{T} \,S_0} \Bigg].
 $$
 \end{frame}
 
