@@ -713,25 +713,25 @@ C_t=\frac{1}{K_t}\mathbb{E}_{\mathbb{P}}[ K_T C_T \mid \calF_t]
 \begin{itemize}
 \item try $K$ of the form
 $
-\rd K_t=\mu^K_t \rd t + \sigma^K_t \rd W_t
+\rd K_t=\mu^K_t \rd t + \sigma^K_t \rd W_t^{\mathbb{P}}
 $
 \item It\^{o}'s product rule yields
 \begin{align*}
 \rd K_t B_t&=K_t \rd B_t + B_t \rd K_t+ \rd [K,B]_t\\
-&=( r K_t B_t + B_t \mu^K_t) \rd t + \ldots \rd W_t
+&=( r K_t B_t + B_t \mu^K_t) \rd t + \ldots \rd W_t^{\mathbb{P}}
 \end{align*}
 $K_tB_t$ martingale $\implies$ no drift $\implies$ $\mu^K_t=-rK_t$
 \item
 It\^{o}'s product rule yields
 \begin{align*}
 \rd K_t S_t&=K_t \rd S_t + S_t \rd K_t+ \rd [S,K]_t\\
-&=\left(  K_t\mu S_t + S_t\mu^K_t+ \sigma \sigma^K_t S_t\right)   \rd t + \ldots \rd W_t
+&=\left(  K_t\mu S_t + S_t\mu^K_t+ \sigma \sigma^K_t S_t\right)   \rd t + \ldots \rd W_t^{\mathbb{P}}
 \end{align*}
 $K_tS_t$ martingale $\implies$ no drift $\implies$ $\sigma^K_t=-K_t(\mu-r)/\sigma$
 \end{itemize}
 So
 \[
-K_0=1,\quad \rd K_t=-rK_t \rd t  -\frac{\mu-r}{\sigma} K_t \rd W_t
+K_0=1,\quad \rd K_t=-rK_t \rd t  -\frac{\mu-r}{\sigma} K_t \rd W_t^{\mathbb{P}}
 \]
 determines the pricing kernel process in the B-S model.
 }
@@ -739,12 +739,12 @@ determines the pricing kernel process in the B-S model.
 %
 \begin{frame}{The pricing kernel for the standard Black-Scholes world}
 \[
-K_0=1,\quad \rd K_t=-rK_t \rd t  -\frac{\mu-r}{\sigma} K_t \rd W_t
+K_0=1,\quad \rd K_t=-rK_t \rd t  -\frac{\mu-r}{\sigma} K_t \rd W_t^{\mathbb{P}}
 \]
 has as solution
 \[
 K_t=\exp\left\{
-\left(-r-0.5\left(\frac{\mu-r}{\sigma}\right)^2 \right)t -\frac{\mu-r}{\sigma} W_t
+\left(-r-0.5\left(\frac{\mu-r}{\sigma}\right)^2 \right)t -\frac{\mu-r}{\sigma} W_t^{\mathbb{P}}
 \right\}
 \]
 Fair price of a derivative, with payoff $C_T=F(S_T)$, based on these assets is given by
