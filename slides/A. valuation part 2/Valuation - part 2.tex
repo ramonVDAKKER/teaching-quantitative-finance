@@ -226,7 +226,7 @@ $\rd V_t=\textcolor{blue}{c_t} \rd t + \textcolor{red}{d_t} \rd W_t$
 \begin{frame}{Warning: sloppy notation}
 We will often use the following notations/abbreviations when working with PDEs:
 \begin{itemize}
-\item $F_S = (\partial F / \partial s) = (\partial F / \partial s)(t,S_t)$
+\item $F_s = (\partial F / \partial s) = (\partial F / \partial s)(t,S_t)$
 \item $F_t = (\partial F / \partial t) = (\partial F / \partial t)(t,S_t)$
 \item $F = F(t,S_t)$
 \item etc.
@@ -247,19 +247,19 @@ We have
 \begin{itemize}
 \item apply It\^{o} to (1) and insert $\rd S_t = \mu S_t \rd t + \sigma S_t \rd W_t$  $\implies$
 \begin{align*}
-\rd V_t &= F_S \rd S_t + F_t \rd t + \frac{1}{2} F_{SS} \rd [S,S]_t 
+\rd V_t &= F_s \rd S_t + F_t \rd t + \frac{1}{2} F_{ss} \rd [S,S]_t 
 \\
-&=  \left( F_S \mu S_t +F_t +  \frac{1}{2} F_{SS} \sigma^2 S_t^2  \right) 
-\rd t + F_S \sigma S_t \rd W_t 
+&=  \left( F_s \mu S_t +F_t +  \frac{1}{2} F_{ss} \sigma^2 S_t^2  \right) 
+\rd t + F_s \sigma S_t \rd W_t 
 \end{align*}
 \item insert $\rd S_t$ and $\rd B_t=rB_t\rd t$ in RHS of (2) $\implies$
 \begin{align*}
 \rd V_t &= (\phi_t \mu S_t + r\psi_t B_t) \rd t +  \phi_t \sigma S_t \rd W_t
 \end{align*}
-\item hence $\phi_t = \phi(t,S_t) = F_{S}(t,S_t)=F_S$
+\item hence $\phi_t = \phi(t,S_t) = F_{s}(t,S_t)=F_s$
 \item and
 \begin{align*}
-F_S \mu S_t +F_t +  \frac{1}{2}\sigma^2 F_{SS} S_t^2    
+F_s \mu S_t +F_t +  \frac{1}{2}\sigma^2 F_{ss} S_t^2    
 &= \phi_t \mu S_t + r\psi_t B_t
 \end{align*}
 \end{itemize}
@@ -277,10 +277,10 @@ s^2}(t,s) -r F(t,s)=0\quad \forall s>0,\,t\in[0, T),
 \]
 On the previous slide we obtained
 \begin{align*}
-F_t + \frac{1}{2}\sigma^2 F_{SS} S_t^2    
+F_t + \frac{1}{2}\sigma^2 F_{ss} S_t^2    
 &=  r\psi_t B_t.
 \end{align*}
-As $\psi_t B_t = F - \phi_t S_t = F - F_S S_t$
+As $\psi_t B_t = F - \phi_t S_t = F - F_s S_t$
 we obtain the result.
 \end{frame}
 
@@ -299,15 +299,15 @@ $C_t = F(t, S_t)$  (assumption!)
 \item 
 using It\^o:
 \[
-\rd V_t = - F_S \rd S_t - F_t \rd t - \frac{1}{2}F_{SS} \rd [S,S]_t + \phi_t \rd S_t
+\rd V_t = - F_s \rd S_t - F_t \rd t - \frac{1}{2}F_{ss} \rd [S,S]_t + \phi_t \rd S_t
 + \psi_t r B_t \rd t
 \]
-\item can only eliminate local risk ($\rd W_t$) for $\phi_t = F_S(t, S_t)$!
+\item can only eliminate local risk ($\rd W_t$) for $\phi_t = F_s(t, S_t)$!
 \item yields $\rd V_t = \cdots \rd t$  which has (locally) no risk, so
 rate of return is same as on $B$ $\implies$ $\rd V_t =r V_t \rd t$
 \item hence 
 \[
--F_t - \frac{1}{2}F_{SS}\sigma^2 S_t^2 + r\psi_t B_t = r \left(  - F  + F_S S_t + \psi_t B_t
+-F_t - \frac{1}{2}F_{ss}\sigma^2 S_t^2 + r\psi_t B_t = r \left(  - F  + F_s S_t + \psi_t B_t
 \right)
 \]
 which yields Black-Scholes PDE
@@ -469,7 +469,7 @@ The explicit finite-difference scheme \emph{is} a trinomial tree; the binomial t
 \item nonnegative weights require $\Delta t$ small relative to $\Delta s^2$ (a \emph{stability / CFL} condition); otherwise the scheme oscillates and the ``probabilities'' turn negative;
 \item the same constraint shows up in the tree: the log-price step must scale like $\sigma\sqrt{\Delta t}$ (so $u=\e^{\sigma\sqrt{\Delta t}}$) to keep $q\in(0,1)$.
 \end{itemize}
-\textbf{One picture:} numerical stability $\Leftrightarrow$ nonnegative weights $\Leftrightarrow$ a valid risk-neutral measure $\Leftrightarrow$ no arbitrage. The PDE, the trees, and the grid are three views of the same object.
+\textbf{One picture (an analogy, not a literal equivalence):} the discrete weights must stay nonnegative to act as risk-neutral probabilities --- mirroring how a valid risk-neutral measure rules out arbitrage. The PDE, the trees, and the grid are three views of the same object.
 \end{frame}
 
 \begin{frame}{From the Black-Scholes PDE to the heat equation}
