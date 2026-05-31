@@ -704,10 +704,10 @@ analytic form.
 bias & yes & none & none\\
 applies to & \emph{any} payoff & smooth only & \emph{any} payoff\\
 needs & --- & payoff deriv. & density score\\
-variance & moderate$^{\ast}$ & low & can be high\\
+variance & high (low w/ CRN) & low & can be high\\
 \hline
 \end{tabular}}
-\\[2pt]{\scriptsize $^{\ast}$ with common random numbers; the bump bias is $O(h)$ one-sided, $O(h^2)$ two-sided.}
+\\[2pt]{\scriptsize Bump variance is $O(1/(nh^2))$ with independent samples (it explodes as $h\to0$) but $O(1/n)$ with common random numbers; its bias is $O(h)$ one-sided, $O(h^2)$ two-sided.}
 \end{center}
 \medskip
 Rule of thumb: \emph{pathwise} for smooth payoffs (unbiased, low variance); \emph{likelihood ratio} for discontinuous payoffs such as the digital; \emph{bump-and-reprice} as the always-applicable fallback and the easy route to second-order Greeks.
