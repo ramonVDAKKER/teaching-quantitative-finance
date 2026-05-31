@@ -174,6 +174,26 @@ different PDE!
 \end{itemize}
 \end{frame}
 
+\begin{frame}{From the binomial tree to the delta}
+In the one-period binomial model (part~1) the replicating stock position was a \emph{difference quotient},
+\[ \phi=\frac{c_u-c_d}{s_u-s_d}=\frac{F(t+\Delta t,s_u)-F(t+\Delta t,s_d)}{s_u-s_d}, \]
+the slope of the value across the two stock outcomes. In the PDE it is $\phi=F_s=\partial F/\partial s$, the \textbf{delta}: as the step shrinks, the secant slope $\to$ the tangent slope.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=8.2cm,height=3.7cm,axis lines=left,xlabel={$s$},ylabel={$F(t,\cdot)$},
+  xmin=84,xmax=116,ymin=0,ymax=22,xtick={90,100,110},xticklabels={$s_d$,$S_t$,$s_u$},
+  ytick=\empty,xlabel style={font=\small},ylabel style={font=\small}]
+\addplot[blue,very thick,smooth] coordinates {(85,2.76)(90,4.45)(95,6.67)(100,9.41)(105,12.64)(110,16.28)(115,20.28)};
+\addplot[red,dashed,thick] coordinates {(88,3.27)(112,17.46)};
+\addplot[green!55!black,thick] coordinates {(92,4.62)(108,14.20)};
+\addplot[only marks,mark=*,black] coordinates {(90,4.45)(110,16.28)(100,9.41)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{-3mm}
+{\small \textcolor{red}{secant} slope $=\frac{c_u-c_d}{s_u-s_d}$ (binomial) $\longrightarrow$ \textcolor{green!55!black}{tangent} slope $=F_s=\Delta$ (PDE).}
+\end{frame}
+
 \begin{frame}{Derivation of the PDE}
 Which $F$ are possible (when using self-financing strategies $(\phi(t,S_t),\psi(t,S_t))$)?
 We have
@@ -425,6 +445,31 @@ Value function $F(t,s)$:
 \begin{figure}
 \includegraphics[width=0.85\textwidth]{value_dig_put.eps}
 \end{figure}
+\end{frame}
+
+\begin{frame}{Solving the PDE numerically: finite differences}
+When there is no closed form, solve the PDE on a grid $t_0<\dots<t_N=T$ (step $\Delta t$) and $s_0<\dots<s_M$ (step $\Delta s$). Replace the derivatives by differences:
+\[
+F_t\approx\frac{F(t+\Delta t,s)-F(t,s)}{\Delta t},\qquad
+F_s\approx\frac{F(t,s+\Delta s)-F(t,s-\Delta s)}{2\,\Delta s},
+\]
+\[
+F_{ss}\approx\frac{F(t,s+\Delta s)-2F(t,s)+F(t,s-\Delta s)}{\Delta s^2}.
+\]
+\begin{itemize}
+\item start from the known terminal values $F(T,s)=h(s)$ and step \emph{backward} in time;
+\item the explicit scheme writes each $F(t,s_i)$ as a (discounted) weighted average of its three neighbours $F(t+\Delta t,s_{i-1}),\,F(t+\Delta t,s_i),\,F(t+\Delta t,s_{i+1})$ --- i.e.\ a \emph{trinomial tree}.
+\end{itemize}
+The digital-put figures shown earlier were produced exactly this way.
+\end{frame}
+
+\begin{frame}{Finite differences, trees, and no-arbitrage}
+The explicit finite-difference scheme \emph{is} a trinomial tree; the binomial tree of part~1 is its two-neighbour cousin. For the scheme to make sense the three weights must be \textbf{nonnegative} --- they play the role of risk-neutral probabilities.
+\begin{itemize}
+\item nonnegative weights require $\Delta t$ small relative to $\Delta s^2$ (a \emph{stability / CFL} condition); otherwise the scheme oscillates and the ``probabilities'' turn negative;
+\item the same constraint shows up in the tree: the log-price step must scale like $\sigma\sqrt{\Delta t}$ (so $u=\e^{\sigma\sqrt{\Delta t}}$) to keep $q\in(0,1)$.
+\end{itemize}
+\textbf{One picture:} numerical stability $\Leftrightarrow$ nonnegative weights $\Leftrightarrow$ a valid risk-neutral measure $\Leftrightarrow$ no arbitrage. The PDE, the trees, and the grid are three views of the same object.
 \end{frame}
 
 \begin{frame}{Food for thought}
