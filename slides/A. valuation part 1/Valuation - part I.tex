@@ -31,6 +31,22 @@
 %\newarrow{hulp}{<}{filler}{middle}{filler}{head}
 \DeclareMathOperator*\ster{*} \DeclareMathOperator*\argmax{argmax}
 \usepackage{color}
+% --- visualisation & teaching extras (added) ---
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepgfplotslibrary{groupplots}
+\usepackage{tcolorbox}
+\newtcolorbox{quizbox}{colback=blue!4,colframe=blue!55!black,fonttitle=\bfseries,
+  title=Quiz,boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt}
+\newtcolorbox{fftbox}{colback=orange!6,colframe=orange!75!black,fonttitle=\bfseries,
+  title=Food for thought (for the curious / advanced student),boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt}
+% binomial-tree helper styles
+\tikzset{
+  bnode/.style={font=\small},
+  bedge/.style={-{Stealth[length=2mm]},thick,gray}
+}
 \AtBeginSection{\frame{\sectionpage}}
 %\AtBeginSubsection{\frame{\subsectionpage}}
 \newtranslation[to=greek]{Section}{En'othta}
@@ -109,25 +125,55 @@ purchase and expiration date}
 \end{frame}
 
 \begin{frame}{Options (quick recap)}
-\textbf{Exercise}\\ Check the following formulas for the payoff at maturity $T$.
+\textbf{Exercise}\\ Check the following formulas for the payoff at maturity $T$ (we denote a generic payoff by $C_T$).
 \begin{itemize}
-\item European call option with strike price $K$:  $C_T=\max\{ S_T -K , 0\}$
-\item European put option with strike price $K$:  $C_T=\max\{ K-S_T  , 0\}$
+\item European call option with strike price $K$:  payoff $\max\{ S_T -K , 0\}$
+\item European put option with strike price $K$:  payoff $\max\{ K-S_T  , 0\}$
 \end{itemize}
 \vspace{.25cm}
 We will often use the following options that are defined by their pay-off:
 \begin{itemize}
-\item European digital (binary) call option with strike price $K$:  $C_T=1\{ S_T -K \geq 0\}$
-\item European digital (binary) put option with strike price $K$:  $C_T=1\{ K -S_T \geq 0\}$
+\item European digital (binary) call option with strike price $K$:  payoff $1\{ S_T \geq K \}$
+\item European digital (binary) put option with strike price $K$:  payoff $1\{ S_T \leq K \}$
 \end{itemize}
 Please recall that the indicator $1\{A\}$ equals $1$ if statement $A$ is true and $0$ otherwise.
 \\ \vspace{.5cm}
-Note that we can write all these payoffs as a function of $S_T$, i.e. $C_T = g(S_T)$.
+Note that we can write each of these payoffs as a function of $S_T$, i.e. $C_T = g(S_T)$ for some function $g$.
+\end{frame}
+
+\begin{frame}{Payoff diagrams at maturity $T$}
+The payoff $C_T=g(S_T)$ of each contract, as a function of the stock price $S_T$:
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[group style={group size=2 by 2,horizontal sep=1.7cm,vertical sep=1.5cm},
+   width=5.1cm,height=3.5cm,axis lines=middle,xlabel={$S_T$},xlabel style={at={(ticklabel* cs:1)},anchor=west},
+   ytick=\empty,xtick={5},xticklabels={$K$},title style={font=\small},xmin=0,xmax=10,clip=false]
+\nextgroupplot[title={call: $\max\{S_T-K,0\}$},ymin=-0.4,ymax=5.5]
+\addplot[very thick,blue,domain=0:10,samples=2]{max(x-5,0)};
+\nextgroupplot[title={put: $\max\{K-S_T,0\}$},ymin=-0.4,ymax=5.5]
+\addplot[very thick,blue,domain=0:10,samples=2]{max(5-x,0)};
+\nextgroupplot[title={digital call: $1\{S_T\geq K\}$},ymin=-0.25,ymax=1.4,ytick={1},yticklabels={$1$}]
+\addplot[very thick,blue] coordinates {(0,0) (5,0)};
+\addplot[very thick,blue] coordinates {(5,1) (10,1)};
+\addplot[blue,dashed] coordinates {(5,0) (5,1)};
+\addplot[only marks,mark=*,blue] coordinates {(5,1)};
+\addplot[only marks,mark=o,blue] coordinates {(5,0)};
+\nextgroupplot[title={digital put: $1\{S_T\leq K\}$},ymin=-0.25,ymax=1.4,ytick={1},yticklabels={$1$}]
+\addplot[very thick,blue] coordinates {(0,1) (5,1)};
+\addplot[very thick,blue] coordinates {(5,0) (10,0)};
+\addplot[blue,dashed] coordinates {(5,1) (5,0)};
+\addplot[only marks,mark=*,blue] coordinates {(5,1)};
+\addplot[only marks,mark=o,blue] coordinates {(5,0)};
+\end{groupplot}
+\end{tikzpicture}
+\end{figure}
 \end{frame}
 
 
 \begin{frame}{Options (quick recap)}
-As an example, we will consider European call and put options on the AEX-index at September 3, 2021. 
+As an example, we will consider European call and put options on the AEX-index at September 3, 2021.
+{\footnotesize\ (Illustrative market data; the precise figures are not important.)}
 \begin{figure}
 \includegraphics[width=1\textwidth]{AEX}
 \end{figure}
@@ -268,7 +314,7 @@ There are no arbitrage opportunities in our financial market if and only if
 \]
 \textbf{Proof} \\
 `$\Rightarrow$':  exercise \\
- `$\Leftarrow$':  this will follow from our proofs of other results (verify!)
+ `$\Leftarrow$':  this follows from the risk-neutral construction derived later in this section (verify!)
 \end{frame}
 
 \begin{frame}{What's the price of an option in this market?}
@@ -298,7 +344,7 @@ C_1(\omega)=\left\{
 \begin{itemize}
 \item as portfolio generates exactly the same pay-offs as option does (for all states-of-the-world), the portfolio is called \emph{replicating} portfolio
 \item Why? As there are no intermediate cashflows, we must have $C_0 = \phi S_0 + \psi B_0$. Otherwise
-we would create arbitrage opportunities. So via the replicating portfolio we find no-arbitrage price of option
+we would create arbitrage opportunities (this is the \emph{law of one price}). So via the replicating portfolio we find the no-arbitrage price of the option
 \end{itemize}
 \item notice that we have to determine $\phi$ and $\psi$ such that
 \begin{align*}
@@ -441,6 +487,100 @@ the replicating portfolios.
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Worked example: one-period model}
+\textbf{Setup} (all numbers reproducible in the accompanying spreadsheet):
+\begin{columns}[T]
+\begin{column}{0.46\textwidth}
+\begin{itemize}
+\item $S_0=125$, \quad $B_0=1$
+\item interest: $B_1=1.02$ (i.e.\ $r=2\%$)
+\item $S_{1,u}=150$, \quad $S_{1,d}=100$
+\item real-world prob.\ $p=\mathbb{P}(\text{up})=0.7$
+\item claim: call with $K=50$, hence
+\[ c_u=100,\qquad c_d=50 \]
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+\centering
+\begin{tikzpicture}[xscale=1.8,yscale=0.95]
+\node (s0) at (0,0) {$\begin{aligned}S_0&=125\\[-2pt]B_0&=1\end{aligned}$};
+\node (su) at (1,1.25) {$\begin{aligned}S_{1,u}&=150\\[-2pt]c_u&=100\end{aligned}$};
+\node (sd) at (1,-1.25){$\begin{aligned}S_{1,d}&=100\\[-2pt]c_d&=50\end{aligned}$};
+\draw[bedge] (s0)--(su) node[midway,above,sloped,font=\scriptsize]{$p=0.7$};
+\draw[bedge] (s0)--(sd) node[midway,below,sloped,font=\scriptsize]{$1-p=0.3$};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Worked example: pricing by replication}
+Solve $c_u=\phi s_u+\psi B_1$ and $c_d=\phi s_d+\psi B_1$:
+\begin{align*}
+\phi &= \frac{c_u-c_d}{s_u-s_d}=\frac{100-50}{150-100}=1,\\[2pt]
+\psi &= \frac{c_d s_u - s_d c_u}{B_1(s_u-s_d)}=\frac{50\cdot150-100\cdot100}{1.02\cdot 50}=-\frac{2500}{51}\approx -49.02 .
+\end{align*}
+No-arbitrage price of the claim at $t=0$:
+\[
+C_0=\phi S_0+\psi B_0 = 125 - 49.02 = 75.98 .
+\]
+\textbf{Check} (the portfolio reproduces the payoff in both states):
+\[
+\phi s_u+\psi B_1 = 150-50 = 100 = c_u,\qquad
+\phi s_d+\psi B_1 = 100-50 = 50 = c_d .
+\]
+\end{frame}
+
+\begin{frame}{Worked example: risk-neutral pricing}
+Risk-neutral probability (makes $S/B$ a $\mathbb{Q}$-martingale):
+\[
+q=\frac{\frac{B_1}{B_0}-\frac{s_d}{S_0}}{\frac{s_u}{S_0}-\frac{s_d}{S_0}}
+=\frac{1.02-0.80}{1.20-0.80}=\frac{0.22}{0.40}=0.55 .
+\]
+Price as discounted $\mathbb{Q}$-expectation of the payoff:
+\[
+C_0=\frac{1}{B_1}\mathbb{E}_{\mathbb{Q}}[C_1]=\frac{0.55\cdot100+0.45\cdot50}{1.02}=\frac{77.5}{1.02}=75.98 ,
+\]
+\emph{identical} to the replication price --- as it must be.
+\end{frame}
+
+\begin{frame}{Worked example: why a \emph{different} measure?}
+The price is \emph{not} the discounted real-world expectation. Under $\mathbb{P}$ ($p=0.7$):
+\[
+\frac{1}{B_1}\mathbb{E}_{\mathbb{P}}[S_1]=\frac{0.7\cdot150+0.3\cdot100}{1.02}=\frac{135}{1.02}=132.35\neq 125=S_0,
+\]
+\[
+\frac{1}{B_1}\mathbb{E}_{\mathbb{P}}[C_1]=\frac{0.7\cdot100+0.3\cdot50}{1.02}=\frac{85}{1.02}=83.33\neq 75.98 .
+\]
+Under the risk-neutral $\mathbb{Q}$ ($q=0.55$):
+\[
+\frac{1}{B_1}\mathbb{E}_{\mathbb{Q}}[S_1]=\frac{0.55\cdot150+0.45\cdot100}{1.02}=\frac{127.5}{1.02}=125=S_0 .
+\]
+\begin{center}
+\emph{Only $\mathbb{Q}$ reproduces today's traded prices; this is exactly why we price under $\mathbb{Q}$ rather than $\mathbb{P}$.}
+\end{center}
+\end{frame}
+
+\begin{frame}{Quiz}
+\begin{quizbox}
+Take the one-period model with $S_0=100$, $B_0=1$, $B_1=1$ (so $r=0$), and
+\[ S_{1,u}=120,\qquad S_{1,d}=90 .\]
+\begin{enumerate}
+\item Is the market free of arbitrage?
+\item Find the risk-neutral probability $q$ of the ``up'' state.
+\item Price a call with strike $K=100$ (payoffs $c_u=20$, $c_d=0$).
+\end{enumerate}
+\end{quizbox}
+\end{frame}
+
+\begin{frame}{Quiz --- solution}
+\begin{enumerate}
+\item Free of arbitrage, since $\dfrac{s_d}{S_0}=0.90<1=\dfrac{B_1}{B_0}<1.20=\dfrac{s_u}{S_0}$.
+\item $q=\dfrac{B_1/B_0-s_d/S_0}{s_u/S_0-s_d/S_0}=\dfrac{1-0.90}{1.20-0.90}=\dfrac{1}{3}$.
+\item $C_0=\dfrac{1}{B_1}\mathbb{E}_{\mathbb{Q}}[C_1]=\tfrac{1}{3}\cdot20+\tfrac{2}{3}\cdot0=6.67$.
+\end{enumerate}
+(Check by replication: $\phi=\tfrac{20-0}{120-90}=\tfrac23$, $\psi=-60$, $C_0=\tfrac23\cdot100-60=6.67$.)
+\end{frame}
+
 \begin{frame}{Method 2: risk-neutral pricing}
 \textbf{First fundamental theorem of asset pricing (for the toy model)} \\
 The market is free of arbitrage opportunities if and only if there exists a probability measure $\mathbb{Q}$ equivalent to $\mathbb{P}$
@@ -478,17 +618,161 @@ Note that we have (why?!)
 which yields $V_0>0$.
 \end{frame}
 
-\begin{frame}{Toy model - concluding remarks}
-For the toy model we have seen that we can price options 
-by
+\begin{frame}{Method 3: the pricing kernel}
+A third, equivalent route. A \textbf{pricing kernel} (a.k.a.\ stochastic discount factor) is a random variable $m>0$ such that, for \emph{every} asset $A$,
+\[
+A_0=\mathbb{E}_{\mathbb{P}}[\,m\,A_1\,].
+\]
+In the toy model $m$ takes two values $m_u,m_d$, determined from the basic assets:
+\begin{align*}
+B_0&=\mathbb{E}_{\mathbb{P}}[m B_1]=B_1\big(p\,m_u+(1-p)m_d\big),\\
+S_0&=\mathbb{E}_{\mathbb{P}}[m S_1]=p\,m_u s_u+(1-p)m_d s_d .
+\end{align*}
+Two equations, two unknowns. Then \emph{any} claim is priced by
+\[
+C_0=\mathbb{E}_{\mathbb{P}}[m\,C_1]=p\,m_u c_u+(1-p)m_d c_d .
+\]
+\end{frame}
+
+\begin{frame}{Method 3: relation to $\mathbb{Q}$, and the worked example}
+The three methods are one and the same. Solving the two equations gives
+\[
+m_\omega=\frac{B_0}{B_1}\,\frac{q_\omega}{p_\omega},
+\qquad\text{i.e.}\qquad
+m=\underbrace{\frac{B_0}{B_1}}_{\text{discount}}\;\times\;\underbrace{\frac{\rd\mathbb{Q}}{\rd\mathbb{P}}}_{\text{change of measure}} .
+\]
+For our numbers ($p=0.7$, $q=0.55$, $B_1=1.02$):
+\[
+m_u=\frac{0.55}{1.02\cdot0.7}\approx0.770,\qquad
+m_d=\frac{0.45}{1.02\cdot0.3}\approx1.471,
+\]
+\[
+C_0=0.7\cdot0.770\cdot100+0.3\cdot1.471\cdot50\approx 75.98 ,
+\]
+again the same price. Note $m_d>m_u$: a payoff in the ``down'' (low-$S$) state is more expensive --- the kernel encodes the price of risk.
+\end{frame}
+
+\subsection{Multi-period model}
+
+\begin{frame}{Multi-period binomial model}
+The one-period idea extends directly to several trading dates. Consider a \emph{two-period}, recombining model ($t=0,1,2$): we may trade and rebalance at $t=0$ and $t=1$.
+\begin{columns}[c]
+\begin{column}{0.40\textwidth}
+\footnotesize
+Bond: $B_0=1$, $B_1=1.05$, $B_2=1.11$.\\[2pt]
+Claim: call with $K=55$, so the payoff $C_2=\max\{S_2-55,0\}$ equals $75,40,0$ in the three terminal states.
+\end{column}
+\begin{column}{0.58\textwidth}
+\centering
+\begin{tikzpicture}[xscale=2.2,yscale=0.7]
+\node (s0) at (0,0) {$100$};
+\node (su) at (1,1.4) {$115$};
+\node (sd) at (1,-1.4) {$75$};
+\node (suu) at (2,2.4) {$130$};
+\node (sud) at (2,0) {$95$};
+\node (sdd) at (2,-2.4) {$45$};
+\draw[bedge](s0)--(su); \draw[bedge](s0)--(sd);
+\draw[bedge](su)--(suu); \draw[bedge](su)--(sud);
+\draw[bedge](sd)--(sud); \draw[bedge](sd)--(sdd);
+\node[right=0.5mm of suu,font=\scriptsize,blue] {$C_2=75$};
+\node[right=0.5mm of sud,font=\scriptsize,blue] {$C_2=40$};
+\node[right=0.5mm of sdd,font=\scriptsize,blue] {$C_2=0$};
+\node[below,font=\scriptsize] at (0,-3.2) {$t=0$};
+\node[below,font=\scriptsize] at (1,-3.2) {$t=1$};
+\node[below,font=\scriptsize] at (2,-3.2) {$t=2$};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Pricing by backward induction}
+\textbf{Key observation:} each \emph{one-period sub-tree} is exactly the model we already solved.
 \begin{itemize}
-\item constructing a replicating portfolio
-\item by using risk-neutral pricing
+\item start at maturity: the values at $t=2$ are the known payoffs;
+\item step back one period at a time. At a node at time $t$ with one-period successors ``$u$''/``$d$'', the no-arbitrage value is
+\[
+V_t=\frac{B_t}{B_{t+1}}\Big(q\,V_{t+1}^{u}+(1-q)\,V_{t+1}^{d}\Big),\qquad
+q=\frac{B_{t+1}/B_t-s_d/s_t}{s_u/s_t-s_d/s_t},
+\]
+equivalently, replicate that single period with $(\phi,\psi)$;
+\item the resulting strategy is \emph{self-financing}: at $t=1$ we rebalance, and the value of the old position exactly funds the new one (no cash injected/withdrawn).
 \end{itemize}
-(and it would also be possible to introduce pricing kernels as a third method).
+We illustrate with replication (the spreadsheet also verifies the risk-neutral route).
+\end{frame}
+
+\begin{frame}{Two-period example: step back to $t=1$}
+At each $t=1$ node we solve a one-period problem for the $t=2$ payoffs.
+\\[2pt]
+\textbf{Up node} ($S_{1,u}=115\to 130/95$, payoffs $75/40$):
+\[
+\phi_{1,u}=\frac{75-40}{130-95}=1,\qquad \psi_{1,u}\approx-49.55,\qquad
+V_{1,u}\approx 62.97 .
+\]
+\textbf{Down node} ($S_{1,d}=75\to 95/45$, payoffs $40/0$):
+\[
+\phi_{1,d}=\frac{40-0}{95-45}=0.8,\qquad \psi_{1,d}\approx-32.43,\qquad
+V_{1,d}\approx 25.95 .
+\]
+\end{frame}
+
+\begin{frame}{Two-period example: step back to $t=0$}
+Now treat $V_{1,u}\approx 62.97$ and $V_{1,d}\approx 25.95$ as the ``payoffs'' of a one-period problem at $t=0$:
+\[
+\phi_0=\frac{62.97-25.95}{115-75}\approx 0.926,\qquad \psi_0\approx-41.41,
+\]
+\[
+V_0=\phi_0 S_0+\psi_0 B_0=0.926\cdot100-41.41\approx 51.16 .
+\]
+\begin{columns}[c]
+\begin{column}{0.46\textwidth}
+\footnotesize
+So the no-arbitrage price of the two-period call is $\approx 51.16$.\\[3pt]
+At $t=1$ we \emph{rebalance} from $(\phi_0,\psi_0)$ to $(\phi_{1,\cdot},\psi_{1,\cdot})$; self-financing means the rebalancing costs nothing.
+\end{column}
+\begin{column}{0.52\textwidth}
+\centering
+\begin{tikzpicture}[xscale=2.2,yscale=0.7]
+\node (s0) at (0,0) {$51.16$};
+\node (su) at (1,1.4) {$62.97$};
+\node (sd) at (1,-1.4) {$25.95$};
+\node (suu) at (2,2.4) {$75$};
+\node (sud) at (2,0) {$40$};
+\node (sdd) at (2,-2.4) {$0$};
+\draw[bedge](s0)--(su); \draw[bedge](s0)--(sd);
+\draw[bedge](su)--(suu); \draw[bedge](su)--(sud);
+\draw[bedge](sd)--(sud); \draw[bedge](sd)--(sdd);
+\node[below,font=\scriptsize] at (0,-3.2) {$V_0$};
+\node[below,font=\scriptsize] at (1,-3.2) {$V_1$};
+\node[below,font=\scriptsize] at (2,-3.2) {$C_2$};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Food for thought}
+\begin{fftbox}
+Suppose the stock can move to \emph{three} values at $t=1$ (``up'', ``middle'', ``down'') instead of two, with the bond unchanged.
+\begin{itemize}
+\item Can you still replicate an arbitrary payoff $(c_u,c_m,c_d)$ using only the stock and the bond?
+\item How many probability measures $\mathbb{Q}$ make $S/B$ a martingale now?
+\item What does this imply for the \emph{uniqueness} of the no-arbitrage price?
+\end{itemize}
+\end{fftbox}
+\vspace{1mm}
+{\footnotesize This is the essence of \emph{market incompleteness}: with more states than independent traded assets, replication fails and $\mathbb{Q}$ is no longer unique. We return to completeness in Part~3.}
+\end{frame}
+
+\begin{frame}{Toy model - concluding remarks}
+For the toy model we have seen that we can price options by
+\begin{itemize}
+\item constructing a replicating portfolio,
+\item using risk-neutral pricing, and
+\item using the pricing kernel.
+\end{itemize}
+All three give the \emph{same} price, and they extend to the multi-period tree via backward induction.
 \\
 \vspace{.5cm}
-For the continuous time case we will see that exactly the same ideas are used. Unfortunately (?), the math gets a bit more difficult.
+For the continuous-time case we will see that exactly the same ideas are used. Unfortunately (?), the math gets a bit more difficult.
 \end{frame}
 
 \end{document}
