@@ -70,30 +70,31 @@ Legend: [x] done (in an open PR), [~] partly, [ ] planned.
 
 ### Hedging - deck B (PR #10)
 - [x] gamma-theta P&L (realised-vs-implied vol bet), Delta(s)/Gamma(s) visuals, bridge to C, quiz/FFT, notation fix.
-- [ ] hedge-error vs rebalancing-frequency slide (tie to the existing notebook); worked delta-gamma-vega hedge; transaction-cost remark; strengthen "Risk measurement" (VaR / scenario P&L via the Taylor expansion).
+- [x] hedge-error vs rebalancing-frequency slide; worked delta-gamma-vega hedge; transaction-cost remark; "From the Greeks to Value-at-Risk" slide; extended `illustration_discrete_time_hedging.ipynb` (error vs n + transaction-cost U-curve).
 
 ### MC Greeks - deck C (PR #10)
 - [x] MSE-vs-h U-curve, "three methods at a glance" capstone, quiz/FFT.
-- [ ] payoff-symbol + `theta,eta,gamma` notation pass; lead-with-the-concrete (vega of a call) before the abstract goal; a numerical three-estimator variance comparison (in the existing notebook).
+- [x] `theta,eta,gamma` parameter fixed; recap-table Greek symbols; led with the concrete vega example; three-estimator variance comparison added to `illustration_mc_methods_for_greeks.ipynb`. [ ] residual: the payoff symbol still varies (h/f/F) across slides -- a convention call for the instructor.
 
 ---
 
 ## 4. Prioritised backlog (after the open PRs merge)
 
-**P0 - correctness & consistency**
-1. Cross-deck **notation pass** (section 2), per deck. Start with deck C payoff symbol + parameters.
-2. Re-run a reviewer agent per deck after the notation pass.
+**P0 - correctness & consistency** -- DONE
+1. [x] Cross-deck notation pass: price unified to capital `S_0/S_t` (Parts 1-3); `F_s` lowercase (Part 2); `W^P` on kernel slides + `B_0=1` (Part 3); deck-C parameters + recap symbols.
+2. [x] Reviewer agent run on every deck (Parts 1, 2, 3 and B, C): **all mathematics verified correct**; flagged notation items fixed.
+   - residual (instructor's call): the payoff-function symbol in deck C still varies (h abstract / f generic / F option) -- defensible but could be unified to `h`.
 
-**P1 - high-value teaching content**
-3. Deck B: hedge-error vs rebalancing-frequency slide + extend `illustration_discrete_time_hedging.ipynb` (error vs n, transaction costs).
-4. Deck C: extend `illustration_mc_methods_for_greeks.ipynb` with a head-to-head variance comparison (call vs digital; bump/pathwise/LRM) reproducing the capstone table numerically.
-5. Deck B: worked delta-gamma-vega hedge (solve the small linear system).
+**P1 - high-value teaching content** -- DONE
+3. [x] Deck B hedge-error vs rebalancing-frequency slide + notebook (error vs n, transaction-cost U-curve).
+4. [x] Deck C three-estimator variance comparison in the notebook (call vs digital; bump/pathwise/LRM).
+5. [x] Deck B worked delta-gamma-vega hedge (the 2x2 system).
 
-**P2 - polish & extensions**
-6. A short **course-map** slide (or one-page handout) showing the spine in section 1.
-7. Consistent **appendix** convention (Parts 1 and 3 already use `\appendix`; apply to any deck whose proofs interrupt the flow).
-8. Deck B "Risk measurement": connect Greeks-as-limits to VaR / stress P&L via the Taylor expansion.
-9. Optional advanced pointers (Malliavin Greeks, automatic differentiation, transaction-cost/Leland hedging, incomplete markets) as clearly-marked food-for-thought.
+**P2 - polish & extensions** -- DONE (except optional pointers)
+6. [x] Course-map slide added to Part 1.
+7. [x] Appendix convention: Parts 1 & 3 use `\appendix`; Part 2 needs none (no interrupting proof).
+8. [x] Deck B "From the Greeks to Value-at-Risk" slide.
+9. [~] Advanced pointers partly added as food-for-thought (autodiff/Malliavin in C; transaction costs in B); further pointers optional.
 
 ---
 
@@ -104,9 +105,9 @@ Legend: [x] done (in an open PR), [~] partly, [ ] planned.
 | `binomial_option_pricing.ipynb` | [x] new (Part 1 companion). |
 | `black_scholes_pde_numerical_approximation.ipynb` | [x] extended (explicit/trinomial scheme + stability). |
 | `risk_neutral_pricing.ipynb` | [x] new (Part 3 companion: P-vs-Q, MC vs closed form). |
-| `illustration_discrete_time_hedging.ipynb` | [ ] extend: hedge error vs rebalancing frequency, transaction costs. |
-| `illustration_mc_methods_for_greeks.ipynb` | [ ] extend: three-estimator variance comparison reproducing the capstone. |
-| `illustration_black_scholes_price.ipynb`, `simulation_of_sde.ipynb` | review for consistency; likely fine. |
+| `illustration_discrete_time_hedging.ipynb` | [x] extended: hedge error vs frequency (1/sqrt(n)) + transaction-cost U-curve. |
+| `illustration_mc_methods_for_greeks.ipynb` | [x] extended: bump/pathwise/LRM compared on call & digital delta. |
+| `illustration_black_scholes_price.ipynb`, `simulation_of_sde.ipynb` | [x] reviewed -- clean (no notation slip). |
 
 All new notebook code is `numpy`+`matplotlib` only (no SciPy) and asserts against the slide numbers.
 
