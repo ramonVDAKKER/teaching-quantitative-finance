@@ -608,7 +608,7 @@ Claim: call with $K=55$, so the payoff $C_2=\max\{S_2-55,0\}$ equals $75,40,0$ i
 \item step back one period at a time. At a node at time $t$ with one-period successors ``$u$''/``$d$'', the no-arbitrage value is
 \[
 V_t=\frac{B_t}{B_{t+1}}\Big(q\,V_{t+1}^{u}+(1-q)\,V_{t+1}^{d}\Big),\qquad
-q=\frac{B_{t+1}/B_t-s_d/s_t}{s_u/s_t-s_d/s_t},
+q=\frac{B_{t+1}/B_t-s_d/S_t}{s_u/S_t-s_d/S_t},
 \]
 equivalently, replicate that single period with $(\phi,\psi)$;
 \item the resulting strategy is \emph{self-financing}: at $t=1$ we rebalance, and the value of the old position exactly funds the new one (no cash injected/withdrawn).
