@@ -623,6 +623,17 @@ respect to change in stock price
 \end{itemize}
 \end{frame}
 
+\begin{frame}{From the Greeks to Value-at-Risk}
+The Greeks turn a distribution of \emph{market moves} into a distribution of \emph{P\&L}. Over a short horizon $\Delta t$,
+\[ \Delta\Pi \approx \Theta\,\Delta t + \Delta\cdot\Delta S + \tfrac12\Gamma\,(\Delta S)^2 . \]
+\begin{itemize}
+\item \textbf{Delta-normal VaR:} if $\Delta S\sim\rN(0,\sigma_S^2)$ and we keep only the linear term, then $\Delta\Pi\approx\Delta\cdot\Delta S\sim\rN(0,\Delta^2\sigma_S^2)$, so
+\[ \mathrm{VaR}_\alpha \approx z_\alpha\,|\Delta|\,\sigma_S \qquad (z_\alpha=\text{standard-normal quantile}). \]
+\item \emph{gamma} adds convexity (a long-gamma book has right-skewed P\&L); \emph{vega} adds exposure to volatility moves.
+\end{itemize}
+\textbf{Caveat:} this is a \emph{local} approximation --- good for small moves, but it misses the tails of large ones, where full revaluation is needed.
+\end{frame}
+
 \begin{frame}{Food for thought}
 \begin{fftbox}
 A delta-hedged option earns $\tfrac12\Gamma S^2(\sigma_{\text{real}}^2-\sigma_{\text{imp}}^2)\,\rd t$ each step.

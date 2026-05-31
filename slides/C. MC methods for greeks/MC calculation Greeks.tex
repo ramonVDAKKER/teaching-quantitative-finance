@@ -153,26 +153,6 @@ vanna & $\dfrac{\partial^2 C}{\partial S \partial \sigma}$
 
 \section{Bump and Reprice}
 
-\begin{frame}{Goal}
-\textbf{Goal:} \\
-Compute, using Monte Carlo techniques, approximation to:
-$$
-\frac{d}{d\theta} \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]
-$$
-where
-\begin{itemize}
-\item $\theta$, $\eta$, and $\gamma$ are (deterministic) parameters
-\item  $X$ is random variable whose distribution might depend on $(\theta,\eta)$
-\item  $h$ is a real-valued function of $X$ and potentially the parameters
-$(\theta,\gamma)$
-\item if $X$ has density (pdf) $f(\cdot;\theta,\eta)$:
-\[
- \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]
- = \int  h(u; \theta, \gamma)  f(u;\theta,\eta) \rd u
-\]
-\end{itemize}
-\end{frame}
-
 \begin{frame}{Example}
 \textbf{Example (vega call option)}
 \begin{itemize}
@@ -195,6 +175,28 @@ F(t,S_t;r,\sigma,T,K)
 \item remark: from $\rd S_t = r S_t \rd t + \sigma S_t \rd W_t^{\mathbb{Q}}$
 we see that conditional pdf of $S_T$, under $\mathbb{Q}$, (indeed) depends on $\sigma$
 \end{itemize}
+\end{itemize}
+\medskip
+\emph{In general we must differentiate an expectation with respect to a parameter --- stated abstractly next.}
+\end{frame}
+
+\begin{frame}{Goal}
+\textbf{Goal (the general problem):} \\
+Compute, using Monte Carlo techniques, approximation to:
+$$
+\frac{d}{d\theta} \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]
+$$
+where
+\begin{itemize}
+\item $\theta$, $\eta$, and $\gamma$ are (deterministic) parameters
+\item  $X$ is random variable whose distribution might depend on $(\theta,\eta)$
+\item  $h$ is a real-valued function of $X$ and potentially the parameters
+$(\theta,\gamma)$
+\item if $X$ has density (pdf) $f(\cdot;\theta,\eta)$:
+\[
+ \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]
+ = \int  h(u; \theta, \gamma)  f(u;\theta,\eta) \rd u
+\]
 \end{itemize}
 \end{frame}
 
