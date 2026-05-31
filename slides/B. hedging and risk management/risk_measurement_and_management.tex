@@ -49,6 +49,17 @@ using the greeks}
 %\newarrow{hulp}{<}{filler}{middle}{filler}{head}
 \DeclareMathOperator*\ster{*} \DeclareMathOperator*\argmax{argmax}
 \usepackage{color}
+% --- visualisation & teaching extras (added) ---
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepgfplotslibrary{groupplots}
+\usepackage{tcolorbox}
+\newtcolorbox{quizbox}{colback=blue!4,colframe=blue!55!black,fonttitle=\bfseries,
+  title=Quiz,boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt}
+\newtcolorbox{fftbox}{colback=orange!6,colframe=orange!75!black,fonttitle=\bfseries,
+  title=Food for thought,boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -439,6 +450,24 @@ of hedge/replication error at maturity $T$ (10,000 replications)
 So by using the ``self-financing delta-neutral'' hedge we have substantially reduced the risk at maturity $T$ (without cost)
 \end{frame}
 
+\begin{frame}{How fast does the hedge error shrink?}
+Delta-hedging a written call with $n$ rebalancings over $[0,T]$ ($S_0=K=100$, $r=3\%$, $\sigma=20\%$, $T=1$; premium $9.41$): the root-mean-square replication error scales like $1/\sqrt{n}$.
+\begin{center}
+\begin{tikzpicture}
+\begin{loglogaxis}[width=8.6cm,height=4.5cm,xlabel={rebalancings $n$},ylabel={RMS hedge error},
+  xlabel style={font=\small},ylabel style={font=\small},legend pos=south west,
+  legend style={font=\scriptsize,draw=none,fill=none}]
+\addplot[blue,thick,mark=*] coordinates {(5,2.9446)(10,2.1134)(20,1.4873)(40,1.0584)(80,0.7517)(160,0.5423)(320,0.3852)};
+\addlegendentry{simulated (8000 paths)}
+\addplot[red,dashed,thick] coordinates {(5,2.99)(320,0.374)};
+\addlegendentry{$\propto n^{-1/2}$}
+\end{loglogaxis}
+\end{tikzpicture}
+\end{center}
+\vspace{-2mm}
+{\small Halving the error needs \emph{four times} as many trades --- and each trade costs money. This is the tension behind the optimal hedging frequency. The same $1/\sqrt{n}$ governs Monte-Carlo error in the next deck.}
+\end{frame}
+
 \begin{frame}{Gamma}
 \begin{itemize}
 \item Recall that ``delta'' was motivated by
@@ -461,7 +490,7 @@ For any portfolio with price process $V_t=G(t,S_t)$ we define
 \Gamma=\Gamma_t =\left. \frac{\partial^2 }{\partial s^2} G(t,s)\right|_{s=S_t} = G_{SS}(t, S_t) =\frac{\partial}{\partial s} \left. \Delta_t
 \right|_{s=S_t}
 \]
-Note that gamma (also) measures direction of $\Delta$. 
+Note that gamma measures the \emph{rate of change} of $\Delta$ (with respect to $s$). 
 Portfolio for which $\Gamma$ (at time $t$) is equal to 0 is called \textbf{gamma neutral}  (at time $t$).
 \end{frame}
 
@@ -491,6 +520,23 @@ we can obtain \textbf{delta-gamma} neutral portfolio (i.e. delta and gamma are b
 \textbf{delta-gamma hedging}
 \end{itemize}
 \end{frame}
+
+\begin{frame}{The Greeks as functions of the stock price}
+For a European call ($K=100$, $\sigma=20\%$, $T-t=0.5$): the \emph{delta} rises smoothly from $0$ to $1$ (the hedge ratio), and \emph{gamma} --- its slope --- peaks at the money.
+\begin{center}
+\begin{tikzpicture}
+\begin{groupplot}[group style={group size=2 by 1,horizontal sep=1.7cm},
+  width=5.7cm,height=4.3cm,axis lines=left,xlabel={$s$},xmin=60,xmax=140,
+  xlabel style={font=\small},title style={font=\small}]
+\nextgroupplot[title={delta $\Delta(s)=\Phi(d_1)$},ymin=0,ymax=1.08]
+\addplot[blue,very thick,smooth] coordinates {(60,0.000) (65,0.002) (70,0.010) (75,0.032) (80,0.081) (85,0.165) (90,0.285) (95,0.426) (100,0.570) (105,0.699) (110,0.803) (115,0.878) (120,0.929) (125,0.960) (130,0.979) (135,0.989) (140,0.995)};
+\nextgroupplot[title={gamma $\Gamma(s)$},ymin=0,ymax=0.034]
+\addplot[red,very thick,smooth] coordinates {(60,0.0001) (65,0.0007) (70,0.0026) (75,0.0067) (80,0.0132) (85,0.0207) (90,0.0267) (95,0.0292) (100,0.0278) (105,0.0234) (110,0.0179) (115,0.0124) (120,0.0080) (125,0.0048) (130,0.0028) (135,0.0015) (140,0.0008)};
+\end{groupplot}
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
 
 
 \begin{frame}{More Greeks}
@@ -530,6 +576,40 @@ And there are even more Greeks:
 \end{frame}
 
 
+\begin{frame}{Worked example: delta--gamma--vega hedging}
+To neutralise \emph{three} sensitivities you need three instruments: two traded options (II, III) and the stock (which has zero gamma and zero vega). Against a written option~I, hold $a$ of II, $b$ of III and $c$ shares.
+\\[2pt]
+Zero gamma and vega (a $2\times2$ system), then zero delta:
+\[
+\begin{pmatrix}\Gamma_{II}&\Gamma_{III}\\ \nu_{II}&\nu_{III}\end{pmatrix}\!\begin{pmatrix}a\\ b\end{pmatrix}=\begin{pmatrix}\Gamma_{I}\\ \nu_{I}\end{pmatrix},\qquad c=\Delta_I-a\,\Delta_{II}-b\,\Delta_{III}.
+\]
+\textbf{Numbers} $(\Delta,\Gamma,\nu)$:\ I$=(0.55,0.07,0.40)$,\ II$=(0.50,0.02,0.10)$,\ III$=(0.60,0.03,0.20)$:
+\[ a=2,\qquad b=1,\qquad c=0.55-2(0.50)-1(0.60)=-1.05 . \]
+So buy $2$ of option~II and $1$ of option~III, and short $1.05$ shares. (Vega-hedging is why a \emph{second} traded option is needed.)
+\end{frame}
+
+\begin{frame}{The gamma--theta P\&L of a delta-hedged option}
+Hold one option and delta-hedge it (short $\Delta=F_s$ shares). Over a short step the \emph{delta} term cancels, leaving
+\[ \rd\Pi \approx \Theta\,\rd t + \tfrac12\,\Gamma\,(\rd S)^2 . \]
+Now $(\rd S)^2\approx \sigma_{\text{real}}^2 S^2\,\rd t$ (realized variance), and the B-S PDE gives $\Theta = rF - rS\,\Delta - \tfrac12\sigma_{\text{imp}}^2 S^2\Gamma$. Substituting and netting the financing term $r\Pi\,\rd t$:
+\[ \boxed{\ \rd\Pi - r\Pi\,\rd t \;\approx\; \tfrac12\,\Gamma\,S^2\big(\sigma_{\text{real}}^2-\sigma_{\text{imp}}^2\big)\,\rd t\ } \]
+\begin{itemize}
+\item a delta-hedged option is a \textbf{bet on realized vs.\ implied volatility};
+\item \emph{gamma} is the exposure; \emph{theta} is the rent paid for it ($\Theta\approx-\tfrac12\sigma_{\text{imp}}^2 S^2\Gamma$);
+\item long gamma $\Rightarrow$ you profit when the market moves \emph{more} than implied.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Quiz}
+\begin{quizbox}
+You have \emph{written} (sold) $100$ European calls, each with delta $0.6$ and gamma $0.04$. A second, traded call has delta $0.5$ and gamma $0.02$.
+\begin{enumerate}
+\item Using only the stock, how many shares make the position delta-neutral?
+\item Using the second call \emph{and} the stock, how many of each make it delta- \emph{and} gamma-neutral?
+\end{enumerate}
+\end{quizbox}
+\end{frame}
+
 \begin{frame}{Risk measurement}
 \begin{itemize}
 \item we discussed Greeks in context of hedging
@@ -541,6 +621,37 @@ respect to change in stock price
 \end{itemize}
 \item Note that the greeks only provide local (in terms of time) information on the risk; in the assignment you will also consider the Value at Risk, which is a basic, but often used risk measure. 
 \end{itemize}
+\end{frame}
+
+\begin{frame}{From the Greeks to Value-at-Risk}
+The Greeks turn a distribution of \emph{market moves} into a distribution of \emph{P\&L}. Over a short horizon $\Delta t$,
+\[ \Delta\Pi \approx \Theta\,\Delta t + \Delta\cdot\Delta S + \tfrac12\Gamma\,(\Delta S)^2 . \]
+\begin{itemize}
+\item \textbf{Delta-normal VaR:} if $\Delta S\sim\rN(0,\sigma_S^2)$ and we keep only the linear term, then $\Delta\Pi\approx\Delta\cdot\Delta S\sim\rN(0,\Delta^2\sigma_S^2)$, so
+\[ \mathrm{VaR}_\alpha \approx z_\alpha\,|\Delta|\,\sigma_S \qquad (z_\alpha=\text{standard-normal quantile}). \]
+\item \emph{gamma} adds convexity (a long-gamma book has right-skewed P\&L); \emph{vega} adds exposure to volatility moves.
+\end{itemize}
+\textbf{Caveat:} this is a \emph{local} approximation --- good for small moves, but it misses the tails of large ones, where full revaluation is needed.
+\end{frame}
+
+\begin{frame}{Food for thought}
+\begin{fftbox}
+A delta-hedged option earns $\tfrac12\Gamma S^2(\sigma_{\text{real}}^2-\sigma_{\text{imp}}^2)\,\rd t$ each step.
+\begin{itemize}
+\item Rebalancing more often shrinks the replication error --- but real markets charge \emph{transaction costs} on every trade. What is the optimal hedging frequency?
+\item Over the option's life, what determines the total hedging P\&L: the \emph{path} of the stock, or only where it ends up?
+\end{itemize}
+\end{fftbox}
+\end{frame}
+
+\begin{frame}{When there is no closed form}
+For European options in the Black-Scholes market the Greeks have closed forms ($\Delta=\Phi(d_1)$, etc.). For \emph{exotic} payoffs or richer models they often do \emph{not}.
+\medskip
+
+The next deck --- \emph{Monte-Carlo methods for the Greeks} --- shows how to estimate $\Delta,\Gamma,\nu,\dots$ by simulation (bump-and-reprice, the pathwise method, the likelihood-ratio method).
+\medskip
+
+{\small A parallel worth noting: just as discrete-time \emph{hedging} leaves a replication error shrinking like $1/\sqrt{n}$ in the number of rebalancings, Monte-Carlo \emph{estimation} of a Greek has an error shrinking like $1/\sqrt{n}$ in the number of simulations.}
 \end{frame}
 
 \end{document}
