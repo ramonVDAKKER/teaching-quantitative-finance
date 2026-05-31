@@ -74,7 +74,7 @@ Legend: [x] done (in an open PR), [~] partly, [ ] planned.
 
 ### MC Greeks - deck C (PR #10)
 - [x] MSE-vs-h U-curve, "three methods at a glance" capstone, quiz/FFT.
-- [x] `theta,eta,gamma` parameter fixed; recap-table Greek symbols; led with the concrete vega example; three-estimator variance comparison added to `illustration_mc_methods_for_greeks.ipynb`. [ ] residual: the payoff symbol still varies (h/f/F) across slides -- a convention call for the instructor.
+- [x] `theta,eta,gamma` parameter fixed; recap-table Greek symbols; led with the concrete vega example; three-estimator variance comparison added to `illustration_mc_methods_for_greeks.ipynb`. [x] payoff/integrand symbol unified to `f` (price stays `F(t,S_t)`); the abstract bump framework keeps `h(X;theta,gamma)` deliberately.
 
 ---
 
@@ -83,7 +83,7 @@ Legend: [x] done (in an open PR), [~] partly, [ ] planned.
 **P0 - correctness & consistency** -- DONE
 1. [x] Cross-deck notation pass: price unified to capital `S_0/S_t` (Parts 1-3); `F_s` lowercase (Part 2); `W^P` on kernel slides + `B_0=1` (Part 3); deck-C parameters + recap symbols.
 2. [x] Reviewer agent run on every deck (Parts 1, 2, 3 and B, C): **all mathematics verified correct**; flagged notation items fixed.
-   - residual (instructor's call): the payoff-function symbol in deck C still varies (h abstract / f generic / F option) -- defensible but could be unified to `h`.
+   - [x] deck-C payoff symbol unified (`f` payoff/integrand, `F` price, `h` abstract bump framework).
 
 **P1 - high-value teaching content** -- DONE
 3. [x] Deck B hedge-error vs rebalancing-frequency slide + notebook (error vs n, transaction-cost U-curve).
