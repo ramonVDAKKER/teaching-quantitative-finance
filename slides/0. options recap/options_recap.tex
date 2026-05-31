@@ -191,6 +191,29 @@ out-of-the-money (OTM) & $S_t<K$ & $S_t>K$ \\
 A European option is exercised at $T$ exactly when it is ITM at $T$; otherwise it expires worthless. ``Moneyness'' is a convenient shorthand when talking about an option's current state.
 \end{frame}
 
+\begin{frame}{Time value of an option}
+Before maturity the option price splits into two parts (shown for a call):
+\[
+\underbrace{C_t}_{\text{price}}=\underbrace{\max\{S_t-K,0\}}_{\text{intrinsic value}}+\underbrace{(\text{time value})}_{\geq 0}.
+\]
+\emph{Intrinsic value} is the payoff if the option were exercised now; \emph{time value} is the extra worth from the chance of moving (further) into the money before $T$. It decays to $0$ as $t\to T$ (``time decay''); at maturity $C_T$ equals the intrinsic value.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=8.4cm,height=3.7cm,axis lines=middle,xlabel={$S_t$},
+   xtick={5},xticklabels={$K$},ytick=\empty,xmin=0,xmax=10,ymin=-0.3,ymax=5.6,
+   legend style={font=\scriptsize,at={(0.03,0.98)},anchor=north west,draw=none,fill=none},clip=false]
+\addplot[very thick,blue] coordinates {(0,0) (5,0) (10,5)};
+\addlegendentry{intrinsic value}
+\addplot[very thick,red,smooth] coordinates {(0,0.01) (1,0.02) (2,0.05) (3,0.13) (4,0.31) (5,0.69) (6,1.31) (7,2.13) (8,3.05) (9,4.02) (10,5.01)};
+\addlegendentry{option price $C_t$}
+\draw[<->,gray,thick] (axis cs:5,0)--(axis cs:5,0.6931);
+\node[font=\scriptsize,gray,anchor=west] at (axis cs:5.15,0.4){time value};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\textbf{Remark.} We will \emph{not} use this intrinsic/time-value split in the remainder of the course --- we always work with the full price $C_t$ produced by a model.
+\end{frame}
+
 \begin{frame}{Exercise styles}
 When may the holder exercise?
 \begin{itemize}
@@ -242,8 +265,6 @@ At maturity the stock is worth $S_T=42$. For strike $K=40$, give the payoff of:
 \item[4.] the position of the \emph{writer} of the call.
 \end{enumerate}
 \end{quizbox}
-\vspace{2mm}
-{\footnotesize Answers: (1) $\max\{42-40,0\}=2$; \;(2) $\max\{40-42,0\}=0$; \;(3) $1\{42\geq40\}=1$; \;(4) $-2$.}
 \end{frame}
 
 \end{document}
