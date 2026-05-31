@@ -31,6 +31,17 @@
 \newcommand{\kansq}{\mathbb{Q}}
 \DeclareMathOperator*\ster{*} \DeclareMathOperator*\argmax{argmax}
 \usepackage{color}
+% --- visualisation & teaching extras (added) ---
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepgfplotslibrary{groupplots}
+\usepackage{tcolorbox}
+\newtcolorbox{quizbox}{colback=blue!4,colframe=blue!55!black,fonttitle=\bfseries,
+  title=Quiz,boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt}
+\newtcolorbox{fftbox}{colback=orange!6,colframe=orange!75!black,fonttitle=\bfseries,
+  title=Food for thought,boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt}
 \AtBeginSection{\frame{\sectionpage}}
 \newtranslation[to=greek]{Section}{En'othta}
 \newtranslation[to=greek]{Subsection}{Upoen'othta}
@@ -65,7 +76,7 @@ In class we will almost exclusively work with the `Black-Scholes market'.
 \textbf{Assumptions on price processes:} \\
 Asset price:
 \[
-\rd S_t=\mu S_t \rd t + \sigma S_t \rd W_t,\quad S_0=s_0,\,\,\, \var(W_1) = 1
+\rd S_t=\mu S_t \rd t + \sigma S_t \rd W_t,\quad S_0>0,\,\,\, \var(W_1) = 1
 \]
 Money Market Account:
 \[
@@ -163,6 +174,26 @@ different PDE!
 \end{itemize}
 \end{frame}
 
+\begin{frame}{From the binomial tree to the delta}
+In the one-period binomial model (part~1) the replicating stock position was a \emph{difference quotient},
+\[ \phi=\frac{c_u-c_d}{s_u-s_d}=\frac{F(t+\Delta t,s_u)-F(t+\Delta t,s_d)}{s_u-s_d}, \]
+the slope of the value across the two stock outcomes. In the PDE it is $\phi=F_s=\partial F/\partial s$, the \textbf{delta}: as the step shrinks, the secant slope $\to$ the tangent slope.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=8.2cm,height=3.7cm,axis lines=left,xlabel={$s$},ylabel={$F(t,\cdot)$},
+  xmin=84,xmax=116,ymin=0,ymax=22,xtick={90,100,110},xticklabels={$s_d$,$S_t$,$s_u$},
+  ytick=\empty,xlabel style={font=\small},ylabel style={font=\small}]
+\addplot[blue,very thick,smooth] coordinates {(85,2.76)(90,4.45)(95,6.67)(100,9.41)(105,12.64)(110,16.28)(115,20.28)};
+\addplot[red,dashed,thick] coordinates {(88,3.27)(112,17.46)};
+\addplot[green!55!black,thick] coordinates {(92,4.62)(108,14.20)};
+\addplot[only marks,mark=*,black] coordinates {(90,4.45)(110,16.28)(100,9.41)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{-3mm}
+{\small \textcolor{red}{secant} slope $=\frac{c_u-c_d}{s_u-s_d}$ (binomial) $\longrightarrow$ \textcolor{green!55!black}{tangent} slope $=F_s=\Delta$ (PDE).}
+\end{frame}
+
 \begin{frame}{Derivation of the PDE}
 Which $F$ are possible (when using self-financing strategies $(\phi(t,S_t),\psi(t,S_t))$)?
 We have
@@ -195,7 +226,7 @@ $\rd V_t=\textcolor{blue}{c_t} \rd t + \textcolor{red}{d_t} \rd W_t$
 \begin{frame}{Warning: sloppy notation}
 We will often use the following notations/abbreviations when working with PDEs:
 \begin{itemize}
-\item $F_S = (\partial F / \partial s) = (\partial F / \partial s)(t,S_t)$
+\item $F_s = (\partial F / \partial s) = (\partial F / \partial s)(t,S_t)$
 \item $F_t = (\partial F / \partial t) = (\partial F / \partial t)(t,S_t)$
 \item $F = F(t,S_t)$
 \item etc.
@@ -216,19 +247,19 @@ We have
 \begin{itemize}
 \item apply It\^{o} to (1) and insert $\rd S_t = \mu S_t \rd t + \sigma S_t \rd W_t$  $\implies$
 \begin{align*}
-\rd V_t &= F_S \rd S_t + F_t \rd t + \frac{1}{2} F_{SS} \rd [S,S]_t 
+\rd V_t &= F_s \rd S_t + F_t \rd t + \frac{1}{2} F_{ss} \rd [S,S]_t 
 \\
-&=  \left( F_S \mu S_t +F_t +  \frac{1}{2} F_{SS} \sigma^2 S_t^2  \right) 
-\rd t + F_S \sigma S_t \rd W_t 
+&=  \left( F_s \mu S_t +F_t +  \frac{1}{2} F_{ss} \sigma^2 S_t^2  \right) 
+\rd t + F_s \sigma S_t \rd W_t 
 \end{align*}
 \item insert $\rd S_t$ and $\rd B_t=rB_t\rd t$ in RHS of (2) $\implies$
 \begin{align*}
 \rd V_t &= (\phi_t \mu S_t + r\psi_t B_t) \rd t +  \phi_t \sigma S_t \rd W_t
 \end{align*}
-\item hence $\phi_t = \phi(t,S_t) = F_{S}(t,S_t)=F_S$
+\item hence $\phi_t = \phi(t,S_t) = F_{s}(t,S_t)=F_s$
 \item and
 \begin{align*}
-F_S \mu S_t +F_t +  \frac{1}{2}\sigma^2 F_{SS} S_t^2    
+F_s \mu S_t +F_t +  \frac{1}{2}\sigma^2 F_{ss} S_t^2    
 &= \phi_t \mu S_t + r\psi_t B_t
 \end{align*}
 \end{itemize}
@@ -246,10 +277,10 @@ s^2}(t,s) -r F(t,s)=0\quad \forall s>0,\,t\in[0, T),
 \]
 On the previous slide we obtained
 \begin{align*}
-F_t + \frac{1}{2}\sigma^2 F_{SS} S_t^2    
+F_t + \frac{1}{2}\sigma^2 F_{ss} S_t^2    
 &=  r\psi_t B_t.
 \end{align*}
-As $\psi_t B_t = F - \phi_t S_t = F - F_S S_t$
+As $\psi_t B_t = F - \phi_t S_t = F - F_s S_t$
 we obtain the result.
 \end{frame}
 
@@ -268,15 +299,15 @@ $C_t = F(t, S_t)$  (assumption!)
 \item 
 using It\^o:
 \[
-\rd V_t = - F_S \rd S_t - F_t \rd t - \frac{1}{2}F_{SS} \rd [S,S]_t + \phi_t \rd S_t
+\rd V_t = - F_s \rd S_t - F_t \rd t - \frac{1}{2}F_{ss} \rd [S,S]_t + \phi_t \rd S_t
 + \psi_t r B_t \rd t
 \]
-\item can only eliminate local risk ($\rd W_t$) for $\phi_t = F_S(t, S_t)$!
+\item can only eliminate local risk ($\rd W_t$) for $\phi_t = F_s(t, S_t)$!
 \item yields $\rd V_t = \cdots \rd t$  which has (locally) no risk, so
 rate of return is same as on $B$ $\implies$ $\rd V_t =r V_t \rd t$
 \item hence 
 \[
--F_t - \frac{1}{2}F_{SS}\sigma^2 S_t^2 + r\psi_t B_t = r \left(  - F  + F_S S_t + \psi_t B_t
+-F_t - \frac{1}{2}F_{ss}\sigma^2 S_t^2 + r\psi_t B_t = r \left(  - F  + F_s S_t + \psi_t B_t
 \right)
 \]
 which yields Black-Scholes PDE
@@ -331,6 +362,53 @@ d_2=\frac{
 \end{itemize}
 \end{frame}
 %
+\begin{frame}{The call price as a function of $s$}
+The PDE solution $F(t,s)$ for a European call ($K=100$, $r=3\%$, $\sigma=20\%$), for several times-to-maturity $\tau=T-t$:
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=9cm,height=5.2cm,axis lines=left,xlabel={$s$},ylabel={$F(t,s)$},
+  xmin=50,xmax=150,ymin=-1,ymax=54,legend pos=north west,
+  legend style={font=\scriptsize,draw=none,fill=none},
+  xlabel style={font=\small},ylabel style={font=\small}]
+\addplot[black,very thick] coordinates {(50,0) (55,0) (60,0) (65,0) (70,0) (75,0) (80,0) (85,0) (90,0) (95,0) (100,0) (105,5) (110,10) (115,15) (120,20) (125,25) (130,30) (135,35) (140,40) (145,45) (150,50)};
+\addlegendentry{payoff $\max\{s-K,0\}$}
+\addplot[blue,thick] coordinates {(50,0.00) (55,0.01) (60,0.04) (65,0.13) (70,0.35) (75,0.79) (80,1.56) (85,2.76) (90,4.45) (95,6.67) (100,9.41) (105,12.64) (110,16.28) (115,20.28) (120,24.55) (125,29.03) (130,33.67) (135,38.43) (140,43.26) (145,48.15) (150,53.08)};
+\addlegendentry{$\tau=1.0$}
+\addplot[red,thick] coordinates {(50,0.00) (55,0.00) (60,0.00) (65,0.01) (70,0.03) (75,0.12) (80,0.39) (85,0.99) (90,2.10) (95,3.88) (100,6.37) (105,9.55) (110,13.32) (115,17.53) (120,22.06) (125,26.79) (130,31.64) (135,36.56) (140,41.52) (145,46.50) (150,51.50)};
+\addlegendentry{$\tau=0.5$}
+\addplot[orange,thick] coordinates {(50,0.00) (55,0.00) (60,0.00) (65,0.00) (70,0.00) (75,0.00) (80,0.00) (85,0.01) (90,0.13) (95,0.79) (100,2.67) (105,6.05) (110,10.47) (115,15.33) (120,20.30) (125,25.30) (130,30.30) (135,35.30) (140,40.30) (145,45.30) (150,50.30)};
+\addlegendentry{$\tau=0.1$}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+As $\tau\to 0$ the price collapses onto the payoff; the gap above it is the option's \emph{time value}.
+\end{frame}
+
+\begin{frame}{Worked example: verifying a candidate solution}
+To check that a function $F$ solves the B-S PDE, just substitute it. Two quick cases (recall $F_t+rsF_s+\tfrac12\sigma^2 s^2 F_{ss}-rF=0$):
+\medskip
+
+\textbf{(a) the stock, $F(t,s)=s$:} then $F_t=0,\ F_s=1,\ F_{ss}=0$, so
+\[ 0+rs\cdot 1+0-r\,s=0.\quad\checkmark \]
+\textbf{(b) a zero-coupon bond paying $K$ at $T$, $F(t,s)=K\e^{-r(T-t)}$:} then $F_s=F_{ss}=0$ and $F_t=rK\e^{-r(T-t)}=rF$, so
+\[ rF+0+0-rF=0.\quad\checkmark \]
+By \emph{linearity} of the PDE, any combination $a\,s+b\,K\e^{-r(T-t)}$ also solves it --- consistent with such a stock+bond portfolio being self-financing.
+\\[2pt]
+{\small(In the exercises you verify that the digital-call solution $F(t,s)=\e^{-r(T-t)}\Phi(d_2)$ solves the PDE.)}
+\end{frame}
+
+\begin{frame}{Quiz}
+\begin{quizbox}
+A portfolio has value process $V_t=F(t,S_t)$ with
+\[ F(t,s)=2\,s+3K\e^{-r(T-t)} . \]
+\begin{enumerate}
+\item Does $F$ solve the Black-Scholes PDE?
+\item Which self-financing strategy $(\phi,\psi)$ does it correspond to?
+\item Which claim does the portfolio pay at maturity $T$?
+\end{enumerate}
+\end{quizbox}
+\end{frame}
+
 \begin{frame}{Examples: European digital call option}
 \begin{itemize}
 \item payoff: $h(S_T)=1\{S_T\geq K\}$
@@ -369,6 +447,52 @@ Value function $F(t,s)$:
 \end{figure}
 \end{frame}
 
+\begin{frame}{Solving the PDE numerically: finite differences}
+When there is no closed form, solve the PDE on a grid $t_0<\dots<t_N=T$ (step $\Delta t$) and $s_0<\dots<s_M$ (step $\Delta s$). Replace the derivatives by differences:
+\[
+F_t\approx\frac{F(t+\Delta t,s)-F(t,s)}{\Delta t},\qquad
+F_s\approx\frac{F(t,s+\Delta s)-F(t,s-\Delta s)}{2\,\Delta s},
+\]
+\[
+F_{ss}\approx\frac{F(t,s+\Delta s)-2F(t,s)+F(t,s-\Delta s)}{\Delta s^2}.
+\]
+\begin{itemize}
+\item start from the known terminal values $F(T,s)=h(s)$ and step \emph{backward} in time;
+\item the explicit scheme writes each $F(t,s_i)$ as a (discounted) weighted average of its three neighbours $F(t+\Delta t,s_{i-1}),\,F(t+\Delta t,s_i),\,F(t+\Delta t,s_{i+1})$ --- i.e.\ a \emph{trinomial tree}.
+\end{itemize}
+An implementation --- including the explicit/trinomial scheme and its stability condition --- is provided in the accompanying notebook.
+\end{frame}
+
+\begin{frame}{Finite differences, trees, and no-arbitrage}
+The explicit finite-difference scheme \emph{is} a trinomial tree; the binomial tree of part~1 is its two-neighbour cousin. For the scheme to make sense the three weights must be \textbf{nonnegative} --- they play the role of risk-neutral probabilities.
+\begin{itemize}
+\item nonnegative weights require $\Delta t$ small relative to $\Delta s^2$ (a \emph{stability / CFL} condition); otherwise the scheme oscillates and the ``probabilities'' turn negative;
+\item the same constraint shows up in the tree: the log-price step must scale like $\sigma\sqrt{\Delta t}$ (so $u=\e^{\sigma\sqrt{\Delta t}}$) to keep $q\in(0,1)$.
+\end{itemize}
+\textbf{One picture (an analogy, not a literal equivalence):} the discrete weights must stay nonnegative to act as risk-neutral probabilities --- mirroring how a valid risk-neutral measure rules out arbitrage. The PDE, the trees, and the grid are three views of the same object.
+\end{frame}
+
+\begin{frame}{From the Black-Scholes PDE to the heat equation}
+A change of variables makes the connection precise. Write $\tau=T-t$ (time-to-maturity) and $x=\log s$, and set $F(t,s)=v(\tau,x)$. Using $s\,\partial_s=\partial_x$ and $s^2\partial_{ss}=\partial_{xx}-\partial_x$, the PDE turns into a \emph{constant-coefficient} equation with an \emph{initial} condition $v(0,x)=h(\e^{x})$:
+\[ v_\tau=\tfrac12\sigma^2 v_{xx}+\big(r-\tfrac12\sigma^2\big)v_x-r\,v. \]
+Rescaling time as $\tilde\tau=\tfrac12\sigma^2\tau$ and substituting $v=\e^{ax+b\tilde\tau}u$ with
+\[ a=-\tfrac12(k-1),\qquad b=-\tfrac14(k+1)^2,\qquad k=\tfrac{2r}{\sigma^2}, \]
+removes the first- and zeroth-order terms, leaving the pure \textbf{heat equation}
+\[ u_{\tilde\tau}=u_{xx}. \]
+So pricing a European option is, after a change of variables, an initial-value problem for the heat equation.
+\end{frame}
+
+\begin{frame}{Food for thought}
+\begin{fftbox}
+The B-S PDE comes with a \emph{terminal} condition $F(T,s)=h(s)$, so it runs \emph{backward} in time. With $\tau=T-t$, $x=\log s$ (and a discount/scaling factor) it becomes the \emph{heat equation}
+\[ \frac{\partial u}{\partial \tau}=\frac{\partial^2 u}{\partial x^2}. \]
+\begin{itemize}
+\item The heat equation instantly \emph{smooths} its initial data. What does this say about the smoothness of the price $F(t,\cdot)$ for $t<T$, even when the payoff $h$ has a kink (call) or a jump (digital)?
+\item Why is ``backward in time, from maturity'' the natural direction for valuation?
+\end{itemize}
+\end{fftbox}
+\end{frame}
+
 \begin{frame}{Feynman-Kac Theorem}
 Let $\alpha(t, x)$, $\beta(t,x)$, and $k(t,x)$ be  functions satisfying `regularity conditions'.
 Consider the PDE
@@ -397,6 +521,18 @@ where $W$ is a standard Brownian motion.
 
 
 
+\begin{frame}{Sketch of proof (Feynman-Kac)}
+Let $F$ solve the PDE with $F(T,x)=h(x)$, and let $X$ follow $\rd X_u=\alpha(u,X_u)\rd u+\beta(u,X_u)\rd W_u$ on $[t,T]$ with $X_t=x$. Define the discounted process
+\[ M_u=\exp\!\Big(-\!\int_t^u k(v,X_v)\,\rd v\Big)\,F(u,X_u),\qquad u\in[t,T]. \]
+With $D_u=\exp(-\int_t^u k\,\rd v)$, It\^o's formula gives
+\begin{align*}
+\rd M_u &= D_u\Big[-k\,F\,\rd u + \big(F_t+\alpha F_x+\tfrac12\beta^2 F_{xx}\big)\rd u + \beta F_x\,\rd W_u\Big]\\
+&= D_u\underbrace{\big(F_t+\alpha F_x+\tfrac12\beta^2 F_{xx}-kF\big)}_{=\,0\ \text{(the PDE)}}\rd u \;+\; D_u\,\beta F_x\,\rd W_u .
+\end{align*}
+So $M$ has \emph{no drift}: it is a (local) martingale, hence --- under integrability conditions --- a martingale. As $M_t=F(t,x)$ and $M_T=\exp(-\int_t^T k\,\rd v)\,h(X_T)$,
+\[ F(t,x)=\mathbb{E}[\,M_T\mid X_t=x\,]=\mathbb{E}\Big[\exp\!\Big(-\!\int_t^T \! k(v,X_v)\,\rd v\Big)h(X_T)\,\Big|\,X_t=x\Big]. \,\square \]
+\end{frame}
+
 \begin{frame}{Black-Scholes PDE reconsidered}
 The no-arbitrage price, at time $t\in [0,T)$, of a European option with payoff $h(S_T)$ at expiration date $T>0$ is given by
 $F(t, S_t)$ where $F$ satisfies
@@ -417,6 +553,19 @@ where $S$ is defined via the SDE
 \rd S_u = r S_u \rd u + \sigma S_u \rd W_u, \quad S_t=s,
 \]
 where $W$ is a standard Brownian motion.
+\end{frame}
+
+\begin{frame}{Uniqueness and the maximum principle}
+Two structural facts make ``the'' price well-defined and well-behaved.
+\begin{itemize}
+\item \textbf{Uniqueness.} Under mild growth conditions the B-S PDE together with the terminal condition $F(T,s)=h(s)$ has a \emph{unique} solution. Hence $F(t,S_t)$ is unambiguous --- the analytic counterpart of market \emph{completeness}.
+\item \textbf{Maximum principle.} For this (parabolic) PDE a solution attains its extreme values on the boundary of the domain --- here the terminal time and the $s$-boundaries. Two consequences:
+\begin{itemize}
+\item \emph{monotonicity}: if $h_1\le h_2$ then $F_1\le F_2$ (prices respect the ordering of payoffs);
+\item \emph{no-arbitrage bounds}, e.g.\ $0\le F_{\text{call}}(t,s)\le s$.
+\end{itemize}
+\end{itemize}
+Both are also immediate from Feynman-Kac: $F(t,s)=\mathbb{E}[\e^{-r(T-t)}h(S_T)\mid S_t=s]$ is linear and monotone in the payoff $h$.
 \end{frame}
 
 \end{document}
