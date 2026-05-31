@@ -32,6 +32,17 @@
 \newcommand{\kansq}{\mathbb{Q}}
 \DeclareMathOperator*\ster{*} \DeclareMathOperator*\argmax{argmax}
 \usepackage{color}
+% --- visualisation & teaching extras (added) ---
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepgfplotslibrary{groupplots}
+\usepackage{tcolorbox}
+\newtcolorbox{quizbox}{colback=blue!4,colframe=blue!55!black,fonttitle=\bfseries,
+  title=Quiz,boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt}
+\newtcolorbox{fftbox}{colback=orange!6,colframe=orange!75!black,fonttitle=\bfseries,
+  title=Food for thought,boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt}
 \AtBeginSection{\frame{\sectionpage}}
 \newtranslation[to=greek]{Section}{En'othta}
 \newtranslation[to=greek]{Subsection}{Upoen'othta}
@@ -551,6 +562,33 @@ $\implies$ (use It\^o)
 \end{itemize}
 \end{frame}
 
+\begin{frame}{The real-world and risk-neutral laws of $S_T$}
+The change of measure $\mathbb{P}\to\mathbb{Q}$ shifts the stock's drift from $\mu$ to $r$ but leaves $\sigma$ unchanged. So $S_T$ is lognormal under both, with the \emph{same} spread but a different centre:
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=9cm,height=4.4cm,axis lines=left,xlabel={$S_T$},ylabel={density},
+  xmin=45,xmax=205,ymin=0,ymax=0.022,ytick=\empty,
+  legend pos=north east,legend style={font=\scriptsize,draw=none,fill=none},
+  xlabel style={font=\small},ylabel style={font=\small}]
+\addplot[blue,thick,smooth] coordinates {(45,0.00000) (50,0.00002) (55,0.00008) (60,0.00031) (65,0.00091) (70,0.00210) (75,0.00406) (80,0.00676) (85,0.00992) (90,0.01308) (95,0.01577) (100,0.01760) (105,0.01838) (110,0.01813) (115,0.01701) (120,0.01527) (125,0.01320) (130,0.01104) (135,0.00896) (140,0.00708) (145,0.00547) (150,0.00414) (155,0.00308) (160,0.00225) (165,0.00162) (170,0.00116) (175,0.00081) (180,0.00057) (185,0.00039) (190,0.00027) (195,0.00018) (200,0.00012) (205,0.00008)};
+\addlegendentry{under $\mathbb{P}$ (drift $\mu$)}
+\addplot[red,thick,smooth] coordinates {(45,0.00001) (50,0.00008) (55,0.00036) (60,0.00112) (65,0.00271) (70,0.00531) (75,0.00879) (80,0.01264) (85,0.01618) (90,0.01877) (95,0.02003) (100,0.01992) (105,0.01864) (110,0.01656) (115,0.01405) (120,0.01147) (125,0.00904) (130,0.00692) (135,0.00516) (140,0.00376) (145,0.00268) (150,0.00188) (155,0.00130) (160,0.00089) (165,0.00060) (170,0.00040) (175,0.00026) (180,0.00017) (185,0.00011) (190,0.00007) (195,0.00005) (200,0.00003) (205,0.00002)};
+\addlegendentry{under $\mathbb{Q}$ (drift $r$)}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{-2mm}
+{\small Here $S_0=100,\ \sigma=20\%,\ T=1,\ \mu=12\%,\ r=3\%$; then $\mathbb{E}_{\mathbb{P}}[S_T]=112.8$ but $\mathbb{E}_{\mathbb{Q}}[S_T]=103.0$. Same outcomes (equivalent measures!), different likelihoods.}
+\end{frame}
+
+\begin{frame}{Worked example: under $\mathbb{Q}$ the stock earns the riskless rate}
+Under $\mathbb{Q}$, $\ S_T=S_t\,\e^{(r-\frac12\sigma^2)(T-t)+\sigma(W_T^{\mathbb{Q}}-W_t^{\mathbb{Q}})}$ with $W_T^{\mathbb{Q}}-W_t^{\mathbb{Q}}\distr\rN(0,T-t)$. Using $\mathbb{E}[\e^{\sigma Z'}]=\e^{\frac12\sigma^2(T-t)}$ for $Z'\distr\rN(0,T-t)$:
+\[ \mathbb{E}_{\mathbb{Q}}[S_T\mid\mathcal{F}_t]=S_t\,\e^{(r-\frac12\sigma^2)(T-t)}\,\e^{\frac12\sigma^2(T-t)}=S_t\,\e^{r(T-t)}. \]
+Equivalently $\mathbb{E}_{\mathbb{Q}}[S_T/B_T\mid\mathcal{F}_t]=S_t/B_t$: \textbf{$S/B$ is a $\mathbb{Q}$-martingale}, as it must be. The same computation under $\mathbb{P}$ gives $\mathbb{E}_{\mathbb{P}}[S_T\mid\mathcal{F}_t]=S_t\,\e^{\mu(T-t)}$ --- the stock earns its true drift $\mu>r$, a \emph{risk premium}.
+\\[3pt]
+This is the continuous-time version of the binomial identity $\frac{1}{B_1}\mathbb{E}_{\mathbb{Q}}[S_1]=S_0$ from part~1.
+\end{frame}
+
 \begin{frame}{Using FFT and Girsanov}
 \small{
 \begin{itemize}
@@ -634,6 +672,18 @@ Later on we will discuss how we can use Monte Carlo techniques to obtain a numer
 $5,000$ simulations.
 \end{frame}
 
+\begin{frame}{Quiz}
+\begin{quizbox}
+In the Black-Scholes market with $\mu=10\%$, $r=2\%$, $\sigma=25\%$:
+\begin{enumerate}
+\item What is the market price of risk $\gamma$?
+\item Write the SDE for $S$ under the risk-neutral measure $\mathbb{Q}$.
+\item What is the distribution of $\log S_T$ under $\mathbb{Q}$ (given $S_0$)?
+\item Is $\mathbb{E}_{\mathbb{Q}}[S_T]$ larger or smaller than $\mathbb{E}_{\mathbb{P}}[S_T]$?
+\end{enumerate}
+\end{quizbox}
+\end{frame}
+
 \begin{frame}{Example: put on Philips}
 \vspace{-.7cm}
 \begin{figure}
@@ -652,6 +702,17 @@ historical data yields estimated $\sigma=0.29$
 $T=17.5/12$, $r=0.01$, $K=45$, $\sigma=0.29$ and $S_0=43.145$ yields 6.70 as B-S price for the put,
 where $\sigma=0.29$ is result from estimation on historical data on $S$.
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Food for thought}
+\begin{fftbox}
+The risk-neutral measure $\mathbb{Q}$ is \emph{not} the real-world measure: it never describes the actual probabilities of price moves, and under $\mathbb{Q}$ every asset earns only $r$.
+\begin{itemize}
+\item In what sense, then, is $\mathbb{Q}$ ``fictional but useful''?
+\item Two investors who disagree about the drift $\mu$ (hence about $\mathbb{P}$) still agree on the option price. Why does $\mu$ drop out?
+\item If a second, \emph{untraded} source of risk is added, $\mathbb{Q}$ is no longer unique (Second FTAP). What breaks in the replication argument?
+\end{itemize}
+\end{fftbox}
 \end{frame}
 
 \section{Pricing Kernels}
