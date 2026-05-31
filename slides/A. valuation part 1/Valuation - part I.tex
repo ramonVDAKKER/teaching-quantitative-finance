@@ -76,6 +76,30 @@
 \titlepage
 \end{frame}
 
+\begin{frame}{Where this fits: the course at a glance}
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\scriptsize,align=center},
+  box/.style={draw,rounded corners,minimum height=7mm,inner sep=2.5pt,fill=blue!6}]
+\node[box] (r) {Options\\recap};
+\node[box,right=3.5mm of r] (p1) {Part 1\\binomial};
+\node[box,right=3.5mm of p1] (p2) {Part 2\\PDE};
+\node[box,right=3.5mm of p2] (p3) {Part 3\\risk-neutral};
+\node[box,right=3.5mm of p3,fill=orange!12] (b) {Hedging\\(B)};
+\node[box,right=3.5mm of b,fill=orange!12] (c) {MC Greeks\\(C)};
+\draw[->,gray] (r)--(p1);\draw[->,gray](p1)--(p2);\draw[->,gray](p2)--(p3);\draw[->,gray](p3)--(b);\draw[->,gray](b)--(c);
+\end{tikzpicture}
+\end{center}
+\textbf{One question:} how to \emph{price} and \emph{hedge} a European option --- and why it works.
+\medskip
+
+Three ideas recur throughout:
+\begin{itemize}
+\item \emph{three methods, one price}: replication $=$ risk-neutral $=$ pricing kernel;
+\item \emph{discrete $\leftrightarrow$ continuous}: binomial $q\leftrightarrow$ market price of risk; hedge ratio $\leftrightarrow$ delta; tree $\leftrightarrow$ finite-difference grid;
+\item \emph{error $\sim 1/\sqrt{n}$}: discrete-time hedging and Monte-Carlo estimation alike.
+\end{itemize}
+\end{frame}
+
 \section{Introduction}
 
 \begin{frame}{Options (prerequisites)}
@@ -104,7 +128,7 @@ A striking feature of the models we use: these two problems turn out to share th
 
 \begin{frame}{Main problems - valuation}
 \begin{itemize}
-\item we are interested in (fair) price $C_t$, for $t\in [0,T)$, of (European) option with payoff $C_T=f(T,S_T)$ at maturity $T$
+\item we are interested in (fair) price $C_t$, for $t\in [0,T)$, of (European) option with payoff $C_T=g(S_T)$ at maturity $T$
 \item we will learn three methods to determine `fair price' (using specified continuous-time model for financial market):
 \begin{itemize}
 \item Black-Scholes Partial Differential Equation
