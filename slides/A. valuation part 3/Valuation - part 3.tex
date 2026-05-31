@@ -78,7 +78,7 @@ In class we will almost exclusively work with the `Black-Scholes market'.
 \textbf{Assumptions on price processes:} \\
 Asset price:
 \[
-\rd S_t=\mu S_t \rd t + \sigma S_t \rd W_t,\quad S_0=s_0,\,\,\, \var(W_1) = 1
+\rd S_t=\mu S_t \rd t + \sigma S_t \rd W_t,\quad S_0>0,\,\,\, \var(W_1) = 1
 \]
 Money Market Account:
 \[
@@ -422,7 +422,7 @@ Then $\mathbb{Q}$ is \emph{not} equivalent to $\mathbb{P}$.
 \item setup: standard Black-Scholes market ($W=W^{\mathbb{P}}$ is standard Brownian motion):
 \[
 \rd B_t = rB_t\rd t,\quad \rd S_t= \mu S_t\rd t +\sigma S_t \rd W_t^{\mathbb{P}},
-\quad S_0=s_0,\,\,B_0=1
+\quad S_0>0,\,\,B_0=1
 \]
 \item use $B$ as num\'{e}raire
 \item
@@ -549,15 +549,15 @@ S_t\e^{
 \right]  \\
 &=
 \e^{-r(T-t)}\mathbb{E}_{\mathbb{Q}}\left[ h\left(
-s_t\e^{
+S_t\e^{
 (r-0.5\sigma^2) (T-t) +\sigma (W_T^{\mathbb{Q}}
 -W_t^{\mathbb{Q}}) }\right) 
-\right] \text{ ($s_t$ is constant)}
+\right] \text{ ($S_t$ is constant)}
 \end{align*}
 \item using $W_T^{\mathbb{Q}}- W_t^{\mathbb{Q}}\distr \sqrt{T-t} Z$ (under $\mathbb{Q}$) with $Z\distr \rN(0,1)$:
 \[
 C_t=\e^{-r(T-t)}\int_{-\infty}^{\infty}
-h\left( s_t\e^{
+h\left( S_t\e^{
 (r-0.5\sigma^2) (T-t) +\sigma \sqrt{T-t}z }\right) \phi(z) \rd z
 \]
 \end{itemize}
@@ -576,19 +576,19 @@ S_T\right)\right]
 \end{align*}
 \item using
 \begin{align*}
- S_T=s_0\exp&\left(
+ S_T=S_0\exp&\left(
 (r-0.5\sigma^2) T +\sigma W_T^{\mathbb{Q}} \right)\leq K \,\, \\ &\quad
 \Leftrightarrow\,\,
-\sigma W_T^{\mathbb{Q}}\leq \log \frac{K}{s_0} -(r-0.5\sigma^2) T
+\sigma W_T^{\mathbb{Q}}\leq \log \frac{K}{S_0} -(r-0.5\sigma^2) T
 \end{align*}
 we obtain
 \begin{align*}
-C_0&=\exp(-rT)\mathbb{Q}\left( \sigma W_T^{\mathbb{Q}}\leq \log \frac{K}{s_0} -(r-0.5\sigma^2) T \right)
+C_0&=\exp(-rT)\mathbb{Q}\left( \sigma W_T^{\mathbb{Q}}\leq \log \frac{K}{S_0} -(r-0.5\sigma^2) T \right)
 \\
 &
 =\exp(-rT)\Phi\left(
 \frac{
-\log \frac{K}{s_0} -(r-0.5\sigma^2) T }{
+\log \frac{K}{S_0} -(r-0.5\sigma^2) T }{
 \sigma\sqrt{T}}
 \right)
 \end{align*}
@@ -874,7 +874,7 @@ pricing kernel (part 3) & $\e^{-rT}\Phi(d_-)$\\
 \hline
 \end{tabular}
 \end{center}
-with $\,d_-=\dfrac{\log(K/s_0)-(r-\frac12\sigma^2)T}{\sigma\sqrt{T}}$. The PDE, the risk-neutral measure, and the pricing kernel are three routes to the \emph{same} no-arbitrage price --- exactly as in the binomial toy model of part~1.
+with $\,d_-=\dfrac{\log(K/S_0)-(r-\frac12\sigma^2)T}{\sigma\sqrt{T}}$. The PDE, the risk-neutral measure, and the pricing kernel are three routes to the \emph{same} no-arbitrage price --- exactly as in the binomial toy model of part~1.
 \end{frame}
 
 \appendix
