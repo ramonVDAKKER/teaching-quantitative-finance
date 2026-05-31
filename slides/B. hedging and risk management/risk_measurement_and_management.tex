@@ -450,6 +450,24 @@ of hedge/replication error at maturity $T$ (10,000 replications)
 So by using the ``self-financing delta-neutral'' hedge we have substantially reduced the risk at maturity $T$ (without cost)
 \end{frame}
 
+\begin{frame}{How fast does the hedge error shrink?}
+Delta-hedging a written call with $n$ rebalancings over $[0,T]$ ($S_0=K=100$, $r=3\%$, $\sigma=20\%$, $T=1$; premium $9.41$): the root-mean-square replication error scales like $1/\sqrt{n}$.
+\begin{center}
+\begin{tikzpicture}
+\begin{loglogaxis}[width=8.6cm,height=4.5cm,xlabel={rebalancings $n$},ylabel={RMS hedge error},
+  xlabel style={font=\small},ylabel style={font=\small},legend pos=south west,
+  legend style={font=\scriptsize,draw=none,fill=none}]
+\addplot[blue,thick,mark=*] coordinates {(5,2.9446)(10,2.1134)(20,1.4873)(40,1.0584)(80,0.7517)(160,0.5423)(320,0.3852)};
+\addlegendentry{simulated (8000 paths)}
+\addplot[red,dashed,thick] coordinates {(5,2.99)(320,0.374)};
+\addlegendentry{$\propto n^{-1/2}$}
+\end{loglogaxis}
+\end{tikzpicture}
+\end{center}
+\vspace{-2mm}
+{\small Halving the error needs \emph{four times} as many trades --- and each trade costs money. This is the tension behind the optimal hedging frequency. The same $1/\sqrt{n}$ governs Monte-Carlo error in the next deck.}
+\end{frame}
+
 \begin{frame}{Gamma}
 \begin{itemize}
 \item Recall that ``delta'' was motivated by
@@ -557,6 +575,18 @@ And there are even more Greeks:
 \end{itemize}
 \end{frame}
 
+
+\begin{frame}{Worked example: delta--gamma--vega hedging}
+To neutralise \emph{three} sensitivities you need three instruments: two traded options (II, III) and the stock (which has zero gamma and zero vega). Against a written option~I, hold $a$ of II, $b$ of III and $c$ shares.
+\\[2pt]
+Zero gamma and vega (a $2\times2$ system), then zero delta:
+\[
+\begin{pmatrix}\Gamma_{II}&\Gamma_{III}\\ \nu_{II}&\nu_{III}\end{pmatrix}\!\begin{pmatrix}a\\ b\end{pmatrix}=\begin{pmatrix}\Gamma_{I}\\ \nu_{I}\end{pmatrix},\qquad c=\Delta_I-a\,\Delta_{II}-b\,\Delta_{III}.
+\]
+\textbf{Numbers} $(\Delta,\Gamma,\nu)$:\ I$=(0.55,0.07,0.40)$,\ II$=(0.50,0.02,0.10)$,\ III$=(0.60,0.03,0.20)$:
+\[ a=2,\qquad b=1,\qquad c=0.55-2(0.50)-1(0.60)=-1.05 . \]
+So buy $2$ of option~II and $1$ of option~III, and short $1.05$ shares. (Vega-hedging is why a \emph{second} traded option is needed.)
+\end{frame}
 
 \begin{frame}{The gamma--theta P\&L of a delta-hedged option}
 Hold one option and delta-hedge it (short $\Delta=F_s$ shares). Over a short step the \emph{delta} term cancels, leaving
