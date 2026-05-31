@@ -78,112 +78,11 @@
 
 \section{Introduction}
 
-\begin{frame}{Options (quick recap)}
-\textbf{Call option} 
-\begin{itemize}
-\item contract between buyer (option holder) and seller (option writer)
-\item contract offers buyer \emph{right} (but \emph{not obligation}!) to \emph{buy}  specified security (or other \emph{underlying financial asset})  at \emph{specific} date (\emph{maturity/expiration date}) or during a specified period of time at  \emph{agreed upon price} (\emph{strike price})
-\end{itemize}
-\textbf{Put option} 
-\begin{itemize}
-\item analogous definition; but put offers buyer right to \emph{sell}
-\end{itemize}
-\textbf{Remarks}
-\begin{itemize}
-\item As a put or call provides its buyer a right and not an obligation, the contract has a (positive) price.
-\item Please note that the seller (writer) of the contract has the obligation to sell (call) or buy (put) in case the option is exercised by the buyer.
-\end{itemize}
-\end{frame}
+\begin{frame}{Options (prerequisites)}
+We assume familiarity with the basics of options --- calls and puts, payoffs at maturity, payoff diagrams, moneyness, and exercise styles. These are collected in the companion deck \emph{``Options: a quick recap''}.
+\medskip
 
-\begin{frame}{Options (quick recap)}
-\textbf{Underlying asset:}
-\begin{itemize}
-\item stock, index, ETF, interest rate(s), real estate, etc.
-\end{itemize}
-\textbf{Exercising the option:}
-\begin{itemize}
-\item \emph{European (style) options}: option can only be exercised \emph{at expiration date}
-\item \emph{American}: option can be exercised \emph{at any time between
-purchase and expiration date}
-\item (there also exist \emph{Asian}, \emph{Bermudan} and \emph{Canary} versions; all these names have nothing to do with geographical locations)
-\item typically: options on indices and interest rates are European style, while options on (individual) stocks and ETFs are American style
-\end{itemize}
-\textbf{Further terminology:}
-\begin{itemize}
-\item \emph{strike price} is a.k.a. \emph{exercise price}
-\item final date for exercising option: \emph{maturity} or \emph{expiration date}
-\end{itemize}
-\end{frame}
-%
-\begin{frame}{Options (quick recap)}
-\textbf{Remarks:}
-\begin{itemize}
-\item options are traded on exchanges, in Over-The-Counter markets, and in bespoke contracts (investment banks)
-\item this course focuses on European style options (on stocks, indices, ETFs); see MSc QFAS for American style options and options on interest rates
-\item options are examples of \emph{financial derivatives} which are contracts that are defined in terms of underlying asset which is traded on financial market
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Options (quick recap)}
-\textbf{Exercise}\\ Check the following formulas for the payoff at maturity $T$ (we denote a generic payoff by $C_T$).
-\begin{itemize}
-\item European call option with strike price $K$:  payoff $\max\{ S_T -K , 0\}$
-\item European put option with strike price $K$:  payoff $\max\{ K-S_T  , 0\}$
-\end{itemize}
-\vspace{.25cm}
-We will often use the following options that are defined by their pay-off:
-\begin{itemize}
-\item European digital (binary) call option with strike price $K$:  payoff $1\{ S_T \geq K \}$
-\item European digital (binary) put option with strike price $K$:  payoff $1\{ S_T \leq K \}$
-\end{itemize}
-Please recall that the indicator $1\{A\}$ equals $1$ if statement $A$ is true and $0$ otherwise.
-\\ \vspace{.5cm}
-Note that we can write each of these payoffs as a function of $S_T$, i.e. $C_T = g(S_T)$ for some function $g$.
-\end{frame}
-
-\begin{frame}{Payoff diagrams at maturity $T$}
-The payoff $C_T=g(S_T)$ of each contract, as a function of the stock price $S_T$:
-\begin{figure}
-\centering
-\begin{tikzpicture}
-\begin{groupplot}[group style={group size=2 by 2,horizontal sep=1.7cm,vertical sep=1.5cm},
-   width=5.1cm,height=3.5cm,axis lines=middle,xlabel={$S_T$},xlabel style={at={(ticklabel* cs:1)},anchor=west},
-   ytick=\empty,xtick={5},xticklabels={$K$},title style={font=\small},xmin=0,xmax=10,clip=false]
-\nextgroupplot[title={call: $\max\{S_T-K,0\}$},ymin=-0.4,ymax=5.5]
-\addplot[very thick,blue] coordinates {(0,0) (5,0) (10,5)};
-\nextgroupplot[title={put: $\max\{K-S_T,0\}$},ymin=-0.4,ymax=5.5]
-\addplot[very thick,blue] coordinates {(0,5) (5,0) (10,0)};
-\nextgroupplot[title={digital call: $1\{S_T\geq K\}$},ymin=-0.25,ymax=1.4,ytick={1},yticklabels={$1$}]
-\addplot[very thick,blue] coordinates {(0,0) (5,0)};
-\addplot[very thick,blue] coordinates {(5,1) (10,1)};
-\addplot[blue,dashed] coordinates {(5,0) (5,1)};
-\addplot[only marks,mark=*,blue] coordinates {(5,1)};
-\addplot[only marks,mark=o,blue] coordinates {(5,0)};
-\nextgroupplot[title={digital put: $1\{S_T\leq K\}$},ymin=-0.25,ymax=1.4,ytick={1},yticklabels={$1$}]
-\addplot[very thick,blue] coordinates {(0,1) (5,1)};
-\addplot[very thick,blue] coordinates {(5,0) (10,0)};
-\addplot[blue,dashed] coordinates {(5,1) (5,0)};
-\addplot[only marks,mark=*,blue] coordinates {(5,1)};
-\addplot[only marks,mark=o,blue] coordinates {(5,0)};
-\end{groupplot}
-\end{tikzpicture}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}{Options (quick recap)}
-As an example, we will consider European call and put options on the AEX-index at September 3, 2021.
-{\footnotesize\ (Illustrative market data; the precise figures are not important.)}
-\begin{figure}
-\includegraphics[width=1\textwidth]{AEX}
-\end{figure}
-\end{frame}
-
-\begin{frame}{Options (quick recap)}
-As an example, we will consider European call and put options, on the AEX-index at September 3, 2021, with expiration date in December 2022.
-\begin{figure}
-\includegraphics[width=1\textwidth]{AEX-opties}
-\end{figure}
+Throughout, $S_t$ denotes the price of the underlying at time $t$, $K$ the strike, and $T$ the maturity; a European payoff is written $C_T=g(S_T)$.
 \end{frame}
 
 \begin{frame}{Main problems}
