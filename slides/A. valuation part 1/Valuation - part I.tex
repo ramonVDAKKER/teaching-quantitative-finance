@@ -184,6 +184,29 @@ where $V_t$ denotes the portfolio value of the self-financing strategy
 %\end{figure}
 \end{frame}
 
+\begin{frame}{A first no-arbitrage result: put-call parity}
+No arbitrage already pins down some prices \emph{without any model}. Take a European call and put with the same strike $K$ and maturity $T$.
+\begin{itemize}
+\item at $T$: $\;(S_T-K)^+-(K-S_T)^+=S_T-K$, so \emph{long call $-$ short put} pays exactly $S_T-K$;
+\item but \emph{one share $-$ $K$ zero-coupon bonds} pays the same $S_T-K$ at $T$;
+\item equal payoffs $\Rightarrow$ equal price today (law of one price):
+\end{itemize}
+\[ \boxed{\;C_t-P_t = S_t-K\,\e^{-r(T-t)}\;}\qquad\text{(put-call parity).} \]
+\textbf{Forward price.} The same reasoning gives the no-arbitrage price for delivery of the stock at $T$:
+\[ F_t = S_t\,\e^{r(T-t)} . \]
+Neither relation uses the Black-Scholes model --- only no arbitrage.
+\end{frame}
+
+\begin{frame}{No-arbitrage bounds on the call price}
+Even before we price it, no arbitrage bounds a European call:
+\[ \big(S_t-K\,\e^{-r(T-t)}\big)^+ \;\le\; C_t \;\le\; S_t . \]
+\begin{itemize}
+\item \emph{upper bound} $C_t\le S_t$: the call never pays more than the stock, so it cannot cost more (else short the call, buy the stock);
+\item \emph{lower bound}: from parity $C_t=P_t+S_t-K\e^{-r(T-t)}\ge S_t-K\e^{-r(T-t)}$ (as $P_t\ge0$), and $C_t\ge0$;
+\item since $S_t-K\e^{-r(T-t)}>S_t-K$, the call is worth \emph{more} than its intrinsic value $(S_t-K)^+$ --- so on a non-dividend stock an \textbf{American call is never exercised early}.
+\end{itemize}
+\end{frame}
+
 \section{Toy model}
 
 \begin{frame}{Motivation}
