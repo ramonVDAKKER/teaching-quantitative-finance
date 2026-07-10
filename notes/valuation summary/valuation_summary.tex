@@ -1,0 +1,90 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=2.7cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=black]{hyperref}
+
+\newcommand{\rd}{\,\mathrm{d}}
+\newcommand{\kansp}{\mathbb{P}}
+\newcommand{\kansq}{\mathbb{Q}}
+\newcommand{\E}{\mathbb{E}}
+
+\title{Summary valuation methods\\ QF\thanks{If you have comments/questions please send an e-mail to \href{mailto:rakker@uvt.nl}{rakker@uvt.nl}.}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent
+Starting point is a model for the `basic assets' in the market, i.e.\ SDEs. In this summary we assume that these assets are a stock, with price process $S$, and a money-market account, with price process $B$. Given this model, this brief note summarizes the three methods to value a European option with payoff $C_T=h(S_T)$ at maturity $T$.
+
+\section{Partial differential equations}
+\begin{enumerate}
+\item Restrict yourself to Markov trading strategies. So we can write
+\begin{equation}\label{eq:markov}
+V_t = F(t, S_t).
+\end{equation}
+\item Restrict yourself to self-financing trading strategies. So we have
+\begin{equation}\label{eq:sf}
+\rd V_t = \phi_t \rd S_t + \psi_t \rd B_t.
+\end{equation}
+\item Derive representation for dynamics of $V_t$:
+\begin{itemize}
+\item using \eqref{eq:markov} (and It\^o's formula) we obtain $\rd V_t = a_t \rd t + b_t \rd W_t$;
+\item using \eqref{eq:sf} we obtain $\rd V_t = c_t \rd t + d_t \rd W_t$.
+\end{itemize}
+\item Solving $a_t=c_t$ and $b_t=d_t$ yields a PDE for $F$.
+\item To value the European option with payoff $C_T=h(S_T)$: solve the PDE from step~4 under the terminal condition $F(T,s)=h(s)$ for all $s>0$. The fair price, at time $t$, is then given by $C_t=F(t,S_t)$.
+\end{enumerate}
+
+\section{Risk-neutral world}
+\begin{enumerate}
+\item Pick a num\'eraire $N$ (any of the basic assets with $N_t>0$).
+\item By the risk-neutral version of the First Fundamental Theorem of asset pricing (FFT) our basic market is free of arbitrage opportunities ``if and only if'' there exists a probability measure $\kansq$ such that $\kansq\sim\kansp$ and such that for all assets the discounted price, i.e.\ $A_t/N_t$, is a martingale under $\kansq$.
+\item Use the model to derive, for every basic asset, a SDE for the discounted price process, i.e.
+\[
+\rd \frac{A_t}{N_t} = a_t \rd t + b_t \rd W_t^{\kansp}.
+\]
+\item Introduce a new process $W^{\kansq}$ by (we specify $\gamma_t$ at a later stage)
+\[
+\rd W_t^{\kansq} = \gamma_t \rd t + \rd W_t^{\kansp},\qquad W_0^{\kansq}=0,
+\]
+and insert this into the previous display:
+\[
+\rd \frac{A_t}{N_t} = (a_t - b_t\gamma_t)\rd t + b_t \rd W_t^{\kansq}.
+\]
+Choose $\gamma_t = a_t/b_t$, which yields:
+\[
+\rd \frac{A_t}{N_t} = b_t \rd W_t^{\kansq}.
+\]
+(For the Black-Scholes market with $N=B$ this gives $\gamma_t=(\mu-r)/\sigma$, the market price of risk.)
+\item Apply Girsanov's theorem to find a probability measure $\kansq$ that is equivalent to $\kansp$ and such that $W^{\kansq}$ is a Brownian motion under $\kansq$.
+\item Conclude that all $A_t/N_t$ are martingales under $\kansq$.
+\item To price the European option with payoff $C_T=h(S_T)$:
+\begin{itemize}
+\item solving the SDEs (under $\kansq$) typically yields $S_T = g(T, W_T^{\kansq})$;
+\item apply the FFT once more:
+\[
+C_t = N_t \E_{\kansq}\left[ \frac{1}{N_T}\, h\!\left(g(T, W_T^{\kansq})\right) \Bigm| \mathcal{F}_t \right],
+\qquad\text{in particular}\quad
+C_0 = N_0 \E_{\kansq}\left[ \frac{1}{N_T}\, h\!\left(g(T, W_T^{\kansq})\right) \right],
+\]
+and exploit that $W^{\kansq}$ is a standard Brownian motion under $\kansq$.
+\end{itemize}
+\end{enumerate}
+
+\section{Pricing kernel}
+By the pricing kernel version of the FFT our market is free of arbitrage opportunities ``if and only if'' there exists some adapted process $K_t$ such that $K_t>0$ and such that for all basic assets in the market $K_tA_t$ is a martingale (here $A_t$ denotes the price of the asset).
+\begin{enumerate}
+\item Try $\rd K_t = \mu_t^K \rd t + \sigma_t^K \rd W_t^{\kansp}$.
+\item Use the model for the basic assets to solve for $\mu_t^K$ and $\sigma_t^K$, i.e.\ calculate $\rd K_tA_t = a_t\rd t + b_t \rd W_t^{\kansp}$ and ensure $a_t=0$ for every basic asset.
+\item To price the European option with payoff $C_T=h(S_T)$ apply the FFT once more:
+\[
+C_t = \frac{1}{K_t}\E_{\kansp}[\, K_T C_T \mid \mathcal{F}_t\,],
+\qquad\text{in particular}\quad
+C_0 = \frac{1}{K_0}\E_{\kansp}[\, K_T C_T\,].
+\]
+\end{enumerate}
+
+\end{document}
