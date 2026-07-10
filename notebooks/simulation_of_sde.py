@@ -23,7 +23,7 @@ def _(mo):
     *   Ito diffusion processes $dX_t=a(t, X_t)dt + b(t, X_t) dW_t$, where $W$ is a standard Brownian motion and $X_0=x_0$.
 
     *This is the interactive [marimo](https://marimo.io) version of
-    [simulation_of_sde.ipynb](https://github.com/ramonVDAKKER/teaching-quantitative-finance/blob/develop/notebooks/simulation_of_sde.ipynb);
+    [simulation_of_sde.ipynb](https://github.com/ramonVDAKKER/teaching-quantitative-finance/blob/main/notebooks/simulation_of_sde.ipynb);
     it runs entirely in your browser. Use the sliders to explore the effect of the parameters.*
     """)
     return
