@@ -65,11 +65,11 @@ Choose $\gamma_t = a_t/b_t$, which yields:
 \begin{itemize}
 \item solving the SDEs (under $\kansq$) typically yields $S_T = g(T, W_T^{\kansq})$;
 \item apply the FFT once more:
-\[
-C_t = N_t \E_{\kansq}\left[ \frac{1}{N_T}\, h\!\left(g(T, W_T^{\kansq})\right) \Bigm| \mathcal{F}_t \right],
-\qquad\text{in particular}\quad
-C_0 = N_0 \E_{\kansq}\left[ \frac{1}{N_T}\, h\!\left(g(T, W_T^{\kansq})\right) \right],
-\]
+\begin{align*}
+C_t &= N_t \E_{\kansq}\left[ \frac{1}{N_T}\, h\!\left(g(T, W_T^{\kansq})\right) \Bigm| \mathcal{F}_t \right],\\
+\text{in particular}\quad
+C_0 &= N_0 \E_{\kansq}\left[ \frac{1}{N_T}\, h\!\left(g(T, W_T^{\kansq})\right) \right],
+\end{align*}
 and exploit that $W^{\kansq}$ is a standard Brownian motion under $\kansq$.
 \end{itemize}
 \end{enumerate}
