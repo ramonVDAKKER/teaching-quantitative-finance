@@ -141,12 +141,12 @@ Suppose bank ABC takes no further action. Then at $t=3/12$:
 \begin{itemize}
 \item bank ABC needs to sell stocks to S for $5$ euro; this leads to loss
 of $10,000 \times (S_{3/12} -5) - 3,000\times\exp(rT)$ euro
-\item note that potential loss is unbounded (assuming GBM as model for $S$):  for any $K>0$:  $\mathbb{P}(S_{3/12} > K)>0$
+\item note that potential loss is unbounded (assuming GBM as model for $S$):  for any $x>0$:  $\mathbb{P}(S_{3/12} > x)>0$
 \end{itemize}
-\item so selling the option yields risk. Bank ABC would like (and is enforced to do so by regulators) to \emph{measure}  the risk
+\item so selling the option yields risk. Bank ABC would like (and is required to do so by regulators) to \emph{measure}  the risk
 and bank ABC might want to \emph{manage} the risk by hedging part of the risk (because of its own risk appetite or because of regulatory limits)
 \item we will discuss risk measurement and hedging using the greeks
-\item our discussion is very specific to option portfolios; see MSc in QFAS for wide-range of tools for risk measurement and management
+\item our discussion is very specific to option portfolios; see MSc in QFAS for wide range of tools for risk measurement and management
 \end{itemize}
 \end{frame}
 
@@ -206,8 +206,8 @@ options
 
 \begin{frame}{Agenda}
 These slides discuss hedging of option portfolios from
-point-of-view 
-of (trading desk) of financial institution 
+point-of-view
+of (trading desk of) financial institution
 that sells (writes)
 (non-traded) European
 options 
@@ -230,7 +230,7 @@ then  $F$ satisfies
 \[
 \frac{\partial F}{\partial t}(t,s) + r s \frac{\partial F}{\partial
 s}(t,s) + \frac{1}{2}\sigma^2 s^2 \frac{\partial^2 F}{\partial
-s^2}(t,s) -r F(t,s)=0\quad \forall s,t
+s^2}(t,s) -r F(t,s)=0\quad \forall s>0,\, t\in[0,T)
 \]
 \item there is self-financing portfolio $(\phi_t,\psi_t)_{t\geq 0}$ that replicates payoff option, i.e. $C_T=V_T=\phi_T S_T+ \psi_T B_T$, given by:
 \begin{align*}
@@ -395,7 +395,7 @@ Now back to trading on a discrete time grid.
 \begin{frame}{Delta-hedging with self-financing portfolio}
 \begin{itemize}
 \item suppose we have $a$ options, against price $C_0$
-\item take a position in stock and money market to obtain delta-neutral portfolio at $t=0$ such that total portfolio is delta-neutral and has value 0
+\item take positions in stock and money market such that the total portfolio is delta-neutral and has value 0 at $t=0$
 \item at each point-in-time 
 we rebalance the position in $S$ such that the total 
 portfolio is delta-neutral: for $t=\eta, 2\eta,\dots,(n-1)\eta$, with $n\eta=T$,
@@ -466,7 +466,7 @@ Delta-hedging a written call with $n$ rebalancings over $[0,T]$ ($S_0=K=100$, $r
 \end{tikzpicture}
 \end{center}
 \vspace{-2mm}
-{\small Halving the error needs \emph{four times} as many trades --- and each trade costs money. This is the tension behind the optimal hedging frequency. The same $1/\sqrt{n}$ governs Monte-Carlo error in the next deck.}
+{\small Halving the error needs \emph{four times} as many trades - and each trade costs money. This is the tension behind the optimal hedging frequency. The same $1/\sqrt{n}$ governs Monte-Carlo error in the next deck.}
 \end{frame}
 
 \begin{frame}{Gamma}
@@ -488,7 +488,7 @@ be relevant as well $\implies$ gamma
 For any portfolio with price process $V_t=G(t,S_t)$ we define
 \textbf{Gamma} by:  
 \[
-\Gamma=\Gamma_t =\left. \frac{\partial^2 }{\partial s^2} G(t,s)\right|_{s=S_t} = G_{SS}(t, S_t) =\frac{\partial}{\partial s} \left. \Delta_t
+\Gamma=\Gamma_t =\left. \frac{\partial^2 }{\partial s^2} G(t,s)\right|_{s=S_t} = G_{SS}(t, S_t) =\left. \frac{\partial}{\partial s} \Delta(t,s)
 \right|_{s=S_t}
 \]
 Note that gamma measures the \emph{rate of change} of $\Delta$ (with respect to $s$). 
@@ -523,7 +523,7 @@ we can obtain \textbf{delta-gamma} neutral portfolio (i.e. delta and gamma are b
 \end{frame}
 
 \begin{frame}{The Greeks as functions of the stock price}
-For a European call ($K=100$, $\sigma=20\%$, $T-t=0.5$): the \emph{delta} rises smoothly from $0$ to $1$ (the hedge ratio), and \emph{gamma} --- its slope --- peaks at the money.
+For a European call ($K=100$, $r=3\%$, $\sigma=20\%$, $T-t=0.5$): the \emph{delta} rises smoothly from $0$ to $1$ (the hedge ratio), and \emph{gamma} - its slope - peaks near the money.
 \begin{center}
 \begin{tikzpicture}
 \begin{groupplot}[group style={group size=2 by 1,horizontal sep=1.7cm},
@@ -572,7 +572,7 @@ And there are even more Greeks:
 \[
 \Theta = \frac{\partial}{\partial t} G(t, S_t)
 \]
-\item Lambda, Vanna, Voma, Charm, etc. 
+\item Lambda, Vanna, Vomma, Charm, etc.
 \end{itemize}
 \end{frame}
 
@@ -594,8 +594,8 @@ The Black-Scholes price is strictly increasing in $\sigma$. The \textbf{implied 
 \[ F^{\text{BS}}(t,S_t;\sigma_{\text{imp}})=\text{market price}. \]
 \begin{itemize}
 \item it is the market's ``Black-Scholes-equivalent'' volatility quote;
-\item if B-S held exactly, $\sigma_{\text{imp}}$ would be identical across all strikes and maturities --- in practice it is not. Plotting $\sigma_{\text{imp}}$ against the strike gives the \emph{volatility smile} (or skew);
-\item so $\sigma_{\text{imp}}$ is a market-implied \emph{input}, whereas the \emph{realized} volatility $\sigma_{\text{real}}$ is what the stock actually does. The two need not agree --- which is exactly what a delta-hedged option bets on (next slide).
+\item if B-S held exactly, $\sigma_{\text{imp}}$ would be identical across all strikes and maturities - in practice it is not. Plotting $\sigma_{\text{imp}}$ against the strike gives the \emph{volatility smile} (or skew);
+\item so $\sigma_{\text{imp}}$ is a market-implied \emph{input}, whereas the \emph{realized} volatility $\sigma_{\text{real}}$ is what the stock actually does. The two need not agree - which is exactly what a delta-hedged option bets on (next slide).
 \end{itemize}
 \end{frame}
 
@@ -642,14 +642,14 @@ The Greeks turn a distribution of \emph{market moves} into a distribution of \em
 \[ \mathrm{VaR}_\alpha \approx z_\alpha\,|\Delta|\,\sigma_S \qquad (z_\alpha=\text{standard-normal quantile}). \]
 \item \emph{gamma} adds convexity (a long-gamma book has right-skewed P\&L); \emph{vega} adds exposure to volatility moves.
 \end{itemize}
-\textbf{Caveat:} this is a \emph{local} approximation --- good for small moves, but it misses the tails of large ones, where full revaluation is needed.
+\textbf{Caveat:} this is a \emph{local} approximation - good for small moves, but it misses the tails of large ones, where full revaluation is needed.
 \end{frame}
 
 \begin{frame}{Food for thought}
 \begin{fftbox}
 A delta-hedged option earns $\tfrac12\Gamma S^2(\sigma_{\text{real}}^2-\sigma_{\text{imp}}^2)\,\rd t$ each step.
 \begin{itemize}
-\item Rebalancing more often shrinks the replication error --- but real markets charge \emph{transaction costs} on every trade. What is the optimal hedging frequency?
+\item Rebalancing more often shrinks the replication error - but real markets charge \emph{transaction costs} on every trade. What is the optimal hedging frequency?
 \item Over the option's life, what determines the total hedging P\&L: the \emph{path} of the stock, or only where it ends up?
 \end{itemize}
 \end{fftbox}
@@ -659,7 +659,7 @@ A delta-hedged option earns $\tfrac12\Gamma S^2(\sigma_{\text{real}}^2-\sigma_{\
 For European options in the Black-Scholes market the Greeks have closed forms ($\Delta=\Phi(d_1)$, etc.). For \emph{exotic} payoffs or richer models they often do \emph{not}.
 \medskip
 
-The next deck --- \emph{Monte-Carlo methods for the Greeks} --- shows how to estimate $\Delta,\Gamma,\nu,\dots$ by simulation (bump-and-reprice, the pathwise method, the likelihood-ratio method).
+The next deck - \emph{Monte-Carlo methods for the Greeks} - shows how to estimate $\Delta,\Gamma,\nu,\dots$ by simulation (bump-and-reprice, the pathwise method, the likelihood-ratio method).
 \medskip
 
 {\small A parallel worth noting: just as discrete-time \emph{hedging} leaves a replication error shrinking like $1/\sqrt{n}$ in the number of rebalancings, Monte-Carlo \emph{estimation} of a Greek has an error shrinking like $1/\sqrt{n}$ in the number of simulations.}
