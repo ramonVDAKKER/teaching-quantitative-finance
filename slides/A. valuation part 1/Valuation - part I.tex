@@ -89,34 +89,26 @@
 \draw[->,gray] (r)--(p1);\draw[->,gray](p1)--(p2);\draw[->,gray](p2)--(p3);\draw[->,gray](p3)--(b);\draw[->,gray](b)--(c);
 \end{tikzpicture}
 \end{center}
-\textbf{One question:} how to \emph{price} and \emph{hedge} a European option --- and why it works.
-\medskip
-
-Three ideas recur throughout:
-\begin{itemize}
-\item \emph{three methods, one price}: replication $=$ risk-neutral $=$ pricing kernel;
-\item \emph{discrete $\leftrightarrow$ continuous}: binomial $q\leftrightarrow$ market price of risk; hedge ratio $\leftrightarrow$ delta; tree $\leftrightarrow$ finite-difference grid;
-\item \emph{error $\sim 1/\sqrt{n}$}: discrete-time hedging and Monte-Carlo estimation alike.
-\end{itemize}
+\textbf{One question:} how to \emph{price} and \emph{hedge} a European option - and why it works.
 \end{frame}
 
 \section{Introduction}
 
 \begin{frame}{Options (prerequisites)}
-We assume familiarity with the basics of options --- calls and puts, payoffs at maturity, payoff diagrams, moneyness, and exercise styles. These are collected in the companion deck \emph{``Options: a quick recap''}.
+We assume familiarity with the basics of options - calls and puts, payoffs at maturity, payoff diagrams, moneyness, and exercise styles. These are collected in the companion deck \emph{``Options: a quick recap''}.
 \medskip
 
 Throughout, $S_t$ denotes the price of the underlying at time $t$, $K$ the strike, and $T$ the maturity; a European payoff is written $C_T=g(S_T)$.
 \end{frame}
 
 \begin{frame}{Main problems}
-Unlike a stock, an option has no obvious ``correct'' price: its value is \emph{derived} from the underlying. This raises two central problems.
+An option has no obvious ``correct'' price: its value is \emph{derived} from the underlying. This raises two central problems.
 \medskip
 
 \textbf{1.\ Valuation/pricing.} What is the `fair' price $C_t$ of an option, and how does it evolve over time? This matters for:
 \begin{itemize}
-\item investors/traders --- to avoid overpaying, or to profit from a market price they believe is wrong;
-\item financial institutions --- to quote prices for OTC (or `embedded') options, and to value and risk-manage books of options.
+\item investors/traders - to avoid overpaying, or to profit from a market price they believe is wrong;
+\item financial institutions - to quote prices for OTC (or `embedded') options, and to value and risk-manage books of options.
 \end{itemize}
 \medskip
 
@@ -154,8 +146,8 @@ d_1&=\frac{ \log\left(\frac{S_t}{K}\right) + \left( r+ \frac{\sigma^2}{2}\right)
 \includegraphics[width=0.84\textwidth]{BSM}
 \end{figure}
 \begin{itemize}
-\item in 1973 Fisher Black and Myron Scholes published paper
-`The Pricing of Options and Corporate Liabilities'  and Robert Merton
+\item in 1973 Fischer Black and Myron Scholes published paper
+`The Pricing of Options and Corporate Liabilities' and Robert Merton
 published `Theory of Rational Option Pricing'
 \item Merton and Scholes received Nobel Memorial Prize in Economic Sciences in 1997 (Black died in 1995)
 \end{itemize}
@@ -194,7 +186,7 @@ No arbitrage already pins down some prices \emph{without any model}. Take a Euro
 \[ \boxed{\;C_t-P_t = S_t-K\,\e^{-r(T-t)}\;}\qquad\text{(put-call parity).} \]
 \textbf{Forward price.} The same reasoning gives the no-arbitrage price for delivery of the stock at $T$:
 \[ F_t = S_t\,\e^{r(T-t)} . \]
-Neither relation uses the Black-Scholes model --- only no arbitrage.
+Neither relation uses the Black-Scholes model - only no arbitrage.
 \end{frame}
 
 \begin{frame}{No-arbitrage bounds on the call price}
@@ -203,14 +195,17 @@ Even before we price it, no arbitrage bounds a European call:
 \begin{itemize}
 \item \emph{upper bound} $C_t\le S_t$: the call never pays more than the stock, so it cannot cost more (else short the call, buy the stock);
 \item \emph{lower bound}: from parity $C_t=P_t+S_t-K\e^{-r(T-t)}\ge S_t-K\e^{-r(T-t)}$ (as $P_t\ge0$), and $C_t\ge0$;
-\item since $S_t-K\e^{-r(T-t)}>S_t-K$, the call is worth \emph{more} than its intrinsic value $(S_t-K)^+$ --- so on a non-dividend stock an \textbf{American call is never exercised early}.
+\item since $S_t-K\e^{-r(T-t)}>S_t-K$, the call is worth \emph{more} than its intrinsic value $(S_t-K)^+$ - so on a non-dividend stock an \textbf{American call is never exercised early}.
 \end{itemize}
+\begin{fftbox}
+Try the same for an American \emph{put}: the analogous lower bound $\bigl(K\e^{-r(T-t)}-S_t\bigr)^+$ does \emph{not} dominate the intrinsic value. Can early exercise be optimal? (Hint: $S_t\approx 0$, $r>0$.)
+\end{fftbox}
 \end{frame}
 
 \section{Toy model}
 
 \begin{frame}{Motivation}
-First we discuss a very simple discrete time model and discuss pricing of options under assumption that arbitrage opportunities do not exist.
+First we discuss a very simple discrete time model and study pricing of options under the assumption that arbitrage opportunities do not exist.
 We discuss three methods:
 \begin{itemize}
 \item pricing by replication
@@ -341,7 +336,7 @@ financial markets:
 \[
  \mathbb{E}\left[ \frac{S_1}{S_0} \right] =\frac{B_1}{B_0},
 \]
-would mean that the expected (gross) return on the stock equals the riskless return --- i.e.\ that investors demand \emph{no risk premium} for bearing risk, which is not what we observe
+would mean that the expected (gross) return on the stock equals the riskless return - i.e.\ that investors demand \emph{no risk premium} for bearing risk, which is not what we observe
 \end{itemize}
 \end{frame}
 
@@ -448,7 +443,7 @@ the replicating portfolios.
 \end{frame}
 
 \begin{frame}{Worked example: one-period model}
-\textbf{Setup} (numbers from the accompanying spreadsheet): $B_0=1$, $B_1=1.02$ (so $r=2\%$), real-world probability $p=\mathbb{P}(\text{up})=0.7$, and the claim is a call with strike $K=50$.
+\textbf{Setup}: $B_0=1$, $B_1=1.02$ (so $r=2\%$), real-world probability $p=\mathbb{P}(\text{up})=0.7$, and the claim is a call with strike $K=50$.
 \vspace{0.4cm}
 \begin{center}
 \begin{tikzpicture}[xscale=3.7,yscale=1.4,>={Stealth[length=2.4mm]}]
@@ -488,7 +483,7 @@ Price as discounted $\mathbb{Q}$-expectation of the payoff:
 \[
 C_0=\frac{1}{B_1}\mathbb{E}_{\mathbb{Q}}[C_1]=\frac{0.55\cdot100+0.45\cdot50}{1.02}=\frac{77.5}{1.02}=75.98 ,
 \]
-\emph{identical} to the replication price --- as it must be.
+\emph{identical} to the replication price - as it must be.
 \end{frame}
 
 \begin{frame}{Worked example: why a \emph{different} measure?}
@@ -518,6 +513,10 @@ Take the one-period model with $S_0=100$, $B_0=1$, $B_1=1$ (so $r=0$), and
 \item Price a call with strike $K=100$ (payoffs $c_u=20$, $c_d=0$).
 \end{enumerate}
 \end{quizbox}
+\medskip
+\begin{fftbox}
+In the worked example the real-world probability $p=0.7$ never entered the price $C_0$ - so two investors who disagree about $p$ still agree on the option price. Where did $p$ go? (Hint: the replication argument never uses it. Compare: the Black-Scholes price does not depend on $\mu$.)
+\end{fftbox}
 \end{frame}
 
 \begin{frame}{Method 2: risk-neutral pricing}
@@ -588,7 +587,7 @@ m_d=\frac{0.45}{1.02\cdot0.3}\approx1.471,
 \[
 C_0=0.7\cdot0.770\cdot100+0.3\cdot1.471\cdot50\approx 75.98 ,
 \]
-again the same price. Note $m_d>m_u$: a payoff in the ``down'' (low-$S$) state is more expensive --- the kernel encodes the price of risk.
+again the same price. Note $m_d>m_u$: a payoff in the ``down'' (low-$S$) state is more expensive - the kernel encodes the price of risk.
 \end{frame}
 
 \section{Multi-period model}
