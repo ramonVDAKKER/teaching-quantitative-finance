@@ -100,7 +100,7 @@ def _(BlackScholesOptionPrice, mo, np):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    In the following plot we fix the time-to-maturity/expiration and consider the price of the put option as function of the current stock price. The dashed line shows the payoff $\max\{K-S_t, 0\}$. Note that for small $r$ and small time-to-maturity the put price is close to the payoff, and that a deep in-the-money put can be worth *less* than its payoff ('negative time value') - compare the food-for-thought box in the slides.
+    In the following plot we fix the time-to-maturity/expiration and consider the price of the put option as function of the current stock price. The dashed line shows the *intrinsic value* $\max\{K-S_t, 0\}$, i.e. the payoff the option would deliver if it expired today (the actual payoff $\max\{K-S_T, 0\}$ is received at the expiration date $T$ only). Note that for small $r$ and small time-to-maturity the put price is close to the intrinsic value, and that a deep in-the-money put can be worth *less* than its intrinsic value ('negative time value') - compare the food-for-thought box in the slides.
     """)
     return
 
@@ -127,7 +127,7 @@ def _(BlackScholesOptionPrice, np, pd, put_r, put_sigma, put_strike, put_tau):
         ylabel="put price",
         label="put price",
     )
-    _ax.plot(_grid, np.maximum(put_strike.value - _grid, 0), "r--", label=r"payoff $\max\{K-S_t,0\}$")
+    _ax.plot(_grid, np.maximum(put_strike.value - _grid, 0), "r--", label=r"intrinsic value $\max\{K-S_t,0\}$")
     _ax.legend()
     _ax
     return
