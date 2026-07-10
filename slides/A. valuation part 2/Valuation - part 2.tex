@@ -392,7 +392,7 @@ To check that a function $F$ solves the B-S PDE, just substitute it. Two quick c
 \[ 0+rs\cdot 1+0-r\,s=0.\quad\checkmark \]
 \textbf{(b) a zero-coupon bond paying $K$ at $T$, $F(t,s)=K\e^{-r(T-t)}$:} then $F_s=F_{ss}=0$ and $F_t=rK\e^{-r(T-t)}=rF$, so
 \[ rF+0+0-rF=0.\quad\checkmark \]
-By \emph{linearity} of the PDE, any combination $a\,s+b\,K\e^{-r(T-t)}$ also solves it --- consistent with such a stock+bond portfolio being self-financing.
+By \emph{linearity} of the PDE, any combination $a\,s+b\,K\e^{-r(T-t)}$ also solves it - consistent with such a stock+bond portfolio being self-financing.
 \\[2pt]
 {\small(In the exercises you verify that the digital-call solution $F(t,s)=\e^{-r(T-t)}\Phi(d_2)$ solves the PDE.)}
 \end{frame}
@@ -412,7 +412,7 @@ A portfolio has value process $V_t=F(t,S_t)$ with
 \begin{frame}{Examples: European digital call option}
 \begin{itemize}
 \item payoff: $h(S_T)=1\{S_T\geq K\}$
-\item the B-S PDE can be solved explictly:
+\item the B-S PDE can be solved explicitly:
 \[
 F(t,s)=\exp(-r(T-t))\Phi(d_2),
 \]
@@ -458,39 +458,9 @@ F_{ss}\approx\frac{F(t,s+\Delta s)-2F(t,s)+F(t,s-\Delta s)}{\Delta s^2}.
 \]
 \begin{itemize}
 \item start from the known terminal values $F(T,s)=h(s)$ and step \emph{backward} in time;
-\item the explicit scheme writes each $F(t,s_i)$ as a (discounted) weighted average of its three neighbours $F(t+\Delta t,s_{i-1}),\,F(t+\Delta t,s_i),\,F(t+\Delta t,s_{i+1})$ --- i.e.\ a \emph{trinomial tree}.
+\item the explicit scheme writes each $F(t,s_i)$ as a (discounted) weighted average of its three neighbours $F(t+\Delta t,s_{i-1}),\,F(t+\Delta t,s_i),\,F(t+\Delta t,s_{i+1})$ - i.e.\ a \emph{trinomial tree}.
 \end{itemize}
-An implementation --- including the explicit/trinomial scheme and its stability condition --- is provided in the accompanying notebook.
-\end{frame}
-
-\begin{frame}{Finite differences, trees, and no-arbitrage}
-The explicit finite-difference scheme \emph{is} a trinomial tree; the binomial tree of part~1 is its two-neighbour cousin. For the scheme to make sense the three weights must be \textbf{nonnegative} --- they play the role of risk-neutral probabilities.
-\begin{itemize}
-\item nonnegative weights require $\Delta t$ small relative to $\Delta s^2$ (a \emph{stability / CFL} condition); otherwise the scheme oscillates and the ``probabilities'' turn negative;
-\item the same constraint shows up in the tree: the log-price step must scale like $\sigma\sqrt{\Delta t}$ (so $u=\e^{\sigma\sqrt{\Delta t}}$) to keep $q\in(0,1)$.
-\end{itemize}
-\textbf{One picture (an analogy, not a literal equivalence):} the discrete weights must stay nonnegative to act as risk-neutral probabilities --- mirroring how a valid risk-neutral measure rules out arbitrage. The PDE, the trees, and the grid are three views of the same object.
-\end{frame}
-
-\begin{frame}{From the Black-Scholes PDE to the heat equation}
-A change of variables makes the connection precise. Write $\tau=T-t$ (time-to-maturity) and $x=\log s$, and set $F(t,s)=v(\tau,x)$. Using $s\,\partial_s=\partial_x$ and $s^2\partial_{ss}=\partial_{xx}-\partial_x$, the PDE turns into a \emph{constant-coefficient} equation with an \emph{initial} condition $v(0,x)=h(\e^{x})$:
-\[ v_\tau=\tfrac12\sigma^2 v_{xx}+\big(r-\tfrac12\sigma^2\big)v_x-r\,v. \]
-Rescaling time as $\tilde\tau=\tfrac12\sigma^2\tau$ and substituting $v=\e^{ax+b\tilde\tau}u$ with
-\[ a=-\tfrac12(k-1),\qquad b=-\tfrac14(k+1)^2,\qquad k=\tfrac{2r}{\sigma^2}, \]
-removes the first- and zeroth-order terms, leaving the pure \textbf{heat equation}
-\[ u_{\tilde\tau}=u_{xx}. \]
-So pricing a European option is, after a change of variables, an initial-value problem for the heat equation.
-\end{frame}
-
-\begin{frame}{Food for thought}
-\begin{fftbox}
-The B-S PDE comes with a \emph{terminal} condition $F(T,s)=h(s)$, so it runs \emph{backward} in time. With $\tau=T-t$, $x=\log s$ (and a discount/scaling factor) it becomes the \emph{heat equation}
-\[ \frac{\partial u}{\partial \tau}=\frac{\partial^2 u}{\partial x^2}. \]
-\begin{itemize}
-\item The heat equation instantly \emph{smooths} its initial data. What does this say about the smoothness of the price $F(t,\cdot)$ for $t<T$, even when the payoff $h$ has a kink (call) or a jump (digital)?
-\item Why is ``backward in time, from maturity'' the natural direction for valuation?
-\end{itemize}
-\end{fftbox}
+An implementation - including the explicit/trinomial scheme and its stability condition - is provided in the accompanying notebook.
 \end{frame}
 
 \begin{frame}{Feynman-Kac Theorem}
@@ -529,7 +499,7 @@ With $D_u=\exp(-\int_t^u k\,\rd v)$, It\^o's formula gives
 \rd M_u &= D_u\Big[-k\,F\,\rd u + \big(F_t+\alpha F_x+\tfrac12\beta^2 F_{xx}\big)\rd u + \beta F_x\,\rd W_u\Big]\\
 &= D_u\underbrace{\big(F_t+\alpha F_x+\tfrac12\beta^2 F_{xx}-kF\big)}_{=\,0\ \text{(the PDE)}}\rd u \;+\; D_u\,\beta F_x\,\rd W_u .
 \end{align*}
-So $M$ has \emph{no drift}: it is a (local) martingale, hence --- under integrability conditions --- a martingale. As $M_t=F(t,x)$ and $M_T=\exp(-\int_t^T k\,\rd v)\,h(X_T)$,
+So $M$ has \emph{no drift}: it is a (local) martingale, hence - under integrability conditions - a martingale. As $M_t=F(t,x)$ and $M_T=\exp(-\int_t^T k\,\rd v)\,h(X_T)$,
 \[ F(t,x)=\mathbb{E}[\,M_T\mid X_t=x\,]=\mathbb{E}\Big[\exp\!\Big(-\!\int_t^T \! k(v,X_v)\,\rd v\Big)h(X_T)\,\Big|\,X_t=x\Big]. \,\square \]
 \end{frame}
 
@@ -539,7 +509,7 @@ $F(t, S_t)$ where $F$ satisfies
 \[
 \frac{\partial F}{\partial t}(t,s) + r s \frac{\partial F}{\partial
 s}(t,s) + \frac{1}{2}\sigma^2 s^2 \frac{\partial^2 F}{\partial
-s^2}(t,s) -r F(t,s)=0\quad \forall s>0,\,t\in[0, T),
+s^2}(t,s) -r F(t,s)=0\quad \forall s>0,\,t\in[0, T).
 \]
 Feynman-Kac tells us that we have
 \[
@@ -558,8 +528,8 @@ where $W$ is a standard Brownian motion.
 \begin{frame}{Uniqueness and the maximum principle}
 Two structural facts make ``the'' price well-defined and well-behaved.
 \begin{itemize}
-\item \textbf{Uniqueness.} Under mild growth conditions the B-S PDE together with the terminal condition $F(T,s)=h(s)$ has a \emph{unique} solution. Hence $F(t,S_t)$ is unambiguous --- the analytic counterpart of market \emph{completeness}.
-\item \textbf{Maximum principle.} For this (parabolic) PDE a solution attains its extreme values on the boundary of the domain --- here the terminal time and the $s$-boundaries. Two consequences:
+\item \textbf{Uniqueness.} Under mild growth conditions the B-S PDE together with the terminal condition $F(T,s)=h(s)$ has a \emph{unique} solution. Hence $F(t,S_t)$ is unambiguous - the analytic counterpart of market \emph{completeness}.
+\item \textbf{Maximum principle.} For this (parabolic) PDE a solution attains its extreme values on the boundary of the domain - here the terminal time and the $s$-boundaries. Two consequences:
 \begin{itemize}
 \item \emph{monotonicity}: if $h_1\le h_2$ then $F_1\le F_2$ (prices respect the ordering of payoffs);
 \item \emph{no-arbitrage bounds}, e.g.\ $0\le F_{\text{call}}(t,s)\le s$.
