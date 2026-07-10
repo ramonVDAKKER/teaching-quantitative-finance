@@ -86,17 +86,25 @@ def _(np, pd, plt):
             ).plot(kind="line", title=title, figsize=(13, 5))
 
         def avg_and_var_over_simulations(self):
-            """Calculates, for each point on time-grid, the mean and variance over sample paths."""
+            """Calculates, for each point on time-grid, the mean and variance over sample paths.
+
+            The plot of the average includes dashed lines at +/- 2 standard errors
+            (of the sample mean) around 0.
+            """
 
             if self.paths.shape[0] < 2:
                 raise ValueError("Requires minimum of two paths.")
             fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5))
-            aux = np.mean(self.paths, axis=0)
-            avg_df = pd.DataFrame(aux, columns=["Average over paths"], index=self.time_grid)
+            avg = np.mean(self.paths, axis=0)
+            var = np.var(self.paths, axis=0)
+            se = np.sqrt(var / self.paths.shape[0])
+            avg_df = pd.DataFrame(avg, columns=["Average over paths"], index=self.time_grid)
             avg_df.plot(kind="line", title="Average over sample paths", ax=ax1)
-            aux = np.var(self.paths, axis=0)
+            ax1.plot(self.time_grid, 2 * se, "r--", label=r"$\pm 2$ standard errors")
+            ax1.plot(self.time_grid, -2 * se, "r--")
+            ax1.legend()
             var_df = pd.DataFrame(
-                aux, columns=["Var over sample paths"], index=self.time_grid
+                var, columns=["Var over sample paths"], index=self.time_grid
             )
             var_df.plot(kind="line", title="Var over sample paths", ax=ax2)
             return avg_df, var_df
@@ -186,7 +194,9 @@ def _(mo):
     mo.md(r"""
     We have $\mathbb{E}W_t=0$ and $\operatorname{var}(W_t) = \sigma^2 t$. As a check on our code, we can try to verify these properties. Indeed, if we use a large number of sample paths $n$, then the law of large numbers implies that the sample mean of $W_t^{(i)}$, $i=1,\dots,n$, i.e. the simulated values of the process at time $t$, provides an approximation to $\mathbb{E}W_t=0$. Similarly, the sample variance of $W_t^{(i)}$, $i=1,\dots,n$, provides an approximation to  $\operatorname{var}(W_t)$.
 
-    In the next cell we use $n=2000$ (and a time-step of $0.005$, to keep the in-browser computation light) and compute the sample mean and sample variances of $W_t^{(i)}$, $i=1,\dots,n$, for all $t$ on the time-grid. Please note that, as a next step, we could develop a statistical test.
+    In the next cell we use $n=2000$ (and a time-step of $0.005$, to keep the in-browser computation light) and compute the sample mean and sample variances of $W_t^{(i)}$, $i=1,\dots,n$, for all $t$ on the time-grid.
+
+    Do not expect the average to be *exactly* $0$: the sample mean is itself a random variable with standard error $\sigma\sqrt{t}/\sqrt{n}$ (for $\sigma=3$, $t=5$, $n=2000$ this is $\approx 0.15$), so deviations from $0$ of this order of magnitude are entirely expected. Note that the average, as a function of $t$, is itself a (scaled) Brownian motion, so it wanders smoothly and can *look* like a systematic drift. The dashed lines in the plot show $\pm 2$ standard errors around $0$: pointwise, the average should lie within this band with approximately 95% probability. This is, in essence, a simple statistical test of $\mathbb{E}W_t=0$.
     """)
     return
 
@@ -197,7 +207,7 @@ def _(BrownianMotion, mo, plt):
     avg_df, var_df = bm_check.avg_and_var_over_simulations()
     mo.vstack([
         plt.gcf(),
-        mo.md("Sample mean and variance at $t=5$ (population values: $0$ and $\\sigma^2 t = 45$):"),
+        mo.md("Sample mean and variance at $t=5$ (population values: $0$ and $\\sigma^2 t = 45$; the sample mean has standard error $\\sigma\\sqrt{t}/\\sqrt{n} \\approx 0.15$):"),
         mo.hstack([avg_df.tail(1), var_df.tail(1)]),
     ])
     return
