@@ -105,7 +105,7 @@ Money Market Account:
 \item risk-neutral pricing
 \item pricing kernel
 \end{itemize}
-\textbf{These slides discuss risk neutral pricing and the pricing kernel approach.} 
+\textbf{These slides discuss risk-neutral pricing and the pricing kernel approach.}
 \end{itemize}
 \end{frame}
 
@@ -114,7 +114,7 @@ Money Market Account:
 The logic of risk-neutral pricing:
 \begin{enumerate}
 \item \textbf{First Fundamental Theorem:} no arbitrage $\Leftrightarrow$ there is a measure $\mathbb{Q}\sim\mathbb{P}$ under which \emph{discounted} prices are martingales.
-\item To \emph{use} it we must actually find $\mathbb{Q}$ --- this is what \textbf{Girsanov}'s theorem delivers (an intermezzo).
+\item To \emph{use} it we must actually find $\mathbb{Q}$ - this is what \textbf{Girsanov}'s theorem delivers (an intermezzo).
 \item \textbf{Apply it:} under $\mathbb{Q}$ the stock earns $r$, and the option price is a discounted $\mathbb{Q}$-expectation. Worked examples (digital put, Philips put).
 \item An equivalent encoding: the \textbf{pricing kernel}.
 \item When is $\mathbb{Q}$ \emph{unique}? The \textbf{Second Fundamental Theorem} (completeness).
@@ -127,7 +127,7 @@ The logic of risk-neutral pricing:
 In part~1 we priced options in the one-period toy model two ways: by \emph{replication}, and by \emph{risk-neutral} pricing under a measure $\mathbb{Q}$ that made $S/B$ a martingale. There we proved the First Fundamental Theorem of asset pricing.
 \medskip
 
-The same ideas carry over to continuous time --- only the machinery is heavier. We now
+The same ideas carry over to continuous time - only the machinery is heavier. We now
 \begin{itemize}
 \item state the continuous-time First Fundamental Theorem;
 \item \emph{find} the risk-neutral measure $\mathbb{Q}$ (via Girsanov);
@@ -272,7 +272,7 @@ V_0 = N_0 \mathbb{E}_\mathbb{Q} \left[  \frac{V_T}{N_T} \mid \calF_0 \right]
 \]
 \item consequently $\mathbb{P}(V_0>0)>0$ $\implies$ strategy does not yield arbitrage opportunity 
 \end{itemize}
-`$\Rightarrow$' We do not prove this implication in general. For the Black-Scholes market you will see an 'explicit' construction.
+`$\Rightarrow$' We do not prove this implication in general. For the Black-Scholes market you will see an `explicit' construction.
 \end{proof}
 \end{frame}
 
@@ -302,9 +302,9 @@ C_t &=  N_t \mathbb{E}_{\mathbb{Q}}\left[
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Using the first fundamental theorem to price option}
+\begin{frame}{Using the first fundamental theorem to price options}
 \begin{itemize}
-\item price processes basic assets in standard Black-Scholes market given; in particular: 
+\item price processes basic assets in standard Black-Scholes market given; in particular:
 \[
 S_T = S_t \exp\left(  (\mu - \frac{1}{2}\sigma^2)(T-t) + \sigma (W_T^{\mathbb{P}} - W_t^{\mathbb{P}})   \right),
 \]
@@ -410,7 +410,7 @@ Then $\mathbb{Q}$ is \emph{not} equivalent to $\mathbb{P}$.
 \textbf{Recall the First Fundamental Theorem} (stated earlier): for a num\'eraire $N$, absence of arbitrage means there is a measure $\mathbb{Q}\sim\mathbb{P}$ under which \emph{every} discounted price $A/N$ is a martingale.
 \medskip
 
-\textbf{Plan.} In the Black-Scholes market we now \emph{construct} this $\mathbb{Q}$ explicitly --- using Girsanov --- and then read off option prices as discounted $\mathbb{Q}$-expectations.
+\textbf{Plan.} In the Black-Scholes market we now \emph{construct} this $\mathbb{Q}$ explicitly - using Girsanov - and then read off option prices as discounted $\mathbb{Q}$-expectations.
 \medskip
 
 (We use the money-market account $B$ as num\'eraire; any asset that stays strictly positive would also do.)
@@ -518,7 +518,7 @@ The change of measure $\mathbb{P}\to\mathbb{Q}$ shifts the stock's drift from $\
 \begin{frame}{Worked example: under $\mathbb{Q}$ the stock earns the riskless rate}
 Under $\mathbb{Q}$, $\ S_T=S_t\,\e^{(r-\frac12\sigma^2)(T-t)+\sigma(W_T^{\mathbb{Q}}-W_t^{\mathbb{Q}})}$ with $W_T^{\mathbb{Q}}-W_t^{\mathbb{Q}}\distr\rN(0,T-t)$. Using $\mathbb{E}[\e^{\sigma Z'}]=\e^{\frac12\sigma^2(T-t)}$ for $Z'\distr\rN(0,T-t)$:
 \[ \mathbb{E}_{\mathbb{Q}}[S_T\mid\mathcal{F}_t]=S_t\,\e^{(r-\frac12\sigma^2)(T-t)}\,\e^{\frac12\sigma^2(T-t)}=S_t\,\e^{r(T-t)}. \]
-Equivalently $\mathbb{E}_{\mathbb{Q}}[S_T/B_T\mid\mathcal{F}_t]=S_t/B_t$: \textbf{$S/B$ is a $\mathbb{Q}$-martingale}, as it must be. The same computation under $\mathbb{P}$ gives $\mathbb{E}_{\mathbb{P}}[S_T\mid\mathcal{F}_t]=S_t\,\e^{\mu(T-t)}$ --- the stock earns its true drift $\mu>r$, a \emph{risk premium}.
+Equivalently $\mathbb{E}_{\mathbb{Q}}[S_T/B_T\mid\mathcal{F}_t]=S_t/B_t$: \textbf{$S/B$ is a $\mathbb{Q}$-martingale}, as it must be. The same computation under $\mathbb{P}$ gives $\mathbb{E}_{\mathbb{P}}[S_T\mid\mathcal{F}_t]=S_t\,\e^{\mu(T-t)}$ - the stock earns its true drift $\mu>r$, a \emph{risk premium}.
 \\[3pt]
 This is the continuous-time version of the binomial identity $\frac{1}{B_1}\mathbb{E}_{\mathbb{Q}}[S_1]=S_0$ from part~1.
 \end{frame}
@@ -551,9 +551,10 @@ S_t\e^{
 \e^{-r(T-t)}\mathbb{E}_{\mathbb{Q}}\left[ h\left(
 S_t\e^{
 (r-0.5\sigma^2) (T-t) +\sigma (W_T^{\mathbb{Q}}
--W_t^{\mathbb{Q}}) }\right) 
-\right] \text{ ($S_t$ is constant)}
+-W_t^{\mathbb{Q}}) }\right)
+\right]
 \end{align*}
+{\footnotesize (we may drop the conditioning: $S_t$ is known at time $t$ and $W_T^{\mathbb{Q}}-W_t^{\mathbb{Q}}$ is independent of $\mathcal{F}_t$)}
 \item using $W_T^{\mathbb{Q}}- W_t^{\mathbb{Q}}\distr \sqrt{T-t} Z$ (under $\mathbb{Q}$) with $Z\distr \rN(0,1)$:
 \[
 C_t=\e^{-r(T-t)}\int_{-\infty}^{\infty}
@@ -593,7 +594,7 @@ C_0&=\exp(-rT)\mathbb{Q}\left( \sigma W_T^{\mathbb{Q}}\leq \log \frac{K}{S_0} -(
 \right)
 \end{align*}
 \medskip
-This is exactly the price the part-2 PDE approach gives for the digital put --- the two methods agree.}
+This is exactly the price the part-2 PDE approach gives for the digital put - the two methods agree.}
 \end{itemize}
 \end{frame}
 %
@@ -686,7 +687,7 @@ K_t A_t  =\mathbb{E}_{\mathbb{P}}[ K_T A_T \mid
 i.e. $KA$ is a $\mathbb{P}$-martingale
 \end{itemize}
 \smallskip
-{\small Here $K=Z/N$ is the discounted likelihood ratio $\tfrac1N\,\tfrac{\rd\mathbb{Q}}{\rd\mathbb{P}}$ --- the continuous-time version of the kernel $m=\tfrac{B_0}{B_1}\tfrac{\rd\mathbb{Q}}{\rd\mathbb{P}}$ from part~1.}
+{\small Here $K=Z/N$ is the discounted likelihood ratio $\tfrac1N\,\tfrac{\rd\mathbb{Q}}{\rd\mathbb{P}}$ - the continuous-time version of the kernel $m=\tfrac{B_0}{B_1}\tfrac{\rd\mathbb{Q}}{\rd\mathbb{P}}$ from part~1.}
 \end{frame}
 
 \begin{frame}{The first fundamental theorem of asset pricing (pricing kernel version)}
@@ -747,12 +748,12 @@ K_t=\exp\left\{
 \left(-r-0.5\left(\frac{\mu-r}{\sigma}\right)^2 \right)t -\frac{\mu-r}{\sigma} W_t^{\mathbb{P}}
 \right\}
 \]
-Fair price of a derivative, with payoff $C_T=F(S_T)$, based on these assets is given by
+Fair price of a derivative, with payoff $C_T=h(S_T)$, based on these assets is given by
 \[
 C_0=\frac{1}{K_0}\mathbb{E}_{\mathbb{P}}[ K_T C_T ]
 \]
 \begin{itemize}
-\item $K_T C_T=g(W_T)f(S_T)=g(W_T)\tilde f(W_T)=h(W_T)$, so price determined by expectation of functional of $\rN(0,T)$ variable
+\item both $K_T$ and $S_T$ (and hence $K_T C_T=K_T h(S_T)$) are functions of $W_T^{\mathbb{P}}$, so the price is the expectation of a function of a $\rN(0,T)$ random variable
 \item price seems to depend on $\mu$, however it does not!
 \end{itemize}
 %$\implies$ price of claim with payoff $F_T(S_T)$ is given by
@@ -793,7 +794,7 @@ K_T=\exp\left\{
 \left(-r-0.5\left(\frac{\mu-r}{\sigma}\right)^2 \right)T -\frac{\mu-r}{\sigma} W_T
 \right\},
 \]
-showing that $K_T$ takes large values for large, negative values of $W_T$. And such state-of-the-world
+showing that $K_T$ takes large values for large, negative values of $W_T$. And such states-of-the-world
 correspond to small values of $S_T(\omega)$
 \end{itemize}
 \end{frame}
@@ -874,7 +875,7 @@ pricing kernel (part 3) & $\e^{-rT}\Phi(d_-)$\\
 \hline
 \end{tabular}
 \end{center}
-with $\,d_-=\dfrac{\log(K/S_0)-(r-\frac12\sigma^2)T}{\sigma\sqrt{T}}$. The PDE, the risk-neutral measure, and the pricing kernel are three routes to the \emph{same} no-arbitrage price --- exactly as in the binomial toy model of part~1.
+with $\,d_-=\dfrac{\log(K/S_0)-(r-\frac12\sigma^2)T}{\sigma\sqrt{T}}$. The PDE, the risk-neutral measure, and the pricing kernel are three routes to the \emph{same} no-arbitrage price - exactly as in the binomial toy model of part~1.
 \end{frame}
 
 \appendix
