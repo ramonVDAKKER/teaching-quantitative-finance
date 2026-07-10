@@ -3,7 +3,7 @@
 %% preamble
  \setbeamertemplate{headline}{}
 \setbeamertemplate{section page}[mine]
-% \setbeamertemplate{footline}[]
+\setbeamertemplate{footline}[frame number]
 \title{Monte Carlo approximation of Greeks}
 \subtitle{Quantitative Finance}
 \author{Tilburg University}
@@ -177,7 +177,7 @@ we see that conditional pdf of $S_T$, under $\mathbb{Q}$, (indeed) depends on $\
 \end{itemize}
 \end{itemize}
 \medskip
-\emph{In general we must differentiate an expectation with respect to a parameter --- stated abstractly next.}
+\emph{In general we must differentiate an expectation with respect to a parameter - stated abstractly next.}
 \end{frame}
 
 \begin{frame}{Goal}
@@ -208,22 +208,22 @@ $$
 $$
 \item please recall, for $f:\mathbb{R}\to\mathbb{R}$,
 \[
-f^\prime(x) = \lim_{\epsilon\to 0} \frac{ f(x+\epsilon) - f(x)}{\epsilon}\approx \frac{ f(x+h) - f(x)}{h} %
+f^\prime(x) = \lim_{\epsilon\to 0} \frac{ f(x+\epsilon) - f(x)}{\epsilon}\approx \frac{ f(x+\delta) - f(x)}{\delta} %
 \]
-for small number $h$
-\item this suggests to approximate 
+for small number $\delta$
+\item this suggests to approximate
 $(d/d\theta) \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]$
-by 
+by
 \emph{one-sided finite-difference estimate}:
 $$
-\frac{ \mathbb{E}_{\theta+h,\eta} [ h(X; \theta+h, \gamma)]
+\frac{ \mathbb{E}_{\theta+\delta,\eta} [ h(X; \theta+\delta, \gamma)]
 -  \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]
-}{h}
+}{\delta}
 $$
-where $h$ is a small step
-\item 
-however, we cannot (or do not want to) compute 
-$\mathbb{E}_{\theta+h,\eta} [ h(X; \theta+h, \gamma)]$ and
+where $\delta$ is a small step (we write $\delta$, rather than the usual $h$, to avoid confusion with the payoff function $h$)
+\item
+however, we cannot (or do not want to) compute
+$\mathbb{E}_{\theta+\delta,\eta} [ h(X; \theta+\delta, \gamma)]$ and
 $\mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]$ analytically
 \end{itemize}
 \end{frame}
@@ -252,20 +252,20 @@ Combining the observations on the previous slide leads to
 \textbf{bump and reprice} method a.k.a.
 \textbf{finite-difference} method:
 \begin{itemize}
-\item choose small number $h$
-\item simulate $X_1^{\theta,\eta},\dots,X_n^{\theta,\eta}$ i.i.d. from 
+\item choose small number $\delta$
+\item simulate $X_1^{\theta,\eta},\dots,X_n^{\theta,\eta}$ i.i.d. from
 $P_{\theta,\eta}$
-\item simulate $X_1^{\theta+h,\eta},\dots,X_n^{\theta+h,\eta}$ i.i.d. from 
-$P_{\theta+h,\eta}$
-\item approximate 
+\item simulate $X_1^{\theta+\delta,\eta},\dots,X_n^{\theta+\delta,\eta}$ i.i.d. from
+$P_{\theta+\delta,\eta}$
+\item approximate
 \[
 \frac{d}{d\theta} \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)]
 \]
 by \emph{one-sided finite-difference estimate}:
 $$
-\frac{\frac{1}{n}\sum_{i=1}^n h(X_i^{\theta+h,\eta}; \theta+h,\gamma) - \frac{1}{n}\sum_{i=1}^n h(X_i^{\theta,\eta}; \theta,\gamma)}{h}
+\frac{\frac{1}{n}\sum_{i=1}^n h(X_i^{\theta+\delta,\eta}; \theta+\delta,\gamma) - \frac{1}{n}\sum_{i=1}^n h(X_i^{\theta,\eta}; \theta,\gamma)}{\delta}
 $$
-where $h$ is a small step
+where $\delta$ is a small step
 \end{itemize}
 \end{frame}
 
@@ -277,39 +277,39 @@ f(\theta) = \mathbb{E}_{\theta,\eta} [ h(X; \theta, \gamma)] \text{ and }
 \hat f_n(\theta) = \frac{1}{n}\sum_{i=1}^n h(X_i^{\theta,\eta}; \theta,\gamma)
 \]
 \item we approximate $f'(\theta)$ by one-sided f.d.
-\[ 
-\hat{f}_n^\prime(\theta) = \frac{ \hat f_n(\theta+h) - \hat f_n(\theta)}{h}
+\[
+\hat{f}_n^\prime(\theta) = \frac{ \hat f_n(\theta+\delta) - \hat f_n(\theta)}{\delta}
 \]
 \item estimation error $\hat{f}_n^\prime(\theta) - f^\prime(\theta)$ can be written as:
 \begin{align*}
 \hat{f}_n^\prime(\theta) - f^\prime(\theta) &
-= \left[ 
-\frac{ f(\theta+h) - f(\theta)}{h} - f'(\theta)
+= \left[
+\frac{ f(\theta+\delta) - f(\theta)}{\delta} - f'(\theta)
 \right] \\
-&\quad + \left[ \hat{f}_n^\prime(\theta) - \frac{ f(\theta+h) - f(\theta)}{h} \right]
+&\quad + \left[ \hat{f}_n^\prime(\theta) - \frac{ f(\theta+\delta) - f(\theta)}{\delta} \right]
 \end{align*}
 \end{itemize}
 \end{frame}
 
 \begin{frame}{One-sided estimate - quality}
 \begin{itemize}
-\item from 
+\item from
 \begin{align*}
 \hat{f}_n^\prime(\theta) - f^\prime(\theta) &
-= \left[ 
-\frac{ f(\theta+h) - f(\theta)}{h} - f'(\theta)
+= \left[
+\frac{ f(\theta+\delta) - f(\theta)}{\delta} - f'(\theta)
 \right] \\
-&\quad + \left[ \hat{f}_n^\prime(\theta) - \frac{ f(\theta+h) - f(\theta)}{h} \right],
+&\quad + \left[ \hat{f}_n^\prime(\theta) - \frac{ f(\theta+\delta) - f(\theta)}{\delta} \right],
 \end{align*}
-with \[ 
-\hat{f}_n^\prime(\theta) = \frac{ \hat f_n(\theta+h) - \hat f_n(\theta)}{h},
+with \[
+\hat{f}_n^\prime(\theta) = \frac{ \hat f_n(\theta+\delta) - \hat f_n(\theta)}{\delta},
 \]
 we obtain
 \[
-\text{MSE} = \left( \frac{ f(\theta+h) - f(\theta)}{h} - f'(\theta)
+\text{MSE} = \left( \frac{ f(\theta+\delta) - f(\theta)}{\delta} - f'(\theta)
     \right)^2 +
- \frac{1}{h^2} \var\left(
-    \hat f_n(\theta+h) -  \hat f_n(\theta)
+ \frac{1}{\delta^2} \var\left(
+    \hat f_n(\theta+\delta) -  \hat f_n(\theta)
     \right)
 \]
 \end{itemize}
@@ -319,31 +319,31 @@ we obtain
 \begin{itemize}
 \item recall (if $f$ is sufficiently smooth)
 \[
-f(\theta+h) = f(\theta) + f'(\theta)h+\frac{f''(\theta)}{2}h^2 +O\big(h^3\big)
+f(\theta+\delta) = f(\theta) + f'(\theta)\delta+\frac{f''(\theta)}{2}\delta^2 +O\big(\delta^3\big)
 \]
-\item so 
+\item so
 \[
-\left( \frac{f(\theta+h)-f(\theta)}{h} 
--f'(\theta) \right)^2 = O(h^2)
+\left( \frac{f(\theta+\delta)-f(\theta)}{\delta}
+-f'(\theta) \right)^2 = O(\delta^2)
 \]
 \item to determine  \emph{variance}, we first consider case  that
 $(X_1^{\theta,\eta},\dots,X_n^{\theta,\eta})$ are independent of
-$(X_1^{\theta+h,\eta},\dots,X_n^{\theta+h,\eta})$
+$(X_1^{\theta+\delta,\eta},\dots,X_n^{\theta+\delta,\eta})$
 \begin{align*}
  \var\!\left[
-  \hat f_n(\theta+h) -  \hat f_n(\theta)
+  \hat f_n(\theta+\delta) -  \hat f_n(\theta)
 \right]
- &= \frac{1}{n} \left( \var_{\theta+h,\eta}(   
-h(X_1^{\theta+h,\eta};\theta+h,\gamma))
+ &= \frac{1}{n} \left( \var_{\theta+\delta,\eta}(
+h(X_1^{\theta+\delta,\eta};\theta+\delta,\gamma))
  \right. \\
-&\quad +\left.\var_{\theta,\eta}(   
+&\quad +\left.\var_{\theta,\eta}(
 h(X_1^{\theta,\eta};\theta,\gamma))\right)
 \end{align*}
-\item we assume that $ \var_{\theta+h,\eta}(   
-h(X_1^{\theta+h,\eta};\theta+h,\gamma))$ is a (locally) bounded function of $\theta$
+\item we assume that $ \var_{\theta+\delta,\eta}(
+h(X_1^{\theta+\delta,\eta};\theta+\delta,\gamma))$ is a (locally) bounded function of $\theta$
 \item this implies that we have
 \[
-\text{MSE}  = \text{bias}^2 + \text{var} =O(h^2)  +  O\left(\frac{1}{nh^2}\right)
+\text{MSE}  = \text{bias}^2 + \text{var} =O(\delta^2)  +  O\left(\frac{1}{n\delta^2}\right)
 \]
 \end{itemize}
 \end{frame}
@@ -352,12 +352,12 @@ h(X_1^{\theta+h,\eta};\theta+h,\gamma))$ is a (locally) bounded function of $\th
 \begin{itemize}
 \item we have
 \[
-\text{MSE}  = \text{bias}^2 + \text{var} = O( h^2)  + O\left( \frac{1}{nh^2} \right)
+\text{MSE}  = \text{bias}^2 + \text{var} = O( \delta^2)  + O\left( \frac{1}{n\delta^2} \right)
 \]
-\item letting $h$ tend to $0$ while keeping $n$ constant will make the MSE
+\item letting $\delta$ tend to $0$ while keeping $n$ constant will make the MSE
 tend to $\infty$
-\item choosing $h$ such that $\text{MSE}$ is minimal 
-leads to $h \propto n^{-1/4}$ and
+\item choosing $\delta$ such that $\text{MSE}$ is minimal
+leads to $\delta \propto n^{-1/4}$ and
 $$
 \text{MSE} = O\big(n^{-1/2}\big)
 $$
@@ -367,54 +367,54 @@ $\text{MSE} = O(n^{-1})$
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Bias--variance trade-off in the step size $h$}
-For the one-sided estimate $\;\text{MSE}(h)=\underbrace{O(h^2)}_{\text{bias}^2}+\underbrace{O(1/(nh^2))}_{\text{variance}}$. Small $h$: small bias but exploding variance; large $h$: small variance but large bias. The optimum sits at $h^\star\propto n^{-1/4}$.
+\begin{frame}{Bias--variance trade-off in the step size $\delta$}
+For the one-sided estimate $\;\text{MSE}(\delta)=\underbrace{O(\delta^2)}_{\text{bias}^2}+\underbrace{O(1/(n\delta^2))}_{\text{variance}}$. Small $\delta$: small bias but exploding variance; large $\delta$: small variance but large bias. The optimum sits at $\delta^\star\propto n^{-1/4}$.
 \begin{center}
 \begin{tikzpicture}
-\begin{axis}[width=8.6cm,height=4.6cm,axis lines=left,xlabel={step $h$},ylabel={MSE (a.u.)},
+\begin{axis}[width=8.6cm,height=4.6cm,axis lines=left,xlabel={step $\delta$},ylabel={MSE (a.u.)},
   xmin=0.04,xmax=0.32,ymin=0,ymax=10,xlabel style={font=\small},ylabel style={font=\small},
   legend pos=north east,legend style={font=\scriptsize,draw=none,fill=none}]
 \addplot[blue,thick] coordinates {(0.040,0.160) (0.050,0.250) (0.060,0.360) (0.070,0.490) (0.080,0.640) (0.090,0.810) (0.100,1.000) (0.110,1.210) (0.120,1.440) (0.130,1.690) (0.140,1.960) (0.150,2.250) (0.160,2.560) (0.170,2.890) (0.180,3.240) (0.190,3.610) (0.200,4.000) (0.210,4.410) (0.220,4.840) (0.230,5.290) (0.240,5.760) (0.250,6.250) (0.260,6.760) (0.270,7.290) (0.280,7.840) (0.290,8.410) (0.300,9.000) (0.310,9.610) (0.320,10.240)}; \addlegendentry{bias$^2$}
 \addplot[red,thick,dashed] coordinates {(0.040,6.250) (0.050,4.000) (0.060,2.778) (0.070,2.041) (0.080,1.562) (0.090,1.235) (0.100,1.000) (0.110,0.826) (0.120,0.694) (0.130,0.592) (0.140,0.510) (0.150,0.444) (0.160,0.391) (0.170,0.346) (0.180,0.309) (0.190,0.277) (0.200,0.250) (0.210,0.227) (0.220,0.207) (0.230,0.189) (0.240,0.174) (0.250,0.160) (0.260,0.148) (0.270,0.137) (0.280,0.128) (0.290,0.119) (0.300,0.111) (0.310,0.104) (0.320,0.098)}; \addlegendentry{variance}
 \addplot[black,very thick] coordinates {(0.040,6.410) (0.050,4.250) (0.060,3.138) (0.070,2.531) (0.080,2.203) (0.090,2.045) (0.100,2.000) (0.110,2.036) (0.120,2.134) (0.130,2.282) (0.140,2.470) (0.150,2.694) (0.160,2.951) (0.170,3.236) (0.180,3.549) (0.190,3.887) (0.200,4.250) (0.210,4.637) (0.220,5.047) (0.230,5.479) (0.240,5.934) (0.250,6.410) (0.260,6.908) (0.270,7.427) (0.280,7.968) (0.290,8.529) (0.300,9.111) (0.310,9.714) (0.320,10.338)}; \addlegendentry{MSE}
 \addplot[gray,dotted,thick] coordinates {(0.1,0) (0.1,10)};
-\node[font=\scriptsize,gray,anchor=south] at (axis cs:0.1,0.2){$h^\star$};
+\node[font=\scriptsize,gray,anchor=south] at (axis cs:0.1,0.2){$\delta^\star$};
 \end{axis}
 \end{tikzpicture}
 \end{center}
 \vspace{-2mm}
-{\small Common random numbers remove the variance blow-up --- then the MSE is $O(n^{-1})$ for any small $h$.}
+{\small Common random numbers remove the variance blow-up - then the MSE is $O(n^{-1})$ for any small $\delta$.}
 \end{frame}
 
 \begin{frame}{One-sided estimate - using common random numbers}
 \begin{itemize}
 \item we considered case that $(X_1^{\theta,\eta},\dots,X_n^{\theta,\eta})$ are independent of
-$(X_1^{\theta+h,\eta},\dots,X_n^{\theta+h,\eta})$
-\item In many cases, it is possible to use \emph{common random numbers} in the simulation: 
+$(X_1^{\theta+\delta,\eta},\dots,X_n^{\theta+\delta,\eta})$
+\item In many cases, it is possible to use \emph{common random numbers} in the simulation:
 \begin{itemize}
 \item simulate $Z_1,\dots,Z_n$ i.i.d.
 \item suppose there exists function $g$ such that
 \[
-h(X_i^{\theta,\eta};\theta,\gamma) 
+h(X_i^{\theta,\eta};\theta,\gamma)
 \stackrel{d}{=} g(Z_i;\theta) \text{ and }
-h(X_i^{\theta+h,\eta};\theta+h,\gamma)\stackrel{d}{=} g(Z_i;\theta+h)
+h(X_i^{\theta+\delta,\eta};\theta+\delta,\gamma)\stackrel{d}{=} g(Z_i;\theta+\delta)
 \]
 \end{itemize}
 \item if $g$ is differentiable with respect to the parameter $\theta$,
 then
 \begin{align*}
 \var\!\big(
-\hat f_n(\theta+h) -  \hat f_n(\theta)
+\hat f_n(\theta+\delta) -  \hat f_n(\theta)
 \big)= \frac{1}{n}\var\left(
-g(Z_1;\theta+h) - g(Z_1;\theta)
+g(Z_1;\theta+\delta) - g(Z_1;\theta)
 \right)
  \\
-= \frac{1}{n}  \var\!\Big( \frac{\partial g}{\partial \theta} (Z_1,\theta)h + O\big(h^2\big)\Big)
-= \frac{1}{n}O\big(h^2\big) \hspace{1cm}
+= \frac{1}{n}  \var\!\Big( \frac{\partial g}{\partial \theta} (Z_1,\theta)\delta + O\big(\delta^2\big)\Big)
+= \frac{1}{n}O\big(\delta^2\big) \hspace{1cm}
 \end{align*}
-which yields 
+which yields
 \[
-\text{MSE} = O( h^2 ) + O(  \frac{1}{n})
+\text{MSE} = O( \delta^2 ) + O(  \frac{1}{n})
 \]
 \end{itemize}
 \end{frame}
@@ -423,15 +423,15 @@ which yields
 \begin{itemize}
 \item under  assumption of ``smoothness''
 (function $g$ differentiable with respect to $\theta$), the mean square error (of the one-sided estimate)
-is of the form  
+is of the form
 $$
-\text{MSE} = O( h^2) + O\left(\frac{1}{n}\right)\,. \hspace{2cm}
+\text{MSE} = O( \delta^2) + O\left(\frac{1}{n}\right)\,. \hspace{2cm}
 $$
-so, for fixed $n$, the variance does not explode as $h$ becomes small
-\item 
-bias is purely controlled by $h$ and variance by $n$ 
+so, for fixed $n$, the variance does not explode as $\delta$ becomes small
+\item
+bias is purely controlled by $\delta$ and variance by $n$
 \item so we can take
-$h$ as small as we want, and the convergence
+$\delta$ as small as we want, and the convergence
 rate of MSE is $O(n^{-1})$ just as in the case of MC approximation of option value itself.
 \end{itemize}
 \end{frame}
@@ -439,28 +439,28 @@ rate of MSE is $O(n^{-1})$ just as in the case of MC approximation of option val
 \begin{frame}{Remarks}
 \textbf{Refinement: two-sided approach}
 \begin{itemize}
-\item  
-approximate $f'(\theta)$ by 
+\item
+approximate $f'(\theta)$ by
 \[
-\frac{f(\theta+h) - f(\theta -h)    }{2h}  
+\frac{f(\theta+\delta) - f(\theta -\delta)    }{2\delta}
 \]
-\item from Taylor expansion $f(\theta+h)=f(\theta) + f'(\theta)h
-+.5f''(\theta)h^2 + O(h^3)$  we see that bias is reduced
-from  $O\big(h\big)$ to $O\big(h^2\big)$
-\item  more accurate, but 
+\item from Taylor expansion $f(\theta+\delta)=f(\theta) + f'(\theta)\delta
++.5f''(\theta)\delta^2 + O(\delta^3)$  we see that bias is reduced
+from  $O\big(\delta\big)$ to $O\big(\delta^2\big)$
+\item  more accurate, but
 requires extra set of simulations
 \end{itemize}
 \textbf{How to determine second-order Greeks?}
 \begin{itemize}
 \item for second-order Greeks the following finite-difference could be used
 \begin{align*}
-f''(\theta) &\approx 
-\frac{ f'(\theta+h)  - f'(\theta)}{h}\approx
-\frac{\frac{ f(\theta+h) -f(\theta)}{h} - 
-\frac{ f(\theta) -f(\theta-h)}{h}
-}{h}\\
+f''(\theta) &\approx
+\frac{ f'(\theta+\delta)  - f'(\theta)}{\delta}\approx
+\frac{\frac{ f(\theta+\delta) -f(\theta)}{\delta} -
+\frac{ f(\theta) -f(\theta-\delta)}{\delta}
+}{\delta}\\
 &
-= \frac{f(\theta+h) - 2f(\theta) + f(\theta-h) }{h^2}
+= \frac{f(\theta+\delta) - 2f(\theta) + f(\theta-\delta) }{\delta^2}
 \end{align*}
 \item now  replace population moments by MC approximations
 \end{itemize}
@@ -471,7 +471,7 @@ f''(\theta) &\approx
 You must estimate, by Monte Carlo, the \textbf{delta} of (a) a European call and (b) a digital call.
 \begin{enumerate}
 \item Which of bump-and-reprice / pathwise / likelihood-ratio work for each, and which fails?
-\item For the one-sided bump estimate with independent samples (no common random numbers), what is the optimal step $h$ as a function of $n$, and the resulting MSE rate?
+\item For the one-sided bump estimate with independent samples (no common random numbers), what is the optimal step $\delta$ as a function of $n$, and the resulting MSE rate?
 \end{enumerate}
 \end{quizbox}
 \end{frame}
@@ -551,7 +551,7 @@ Note that this is an unbiased estimator!
 \begin{frame}{Pathwise method (1)}
 Under sufficient smoothness, we indeed have:
 $$
-\frac{\partial}{\partial \theta} E [f(Z,\theta)] = E \Big[ \frac{\partial}{\partial\theta}f(Z,\theta)\Big].
+\frac{\partial}{\partial \theta} \mathbb{E} [f(Z,\theta)] = \mathbb{E} \Big[ \frac{\partial}{\partial\theta}f(Z,\theta)\Big].
 $$
 Example: compute the delta, at $t=0$, of a call option in the B-S market.
 \begin{align*}
@@ -571,14 +571,14 @@ computed by straightforward MC.
 \end{frame}
 
 \begin{frame}{Pathwise method (2)}
-What makes functions like $f(x)=\max(x,0)$ sufficiently smooth for our purposes is that -- even though they are not differentiable -- there exists a (non-unique) function $f'(x)$
+What makes functions like $f(x)=\max(x,0)$ sufficiently smooth for our purposes is that - even though they are not differentiable - there exists a (non-unique) function $f'(x)$
 such that
 \[
 \structure{f(b)-f(a)=\int_a^b f'(x) dx} = \int_a^b 1_{x>0} dx.
 \]
-Intuitively, this is what we need here: A function that behaves like the (non-existent) derivative of $f$ when it is inside an integral. 
-Such functions are called \emph{absolutely continuous}. 
-You implicitly are aware of this from probability theory: 
+Intuitively, this is what we need here: A function that behaves like the (non-existent) derivative of $f$ when it is inside an integral.
+Such functions are called \emph{absolutely continuous}.
+You are implicitly aware of this from probability theory:
 random variables that have a pdf (and such random variables are said to have an absolutely continuous distribution).
 \vskip2mm
 Conversely, the pathwise approach fails for functions $f$ that have jumps and thus cannot be represented as integrals. Bump \& Reprice remains applicable. 
@@ -686,7 +686,7 @@ Comments on the LR method:
 \vskip1mm
 \begin{itemize}
 \itemsep3mm
-\item It is applicable to \emph{any} payoff function $F$, continuous or not.\pause
+\item It is applicable to \emph{any} payoff function $f$, continuous or not.\pause
 \item It can be used analogously for other Greeks, including higher-order derivatives.\pause
 \item It depends on availability of the density of the underlying at time $T$ in
 analytic form.
@@ -705,11 +705,11 @@ analytic form.
 \hline
 bias & yes & none & none\\
 applies to & \emph{any} payoff & smooth only & \emph{any} payoff\\
-needs & --- & payoff deriv. & density score\\
+needs & - & payoff deriv. & density score\\
 variance & high (low w/ CRN) & low & can be high\\
 \hline
 \end{tabular}}
-\\[2pt]{\scriptsize Bump variance is $O(1/(nh^2))$ with independent samples (it explodes as $h\to0$) but $O(1/n)$ with common random numbers; its bias is $O(h)$ one-sided, $O(h^2)$ two-sided.}
+\\[2pt]{\scriptsize Bump variance is $O(1/(n\delta^2))$ with independent samples (it explodes as $\delta\to0$) but $O(1/n)$ with common random numbers; its bias is $O(\delta)$ one-sided, $O(\delta^2)$ two-sided.}
 \end{center}
 \medskip
 Rule of thumb: \emph{pathwise} for smooth payoffs (unbiased, low variance); \emph{likelihood ratio} for discontinuous payoffs such as the digital; \emph{bump-and-reprice} as the always-applicable fallback and the easy route to second-order Greeks.
@@ -718,8 +718,8 @@ Rule of thumb: \emph{pathwise} for smooth payoffs (unbiased, low variance); \emp
 \begin{frame}{Food for thought}
 \begin{fftbox}
 \begin{itemize}
-\item The pathwise method differentiates the \emph{payoff} --- exactly what modern \emph{automatic differentiation} does mechanically, and how Greeks are computed at scale today. The likelihood-ratio method differentiates the \emph{density}; \emph{Malliavin calculus} generalizes it. Which would you reach for on a \emph{barrier} option?
-\item Bump-and-reprice has both a bias and a variance, whereas plain MC pricing has only variance --- yet with common random numbers bump-and-reprice recovers the $O(n^{-1})$ rate. Why does \emph{sharing the randomness} matter so much?
+\item The pathwise method differentiates the \emph{payoff} - exactly what modern \emph{automatic differentiation} does mechanically, and how Greeks are computed at scale today. The likelihood-ratio method differentiates the \emph{density}; \emph{Malliavin calculus} generalizes it. Which would you reach for on a \emph{barrier} option?
+\item Bump-and-reprice has both a bias and a variance, whereas plain MC pricing has only variance - yet with common random numbers bump-and-reprice recovers the $O(n^{-1})$ rate. Why does \emph{sharing the randomness} matter so much?
 \end{itemize}
 \end{fftbox}
 \end{frame}
