@@ -79,7 +79,7 @@
 % ===================== content =====================
 
 \begin{frame}{What is an option?}
-An \textbf{option} is a contract between a \emph{buyer} (holder) and a \emph{seller} (writer). It gives the buyer a \emph{right} --- but \emph{not} an obligation.
+An \textbf{option} is a contract between a \emph{buyer} (holder) and a \emph{seller} (writer). It gives the buyer a \emph{right} - but \emph{not} an obligation.
 \medskip
 \begin{columns}[T]
 \begin{column}{0.48\textwidth}
@@ -93,7 +93,7 @@ the right to \emph{sell} the underlying asset at a fixed strike price $K$, at (o
 \end{columns}
 \medskip
 \begin{itemize}
-\item the buyer pays a \emph{premium} (the option price) at inception --- a right has positive value;
+\item the buyer pays a \emph{premium} (the option price) at inception - a right has positive value;
 \item the writer has the matching \emph{obligation} (to sell, for a call; to buy, for a put) whenever the buyer exercises.
 \end{itemize}
 \end{frame}
@@ -196,7 +196,7 @@ Before maturity the option price splits into two parts (shown for a call):
 \[
 \underbrace{C_t}_{\text{price}}=\underbrace{\max\{S_t-K,0\}}_{\text{intrinsic value}}+\underbrace{(\text{time value})}_{\geq 0}.
 \]
-\emph{Intrinsic value} is the payoff if the option were exercised now; \emph{time value} is the extra worth from the chance of moving (further) into the money before $T$. It decays to $0$ as $t\to T$ (``time decay''); at maturity $C_T$ equals the intrinsic value.
+\emph{Intrinsic value} is the payoff if the option were exercised now; \emph{time value} is the extra worth from the chance of moving (further) into the money before $T$. It decays to $0$ as $t\to T$ (``time decay''); at maturity $C_T$ equals the intrinsic value (why $\geq 0$? see next slide).
 \begin{center}
 \begin{tikzpicture}
 \begin{axis}[width=8.4cm,height=3.7cm,axis lines=middle,xlabel={$S_t$},
@@ -211,7 +211,24 @@ Before maturity the option price splits into two parts (shown for a call):
 \end{axis}
 \end{tikzpicture}
 \end{center}
-\textbf{Remark.} We will \emph{not} use this intrinsic/time-value split in the remainder of the course --- we always work with the full price $C_t$ produced by a model.
+\textbf{Remark.} We will \emph{not} use this intrinsic/time-value split in the remainder of the course - we always work with the full price $C_t$ produced by a model.
+\end{frame}
+
+\begin{frame}{Why is the time value of a call nonnegative?}
+\small
+Consider a European call on a stock that pays no dividends; let $r\geq 0$ be the risk-free rate. Two no-arbitrage observations:
+\begin{enumerate}
+\item $C_t\geq 0$: the payoff $\max\{S_T-K,0\}$ is never negative, so the call cannot trade at a negative price.
+\item $C_t\geq S_t-K\e^{-r(T-t)}$: the call plus $K\e^{-r(T-t)}$ in the bank pays $\max\{S_T-K,0\}+K=\max\{S_T,K\}\geq S_T$ at maturity, i.e.\ at least as much as one share, in \emph{every} scenario; hence $C_t+K\e^{-r(T-t)}\geq S_t$.
+\end{enumerate}
+Combining the two bounds, and using $K\e^{-r(T-t)}\leq K$ (as $r\geq 0$),
+\[
+C_t\;\geq\;\max\bigl\{S_t-K\e^{-r(T-t)},\,0\bigr\}\;\geq\;\max\{S_t-K,\,0\},
+\]
+so the price is at least the intrinsic value: the time value is nonnegative.
+\begin{fftbox}
+Does the same conclusion hold for a European \emph{put}? Mimic the argument: which lower bound on $P_t$ do you get, and does it dominate the intrinsic value $\max\{K-S_t,0\}$? Consider a deep in-the-money put ($S_t\approx 0$) with $r>0$.
+\end{fftbox}
 \end{frame}
 
 \begin{frame}{Exercise styles}
