@@ -10,5 +10,6 @@ The following notebooks are also available as [marimo](https://marimo.io) notebo
 
 - Simulation of stochastic processes: [![Open in marimo](https://marimo.io/shield.svg)](https://marimo.app/github.com/ramonVDAKKER/teaching-quantitative-finance/blob/main/notebooks/simulation_of_sde.py)
 - Black-Scholes prices for European options: [![Open in marimo](https://marimo.io/shield.svg)](https://marimo.app/github.com/ramonVDAKKER/teaching-quantitative-finance/blob/main/notebooks/illustration_black_scholes_price.py)
+- Solving the Black-Scholes PDE numerically: [![Open in marimo](https://marimo.io/shield.svg)](https://marimo.app/github.com/ramonVDAKKER/teaching-quantitative-finance/blob/main/notebooks/black_scholes_pde_numerical_approximation.py)
 
 Please report questions, typos, errors, unclarities etc. via 'Issues'. Alternatively, update the material and open a pull request.
